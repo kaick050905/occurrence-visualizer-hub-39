@@ -32,17 +32,12 @@ const weeklyData = [
   { name: "Dom", críticas: 1, altas: 3, médias: 5, baixas: 4 },
 ];
 
-const monthlyData = [
-  { name: "Jan", total: 140 },
-  { name: "Fev", total: 180 },
-  { name: "Mar", total: 220 },
-  { name: "Abr", total: 300 },
-  { name: "Mai", total: 270 },
-  { name: "Jun", total: 250 },
-  { name: "Jul", total: 310 },
-  { name: "Ago", total: 290 },
-  { name: "Set", total: 350 },
-  { name: "Out", total: 320 },
+// Yearly data for the last 4 years
+const yearlyData = [
+  { name: "2022", total: 1540 },
+  { name: "2023", total: 1780 },
+  { name: "2024", total: 1650 },
+  { name: "2025", total: 420, emProgresso: true },
 ];
 
 const priorityData = [
@@ -102,31 +97,31 @@ const OccurrenceCharts: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Tendência Mensal</CardTitle>
-          <CardDescription>Total de ocorrências por mês</CardDescription>
+          <CardTitle>Total de Ocorrências dos Últimos Anos</CardTitle>
+          <CardDescription>Registros anuais de 2022 a 2025</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={monthlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.1} />
-                  </linearGradient>
-                </defs>
+              <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="total"
-                  stroke="#3B82F6"
-                  fillOpacity={1}
-                  fill="url(#colorTotal)"
-                />
-              </AreaChart>
+                <Bar 
+                  dataKey="total" 
+                  fill="#3B82F6"
+                  radius={[4, 4, 0, 0]}
+                  name="Total de Ocorrências"
+                >
+                  {yearlyData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.emProgresso ? "#94A3B8" : "#3B82F6"} 
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </CardContent>

@@ -4,58 +4,58 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, ChevronRight, Clock, Filter, Loader2, XCircle } from "lucide-react";
+import { Check, ChevronRight, Filter, Loader2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-// Sample data for recent occurrences
-const recentOccurrencesData = [
+// Sample data for most recurring occurrences
+const recurringOccurrencesData = [
   {
     id: "OC-1234",
-    description: "Vazamento de água na Av. Principal",
+    description: "Furto de Veículo",
     location: "Setor Centro",
     status: "Crítica",
-    time: "10:30",
-    date: "15/05/2023",
-    assigned: "Equipe Águas"
+    count: 245,
+    lastOccurrence: "15/05/2023",
+    assigned: "Equipe Segurança"
   },
   {
     id: "OC-1233",
     description: "Falta de iluminação pública",
     location: "Rua 7, Setor Sul",
     status: "Alta",
-    time: "09:45",
-    date: "15/05/2023",
+    count: 210,
+    lastOccurrence: "15/05/2023",
     assigned: "Equipe Elétrica"
   },
   {
     id: "OC-1232",
-    description: "Buraco na via pública",
+    description: "Acidente de Trânsito",
     location: "Rua João Pedro, Setor Oeste",
     status: "Média",
-    time: "08:15",
-    date: "15/05/2023",
-    assigned: "Equipe Obras"
+    count: 180,
+    lastOccurrence: "15/05/2023",
+    assigned: "Equipe Trânsito"
   },
   {
     id: "OC-1231",
-    description: "Lixo acumulado em praça",
+    description: "Invasão de Propriedade",
     location: "Praça Central, Setor Centro",
-    status: "Baixa",
-    time: "07:30",
-    date: "15/05/2023",
-    assigned: "Equipe Limpeza"
+    status: "Alta",
+    count: 165,
+    lastOccurrence: "15/05/2023",
+    assigned: "Equipe Segurança"
   },
   {
     id: "OC-1230",
-    description: "Semáforo com defeito",
+    description: "Vandalismo em Prédio Público",
     location: "Cruzamento Av. Norte com Rua 5",
     status: "Alta",
-    time: "17:20",
-    date: "14/05/2023",
-    assigned: "Equipe Trânsito"
+    count: 155,
+    lastOccurrence: "14/05/2023",
+    assigned: "Equipe Manutenção"
   }
 ];
 
@@ -82,8 +82,8 @@ const RecentOccurrences: React.FC = () => {
   };
 
   const filteredOccurrences = statusFilter.length > 0
-    ? recentOccurrencesData.filter(item => statusFilter.includes(item.status))
-    : recentOccurrencesData;
+    ? recurringOccurrencesData.filter(item => statusFilter.includes(item.status))
+    : recurringOccurrencesData;
 
   const handleRefresh = () => {
     setLoading(true);
@@ -97,8 +97,8 @@ const RecentOccurrences: React.FC = () => {
     <Card className="mt-6">
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Ocorrências Recentes</CardTitle>
-          <CardDescription>Últimas ocorrências registradas no sistema</CardDescription>
+          <CardTitle>Ocorrências Mais Recorrentes</CardTitle>
+          <CardDescription>Tipos de ocorrências mais frequentes no sistema</CardDescription>
         </div>
         <div className="flex gap-2">
           <Popover>
@@ -147,7 +147,8 @@ const RecentOccurrences: React.FC = () => {
                 <TableHead>Descrição</TableHead>
                 <TableHead>Local</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Data</TableHead>
+                <TableHead>Total Ocorrências</TableHead>
+                <TableHead>Última Ocorrência</TableHead>
                 <TableHead>Responsável</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
@@ -163,16 +164,11 @@ const RecentOccurrences: React.FC = () => {
                       {occurrence.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    {occurrence.date}
-                    <div className="text-xs text-muted-foreground">{occurrence.time}</div>
-                  </TableCell>
+                  <TableCell className="font-medium">{occurrence.count}</TableCell>
+                  <TableCell>{occurrence.lastOccurrence}</TableCell>
                   <TableCell>{occurrence.assigned}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Clock className="h-4 w-4" />
-                      </Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Check className="h-4 w-4" />
                       </Button>
@@ -189,7 +185,7 @@ const RecentOccurrences: React.FC = () => {
       </CardContent>
       <CardFooter className="flex justify-between border-t p-4">
         <div className="text-xs text-muted-foreground">
-          Mostrando {filteredOccurrences.length} de {recentOccurrencesData.length} ocorrências
+          Mostrando {filteredOccurrences.length} de {recurringOccurrencesData.length} ocorrências
         </div>
         <Button variant="outline" size="sm" className="gap-1">
           <span>Ver Todas</span>

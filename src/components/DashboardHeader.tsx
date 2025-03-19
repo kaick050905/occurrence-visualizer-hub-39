@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bell, Calendar, Search, Settings } from 'lucide-react';
+import { Bell, Search, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,7 @@ const DashboardHeader: React.FC = () => {
   return (
     <Card className="mb-6 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard de Ocorrências</h1>
+        <h1 className="text-2xl font-bold">INFO SP</h1>
         <p className="text-muted-foreground">{capitalizedDate}</p>
       </div>
       <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -77,9 +77,6 @@ const DashboardHeader: React.FC = () => {
             </div>
           </PopoverContent>
         </Popover>
-        <Button size="icon" variant="outline">
-          <Calendar className="h-5 w-5" />
-        </Button>
         <Button size="icon" variant="outline">
           <Settings className="h-5 w-5" />
         </Button>

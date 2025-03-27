@@ -13,33 +13,13 @@ import {
 
 // Mock data for cities and regions
 const citiesData = {
-  dangerous: [
-    { name: "São Paulo - Centro", count: 1245, trend: 12 },
-    { name: "Rio de Janeiro - Zona Norte", count: 1120, trend: 8 },
-    { name: "Salvador - Centro", count: 920, trend: 5 },
-    { name: "Belo Horizonte - Região Leste", count: 875, trend: 7 },
-  ],
-  safe: [
-    { name: "Curitiba - Santa Felicidade", count: 145, trend: -16 },
-    { name: "Florianópolis - Lagoa", count: 120, trend: -23 },
-    { name: "Vitória - Jardim Camburi", count: 165, trend: -15 },
-    { name: "Porto Alegre - Moinhos de Vento", count: 178, trend: -12 },
-  ]
+  dangerous: { name: "São Paulo - Centro", count: 1245, trend: 12 },
+  safe: { name: "Florianópolis - Lagoa", count: 120, trend: -23 }
 };
 
 const regionsData = {
-  dangerous: [
-    { name: "Zona Norte - SP", count: 2245, trend: 14 },
-    { name: "Zona Oeste - RJ", count: 1980, trend: 9 },
-    { name: "Zona Leste - SP", count: 1845, trend: 11 },
-    { name: "Centro - Salvador", count: 1520, trend: 7 },
-  ],
-  safe: [
-    { name: "Zona Sul - Florianópolis", count: 320, trend: -18 },
-    { name: "Região Centro-Sul - BH", count: 410, trend: -12 },
-    { name: "Zonas de Praia - Vitória", count: 380, trend: -14 },
-    { name: "Região Norte - Curitiba", count: 345, trend: -9 },
-  ]
+  dangerous: { name: "Zona Norte - SP", count: 2245, trend: 14 },
+  safe: { name: "Zona Sul - Florianópolis", count: 320, trend: -18 }
 };
 
 // Crime statistics data
@@ -60,19 +40,19 @@ const crimeStats = [
   }
 ];
 
-interface SafetyCardProps {
+interface SingleCityRegionCardProps {
   title: string;
   data: {
     name: string;
     count: number;
     trend: number;
-  }[];
+  };
   icon: React.ReactNode;
   colorClass: string;
 }
 
-// Component for city or region safety card
-const SafetyCard: React.FC<SafetyCardProps> = ({ title, data, icon, colorClass }) => {
+// Component for city or region safety card with a single item
+const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass }) => {
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", colorClass)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -81,26 +61,24 @@ const SafetyCard: React.FC<SafetyCardProps> = ({ title, data, icon, colorClass }
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {data.map((item, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{item.name}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">{item.count}</span>
-                <div className={cn(
-                  "flex items-center text-xs rounded-full px-2 py-0.5",
-                  item.trend > 0 
-                    ? "bg-red-100 text-red-700" 
-                    : "bg-green-100 text-green-700"
-                )}>
-                  {item.trend > 0 ? <ArrowUp className="h-3 w-3 mr-0.5" /> : <ArrowDown className="h-3 w-3 mr-0.5" />}
-                  {Math.abs(item.trend)}%
-                </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">{data.name}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">{data.count}</span>
+              <div className={cn(
+                "flex items-center text-xs rounded-full px-2 py-0.5",
+                data.trend > 0 
+                  ? "bg-red-100 text-red-700" 
+                  : "bg-green-100 text-green-700"
+              )}>
+                {data.trend > 0 ? <ArrowUp className="h-3 w-3 mr-0.5" /> : <ArrowDown className="h-3 w-3 mr-0.5" />}
+                {Math.abs(data.trend)}%
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -139,42 +117,42 @@ const SafetyCardsCarousel: React.FC = () => {
     <div className="mt-6">
       <Carousel opts={{ align: "start", loop: true }}>
         <CarouselContent className="-ml-2 md:-ml-4">
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
-            <SafetyCard 
-              title="Cidades Mais Perigosas" 
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+            <SingleCityRegionCard 
+              title="Cidade Mais Perigosa" 
               data={citiesData.dangerous} 
               icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
               colorClass="border-l-red-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
-            <SafetyCard 
-              title="Cidades Mais Seguras" 
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+            <SingleCityRegionCard 
+              title="Cidade Mais Segura" 
               data={citiesData.safe} 
               icon={<Shield className="h-5 w-5 text-green-500" />}
               colorClass="border-l-green-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
-            <SafetyCard 
-              title="Regiões Mais Perigosas" 
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+            <SingleCityRegionCard 
+              title="Região Mais Perigosa" 
               data={regionsData.dangerous} 
               icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
               colorClass="border-l-red-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
-            <SafetyCard 
-              title="Regiões Mais Seguras" 
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+            <SingleCityRegionCard 
+              title="Região Mais Segura" 
               data={regionsData.safe} 
               icon={<Shield className="h-5 w-5 text-green-500" />}
               colorClass="border-l-green-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
             <CrimeStatCard data={crimeStats[0]} />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/4">
+          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
             <CrimeStatCard data={crimeStats[1]} />
           </CarouselItem>
         </CarouselContent>

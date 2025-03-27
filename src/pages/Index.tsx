@@ -5,6 +5,8 @@ import StatusCards from "@/components/StatusCards";
 import OccurrenceCharts from "@/components/OccurrenceCharts";
 import RecentOccurrences from "@/components/RecentOccurrences";
 import GeographicDistribution from "@/components/GeographicDistribution";
+import LocalityData from "@/components/LocalityData";
+import SafetyCardsCarousel from "@/components/SafetyCards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 
@@ -21,16 +23,18 @@ const Index = () => {
             <TabsTrigger value="configuracoes">Configurações</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="dashboard" className="mt-4">
+          <TabsContent value="dashboard" className="mt-4 space-y-4">
             <StatusCards />
+            <SafetyCardsCarousel />
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <GeographicDistribution />
               <div className="col-span-1 md:col-span-2">
                 <OccurrenceCharts />
               </div>
             </div>
             
+            <LocalityData />
             <RecentOccurrences />
           </TabsContent>
           

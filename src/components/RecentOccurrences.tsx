@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, ChevronRight, Filter, Loader2, XCircle } from "lucide-react";
+import { ChevronRight, Filter, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,47 +15,32 @@ const recurringOccurrencesData = [
   {
     id: "OC-1234",
     description: "Furto de Veículo",
-    location: "Setor Centro",
     status: "Crítica",
     count: 245,
-    lastOccurrence: "15/05/2023",
-    assigned: "Equipe Segurança"
   },
   {
     id: "OC-1233",
     description: "Falta de iluminação pública",
-    location: "Rua 7, Setor Sul",
     status: "Alta",
     count: 210,
-    lastOccurrence: "15/05/2023",
-    assigned: "Equipe Elétrica"
   },
   {
     id: "OC-1232",
     description: "Acidente de Trânsito",
-    location: "Rua João Pedro, Setor Oeste",
     status: "Média",
     count: 180,
-    lastOccurrence: "15/05/2023",
-    assigned: "Equipe Trânsito"
   },
   {
     id: "OC-1231",
     description: "Invasão de Propriedade",
-    location: "Praça Central, Setor Centro",
     status: "Alta",
     count: 165,
-    lastOccurrence: "15/05/2023",
-    assigned: "Equipe Segurança"
   },
   {
     id: "OC-1230",
     description: "Vandalismo em Prédio Público",
-    location: "Cruzamento Av. Norte com Rua 5",
     status: "Alta",
     count: 155,
-    lastOccurrence: "14/05/2023",
-    assigned: "Equipe Manutenção"
   }
 ];
 
@@ -145,38 +130,21 @@ const RecentOccurrences: React.FC = () => {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Descrição</TableHead>
-                <TableHead>Local</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Total Ocorrências</TableHead>
-                <TableHead>Última Ocorrência</TableHead>
-                <TableHead>Responsável</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOccurrences.map((occurrence) => (
-                <TableRow key={occurrence.id}>
+                <TableRow key={occurrence.id} className="hover:bg-gray-50 transition-colors duration-200">
                   <TableCell className="font-medium">{occurrence.id}</TableCell>
                   <TableCell>{occurrence.description}</TableCell>
-                  <TableCell>{occurrence.location}</TableCell>
                   <TableCell>
                     <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle])}>
                       {occurrence.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">{occurrence.count}</TableCell>
-                  <TableCell>{occurrence.lastOccurrence}</TableCell>
-                  <TableCell>{occurrence.assigned}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end space-x-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Check className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <XCircle className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

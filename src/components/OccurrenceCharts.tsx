@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart,
@@ -8,8 +8,6 @@ import {
   Line,
   PieChart,
   Pie,
-  Area,
-  AreaChart,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -32,7 +30,47 @@ const weeklyData = [
   { name: "Dom", críticas: 1, altas: 3, médias: 5, baixas: 4 },
 ];
 
-// Yearly data for the last 4 years
+// Yearly data for crime types
+const crimeYearlyData = {
+  furto: [
+    { year: "2018", count: 10250 },
+    { year: "2019", count: 11320 },
+    { year: "2020", count: 9845 },
+    { year: "2021", count: 10580 },
+    { year: "2022", count: 12450 },
+    { year: "2023", count: 13650 },
+    { year: "2024", count: 12567 },
+  ],
+  roubo: [
+    { year: "2018", count: 8650 },
+    { year: "2019", count: 9120 },
+    { year: "2020", count: 7845 },
+    { year: "2021", count: 8280 },
+    { year: "2022", count: 9150 },
+    { year: "2023", count: 9650 },
+    { year: "2024", count: 8932 },
+  ],
+  estupro: [
+    { year: "2018", count: 2150 },
+    { year: "2019", count: 2320 },
+    { year: "2020", count: 2045 },
+    { year: "2021", count: 2180 },
+    { year: "2022", count: 2350 },
+    { year: "2023", count: 2450 },
+    { year: "2024", count: 2267 },
+  ],
+  homicidio: [
+    { year: "2018", count: 1450 },
+    { year: "2019", count: 1380 },
+    { year: "2020", count: 1245 },
+    { year: "2021", count: 1180 },
+    { year: "2022", count: 1050 },
+    { year: "2023", count: 950 },
+    { year: "2024", count: 876 },
+  ],
+};
+
+// Yearly total data
 const yearlyData = [
   { name: "2022", total: 1540 },
   { name: "2023", total: 1780 },
@@ -56,7 +94,20 @@ const categoryData = [
   { name: "Outros", value: 25 },
 ];
 
+const crimeTypeColors = {
+  furto: "#3B82F6",
+  roubo: "#EF4444",
+  estupro: "#7C3AED",
+  homicidio: "#111827"
+};
+
 const OccurrenceCharts: React.FC = () => {
+  const [crimeType, setCrimeType] = useState<string>("furto");
+  const [timePeriod, setTimePeriod] = useState<string>("semanal");
+  
+  const currentCrimeData = crimeYearlyData[crimeType as keyof typeof crimeYearlyData];
+  const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <Card className="col-span-1 md:col-span-2">
@@ -65,7 +116,11 @@ const OccurrenceCharts: React.FC = () => {
             <CardTitle>Ocorrências por Dia</CardTitle>
             <CardDescription>Distribuição diária de ocorrências por prioridade</CardDescription>
           </div>
-          <Select defaultValue="semanal">
+          <Select 
+            defaultValue="semanal" 
+            value={timePeriod}
+            onValueChange={(value) => setTimePeriod(value)}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Período" />
             </SelectTrigger>
@@ -90,6 +145,60 @@ const OccurrenceCharts: React.FC = () => {
                 <Bar dataKey="médias" name="Médias" stackId="a" fill="#F59E0B" />
                 <Bar dataKey="baixas" name="Baixas" stackId="a" fill="#10B981" />
               </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="col-span-1 md:col-span-2">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Evolução de Crimes por Ano</CardTitle>
+            <CardDescription>Crescimento anual por tipo de crime</CardDescription>
+          </div>
+          <Select 
+            value={crimeType} 
+            onValueChange={(value) => setCrimeType(value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Tipo de Crime" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="furto">Furto</SelectItem>
+              <SelectItem value="roubo">Roubo</SelectItem>
+              <SelectItem value="estupro">Estupro</SelectItem>
+              <SelectItem value="homicidio">Homicídio</SelectItem>
+            </SelectContent>
+          </Select>
+        </CardHeader>
+        <CardContent>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                data={currentCrimeData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="year" 
+                  padding={{ left: 20, right: 20 }}
+                />
+                <YAxis />
+                <Tooltip 
+                  formatter={(value) => [`${value} ocorrências`, `Total de ${crimeType}`]}
+                  labelFormatter={(label) => `Ano: ${label}`}
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  name={`Total de ${crimeType}`}
+                  stroke={colorForCrime}
+                  strokeWidth={3}
+                  dot={{ r: 6, strokeWidth: 2 }}
+                  activeDot={{ r: 8, strokeWidth: 2 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </div>
         </CardContent>

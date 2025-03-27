@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -113,9 +115,44 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
 };
 
 const SafetyCardsCarousel: React.FC = () => {
+  // Create autoplay plugin instance with options
+  const autoplayPlugin = React.useMemo(() => 
+    Autoplay({ 
+      delay: 3000, // 3 seconds delay between slides
+      stopOnInteraction: false, // Continue autoplay after user interaction
+      stopOnMouseEnter: true, // Pause on mouse hover
+    }), 
+    []
+  );
+
+  const [api, setApi] = useState<any>(null);
+
+  // Set up embla carousel with autoplay plugin
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      align: "start", 
+      loop: true,
+      skipSnaps: false
+    }, 
+    [autoplayPlugin]
+  );
+
+  useEffect(() => {
+    if (emblaApi) {
+      setApi(emblaApi);
+    }
+  }, [emblaApi]);
+
   return (
     <div className="mt-6">
-      <Carousel opts={{ align: "start", loop: true }}>
+      <Carousel 
+        opts={{ 
+          align: "start", 
+          loop: true 
+        }}
+        plugins={[autoplayPlugin]}
+        setApi={setApi}
+      >
         <CarouselContent className="-ml-2 md:-ml-4">
           <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
             <SingleCityRegionCard 

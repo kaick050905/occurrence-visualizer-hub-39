@@ -1,7 +1,6 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -64,49 +63,45 @@ const GeographicDistribution: React.FC = () => {
           </TabsList>
           
           <TabsContent value="regiao">
-            <ScrollArea className="h-[220px] pr-4">
-              <div className="space-y-6">
-                {regionsData.map((region) => (
-                  <div key={region.name}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="font-medium">{region.name}</div>
-                      <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress 
-                        value={region.percentage} 
-                        max={100} 
-                        className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
-                      />
-                      <span className="text-sm font-medium">{region.percentage}%</span>
-                    </div>
+            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
+              {regionsData.map((region) => (
+                <div key={region.name}>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="font-medium">{region.name}</div>
+                    <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
+                  <div className="flex items-center gap-2">
+                    <Progress 
+                      value={region.percentage} 
+                      max={100} 
+                      className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
+                    />
+                    <span className="text-sm font-medium">{region.percentage}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </TabsContent>
           
           <TabsContent value="tipo">
-            <ScrollArea className="h-[220px] pr-4">
-              <div className="space-y-6">
-                {occurrenceTypesData.map((type) => (
-                  <div key={type.name}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="font-medium">{type.name}</div>
-                      <div className="text-sm text-muted-foreground">{type.count} ocorrências</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress 
-                        value={type.percentage} 
-                        max={100} 
-                        className={cn("h-2", statusColors[type.status as keyof typeof statusColors])} 
-                      />
-                      <span className="text-sm font-medium">{type.percentage}%</span>
-                    </div>
+            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
+              {occurrenceTypesData.map((type) => (
+                <div key={type.name}>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="font-medium">{type.name}</div>
+                    <div className="text-sm text-muted-foreground">{type.count} ocorrências</div>
                   </div>
-                ))}
-              </div>
-            </ScrollArea>
+                  <div className="flex items-center gap-2">
+                    <Progress 
+                      value={type.percentage} 
+                      max={100} 
+                      className={cn("h-2", statusColors[type.status as keyof typeof statusColors])} 
+                    />
+                    <span className="text-sm font-medium">{type.percentage}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>

@@ -1,22 +1,12 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Region data with city, region name, population, HDI, and occurrences in 2024
-const regionsData = [
-  { name: "Zona Norte", count: 132, percentage: 28, status: "Crítica" },
-  { name: "Zona Sul", count: 97, percentage: 21, status: "Alta" },
-  { name: "Zona Leste", count: 86, percentage: 18, status: "Média" },
-  { name: "Zona Oeste", count: 110, percentage: 23, status: "Alta" },
-  { name: "Centro", count: 45, percentage: 10, status: "Baixa" },
-];
-
-// 23 types of occurrences data
-const occurrenceTypesData = [
+// Crime type data
+const crimeTypeData = [
   { name: "Furto", count: 245, percentage: 15, status: "Crítica" },
   { name: "Roubo", count: 210, percentage: 13, status: "Crítica" },
   { name: "Acidente de Trânsito", count: 180, percentage: 11, status: "Alta" },
@@ -53,62 +43,30 @@ const GeographicDistribution: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Distribuição</CardTitle>
-        <CardDescription>Por região e tipo de ocorrência</CardDescription>
+        <CardTitle>Distribuição por tipo de crime</CardTitle>
+        <CardDescription>Ocorrências por categorias</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="regiao">
-          <TabsList className="mb-4">
-            <TabsTrigger value="regiao">Por Região</TabsTrigger>
-            <TabsTrigger value="tipo">Por Tipo</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="regiao">
-            <ScrollArea className="h-[220px] pr-4">
-              <div className="space-y-6">
-                {regionsData.map((region) => (
-                  <div key={region.name}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="font-medium">{region.name}</div>
-                      <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress 
-                        value={region.percentage} 
-                        max={100} 
-                        className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
-                      />
-                      <span className="text-sm font-medium">{region.percentage}%</span>
-                    </div>
-                  </div>
-                ))}
+        <ScrollArea className="h-[220px] pr-4">
+          <div className="space-y-6">
+            {crimeTypeData.map((crime) => (
+              <div key={crime.name}>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="font-medium">{crime.name}</div>
+                  <div className="text-sm text-muted-foreground">{crime.count} ocorrências</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Progress 
+                    value={crime.percentage} 
+                    max={100} 
+                    className={cn("h-2", statusColors[crime.status as keyof typeof statusColors])} 
+                  />
+                  <span className="text-sm font-medium">{crime.percentage}%</span>
+                </div>
               </div>
-            </ScrollArea>
-          </TabsContent>
-          
-          <TabsContent value="tipo">
-            <ScrollArea className="h-[220px] pr-4">
-              <div className="space-y-6">
-                {occurrenceTypesData.map((type) => (
-                  <div key={type.name}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="font-medium">{type.name}</div>
-                      <div className="text-sm text-muted-foreground">{type.count} ocorrências</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress 
-                        value={type.percentage} 
-                        max={100} 
-                        className={cn("h-2", statusColors[type.status as keyof typeof statusColors])} 
-                      />
-                      <span className="text-sm font-medium">{type.percentage}%</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

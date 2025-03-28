@@ -10,34 +10,34 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-// Sample data for most recurring occurrences
+// Sample data for most recurring occurrences - Updated with ID_TIPO instead of ID
 const recurringOccurrencesData = [
   {
-    id: "OC-1234",
+    id: "TP-001",  // ID_TIPO em formato de código
     description: "Furto de Veículo",
     status: "Crítica",
     count: 245,
   },
   {
-    id: "OC-1233",
+    id: "TP-002",
     description: "Falta de iluminação pública",
     status: "Alta",
     count: 210,
   },
   {
-    id: "OC-1232",
+    id: "TP-003",
     description: "Acidente de Trânsito",
     status: "Média",
     count: 180,
   },
   {
-    id: "OC-1231",
+    id: "TP-004",
     description: "Invasão de Propriedade",
     status: "Alta",
     count: 165,
   },
   {
-    id: "OC-1230",
+    id: "TP-005",
     description: "Vandalismo em Prédio Público",
     status: "Alta",
     count: 155,
@@ -116,7 +116,7 @@ const RecentOccurrences: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>ID Tipo</TableHead>
                 <TableHead>Descrição</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Total Ocorrências</TableHead>

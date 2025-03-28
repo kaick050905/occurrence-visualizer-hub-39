@@ -57,26 +57,26 @@ const GeographicDistribution: React.FC = () => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="regiao">
-          <TabsList className="mb-4">
-            <TabsTrigger value="regiao">Por Região</TabsTrigger>
-            <TabsTrigger value="tipo">Por Tipo</TabsTrigger>
+          <TabsList className="mb-4 w-full flex">
+            <TabsTrigger value="regiao" className="flex-1">Por Região</TabsTrigger>
+            <TabsTrigger value="tipo" className="flex-1">Por Tipo</TabsTrigger>
           </TabsList>
           
           <TabsContent value="regiao">
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
               {regionsData.map((region) => (
-                <div key={region.name}>
-                  <div className="flex items-center justify-between mb-1">
+                <div key={region.name} className="border p-3 rounded-lg hover:bg-gray-50 transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1">
                     <div className="font-medium">{region.name}</div>
                     <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mt-2">
                     <Progress 
                       value={region.percentage} 
                       max={100} 
-                      className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
+                      className={cn("h-2 flex-grow", statusColors[region.status as keyof typeof statusColors])} 
                     />
-                    <span className="text-sm font-medium">{region.percentage}%</span>
+                    <span className="text-sm font-medium min-w-[40px] text-right">{region.percentage}%</span>
                   </div>
                 </div>
               ))}

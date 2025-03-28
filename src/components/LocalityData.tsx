@@ -1,9 +1,10 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Users, Activity, BarChart } from "lucide-react";
+import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 
 // Sample data for cities
 const citiesData = [
@@ -91,6 +92,13 @@ const formatNumber = (num: number): string => {
 };
 
 const LocalityData: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const filteredCities = citiesData.filter(city => 
+    city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    city.region.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Card className="mt-6">
       <CardHeader>
@@ -98,6 +106,16 @@ const LocalityData: React.FC = () => {
         <CardDescription>Informações sobre cidades, população, IDH e ocorrências</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="relative mb-4">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Pesquisar cidade ou região..."
+            className="pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
         <Tabs defaultValue="cidades">
           <TabsList className="mb-4">
             <TabsTrigger value="cidades">Por Cidade</TabsTrigger>
@@ -107,48 +125,54 @@ const LocalityData: React.FC = () => {
           <TabsContent value="cidades">
             <ScrollArea className="h-[300px] pr-4">
               <div className="space-y-4">
-                {citiesData.map((city, index) => (
-                  <div 
-                    key={index} 
-                    className="p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-md transition-all duration-300"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-5 w-5 text-primary" />
-                        <span className="font-semibold text-lg">{city.name}</span>
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Região: {city.region}
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-blue-500" />
-                        <div>
-                          <div className="text-sm text-muted-foreground">População</div>
-                          <div className="font-medium">{city.population}</div>
+                {filteredCities.length > 0 ? (
+                  filteredCities.map((city, index) => (
+                    <div 
+                      key={index} 
+                      className="p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-5 w-5 text-primary" />
+                          <span className="font-semibold text-lg">{city.name}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Região: {city.region}
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-2">
-                        <Activity className="h-4 w-4 text-purple-500" />
-                        <div>
-                          <div className="text-sm text-muted-foreground">IDH</div>
-                          <div className={`font-medium ${getHDIColor(city.hdi)}`}>{city.hdi}</div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-blue-500" />
+                          <div>
+                            <div className="text-sm text-muted-foreground">População</div>
+                            <div className="font-medium">{city.population}</div>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <BarChart className="h-4 w-4 text-red-500" />
-                        <div>
-                          <div className="text-sm text-muted-foreground">Ocorrências em 2024</div>
-                          <div className="font-medium">{formatNumber(city.occurrences2024)}</div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Activity className="h-4 w-4 text-purple-500" />
+                          <div>
+                            <div className="text-sm text-muted-foreground">IDH</div>
+                            <div className={`font-medium ${getHDIColor(city.hdi)}`}>{city.hdi}</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <BarChart className="h-4 w-4 text-red-500" />
+                          <div>
+                            <div className="text-sm text-muted-foreground">Ocorrências em 2024</div>
+                            <div className="font-medium">{formatNumber(city.occurrences2024)}</div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8">
+                    <p className="text-muted-foreground">Nenhuma cidade encontrada</p>
                   </div>
-                ))}
+                )}
               </div>
             </ScrollArea>
           </TabsContent>

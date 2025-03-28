@@ -63,7 +63,7 @@ const GeographicDistribution: React.FC = () => {
           </TabsList>
           
           <TabsContent value="regiao">
-            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
+            <div className="space-y-4">
               {regionsData.map((region) => (
                 <div key={region.name}>
                   <div className="flex items-center justify-between mb-1">
@@ -84,8 +84,8 @@ const GeographicDistribution: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="tipo">
-            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
-              {occurrenceTypesData.map((type) => (
+            <div className="space-y-4">
+              {occurrenceTypesData.slice(0, 10).map((type) => (
                 <div key={type.name}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="font-medium">{type.name}</div>

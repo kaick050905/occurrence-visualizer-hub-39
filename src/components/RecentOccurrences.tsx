@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Filter, Loader2 } from "lucide-react";
+import { ChevronRight, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -56,7 +56,6 @@ const statusStyle = {
 
 const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
@@ -69,14 +68,6 @@ const RecentOccurrences: React.FC = () => {
   const filteredOccurrences = statusFilter.length > 0
     ? recurringOccurrencesData.filter(item => statusFilter.includes(item.status))
     : recurringOccurrencesData;
-
-  const handleRefresh = () => {
-    setLoading(true);
-    // Simulate data fetching
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-  };
 
   return (
     <Card className="mt-6">
@@ -118,9 +109,6 @@ const RecentOccurrences: React.FC = () => {
               </div>
             </PopoverContent>
           </Popover>
-          <Button size="sm" variant="outline" className="h-8" onClick={handleRefresh} disabled={loading}>
-            {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Atualizar"}
-          </Button>
         </div>
       </CardHeader>
       <CardContent>

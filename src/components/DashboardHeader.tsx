@@ -18,8 +18,12 @@ const DashboardHeader: React.FC = () => {
 
   return (
     <Card className="mb-6 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div>
-        <h1 className="text-2xl font-bold">INFO SP</h1>
+      <div className="flex items-center gap-3">
+        <img 
+          src="/lovable-uploads/fcf12f31-12c0-4ba3-9909-00dfc69ade2e.png" 
+          alt="Info SP Logo" 
+          className="h-12 md:h-14"
+        />
         <p className="text-muted-foreground">{capitalizedDate}</p>
       </div>
       <div className="flex items-center gap-3 w-full sm:w-auto">

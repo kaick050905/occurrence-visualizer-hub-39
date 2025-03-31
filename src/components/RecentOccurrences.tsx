@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -9,40 +9,8 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-
-// Sample data for most recurring occurrences - Updated with ID_TIPO instead of ID
-const recurringOccurrencesData = [
-  {
-    id: "TP-001",  // ID_TIPO em formato de código
-    description: "Furto de Veículo",
-    status: "Crítica",
-    count: 245,
-  },
-  {
-    id: "TP-002",
-    description: "Falta de iluminação pública",
-    status: "Alta",
-    count: 210,
-  },
-  {
-    id: "TP-003",
-    description: "Acidente de Trânsito",
-    status: "Média",
-    count: 180,
-  },
-  {
-    id: "TP-004",
-    description: "Invasão de Propriedade",
-    status: "Alta",
-    count: 165,
-  },
-  {
-    id: "TP-005",
-    description: "Vandalismo em Prédio Público",
-    status: "Alta",
-    count: 155,
-  }
-];
+import { fetchMostCommonOccurrenceTypes } from "@/services/supabaseService";
+import { useQuery } from "@tanstack/react-query";
 
 const statusStyle = {
   Crítica: "bg-occurrence-critical text-white",
@@ -57,6 +25,11 @@ const statusStyle = {
 const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
+  const { data: recurringOccurrencesData = [], isLoading, error } = useQuery({
+    queryKey: ['mostCommonOccurrenceTypes'],
+    queryFn: () => fetchMostCommonOccurrenceTypes(5),
+  });
+
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
       prevFilters.includes(status)
@@ -68,6 +41,10 @@ const RecentOccurrences: React.FC = () => {
   const filteredOccurrences = statusFilter.length > 0
     ? recurringOccurrencesData.filter(item => statusFilter.includes(item.status))
     : recurringOccurrencesData;
+
+  if (error) {
+    console.error("Error fetching occurrence data:", error);
+  }
 
   return (
     <Card className="mt-6">
@@ -113,30 +90,42 @@ const RecentOccurrences: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="overflow-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID Tipo</TableHead>
-                <TableHead>Descrição</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Total Ocorrências</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOccurrences.map((occurrence) => (
-                <TableRow key={occurrence.id} className="hover:bg-gray-50 transition-colors duration-200">
-                  <TableCell className="font-medium">{occurrence.id}</TableCell>
-                  <TableCell>{occurrence.description}</TableCell>
-                  <TableCell>
-                    <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle])}>
-                      {occurrence.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-medium">{occurrence.count}</TableCell>
+          {isLoading ? (
+            <div className="text-center py-8">Carregando dados...</div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID Tipo</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Total Ocorrências</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredOccurrences.length > 0 ? (
+                  filteredOccurrences.map((occurrence) => (
+                    <TableRow key={occurrence.id} className="hover:bg-gray-50 transition-colors duration-200">
+                      <TableCell className="font-medium">{occurrence.id}</TableCell>
+                      <TableCell>{occurrence.description}</TableCell>
+                      <TableCell>
+                        <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle] || "bg-gray-500 text-white")}>
+                          {occurrence.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-medium">{occurrence.count}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-4">
+                      Nenhum dado encontrado
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between border-t p-4">

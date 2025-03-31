@@ -9,7 +9,110 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      locations: {
+        Row: {
+          ID_LOCALIDADE: number
+          ID_REGIAO: number | null
+          IDH: string | null
+          NOME: string | null
+          População: string | null
+        }
+        Insert: {
+          ID_LOCALIDADE: number
+          ID_REGIAO?: number | null
+          IDH?: string | null
+          NOME?: string | null
+          População?: string | null
+        }
+        Update: {
+          ID_LOCALIDADE?: number
+          ID_REGIAO?: number | null
+          IDH?: string | null
+          NOME?: string | null
+          População?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "locations_ID_REGIAO_fkey"
+            columns: ["ID_REGIAO"]
+            isOneToOne: false
+            referencedRelation: "region"
+            referencedColumns: ["ID_REGIAO"]
+          },
+        ]
+      }
+      occurrences: {
+        Row: {
+          ANO: number | null
+          ID_LOCALIDADE: number | null
+          ID_OCORRENCIA: number
+          QUANTIDADE: string | null
+          TIPO_OCO: string | null
+        }
+        Insert: {
+          ANO?: number | null
+          ID_LOCALIDADE?: number | null
+          ID_OCORRENCIA: number
+          QUANTIDADE?: string | null
+          TIPO_OCO?: string | null
+        }
+        Update: {
+          ANO?: number | null
+          ID_LOCALIDADE?: number | null
+          ID_OCORRENCIA?: number
+          QUANTIDADE?: string | null
+          TIPO_OCO?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "occurrences_ID_LOCALIDADE_fkey"
+            columns: ["ID_LOCALIDADE"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["ID_LOCALIDADE"]
+          },
+          {
+            foreignKeyName: "occurrences_TIPO_OCO_fkey"
+            columns: ["TIPO_OCO"]
+            isOneToOne: false
+            referencedRelation: "relacao"
+            referencedColumns: ["TIPO_OCO"]
+          },
+        ]
+      }
+      region: {
+        Row: {
+          ID_REGIAO: number
+          REGIAO: string | null
+        }
+        Insert: {
+          ID_REGIAO: number
+          REGIAO?: string | null
+        }
+        Update: {
+          ID_REGIAO?: number
+          REGIAO?: string | null
+        }
+        Relationships: []
+      }
+      relacao: {
+        Row: {
+          "DESCRICAO RESUMIDA": string | null
+          NÍVEL: string | null
+          TIPO_OCO: string
+        }
+        Insert: {
+          "DESCRICAO RESUMIDA"?: string | null
+          NÍVEL?: string | null
+          TIPO_OCO: string
+        }
+        Update: {
+          "DESCRICAO RESUMIDA"?: string | null
+          NÍVEL?: string | null
+          TIPO_OCO?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

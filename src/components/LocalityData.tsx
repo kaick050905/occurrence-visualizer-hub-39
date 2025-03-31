@@ -1,12 +1,13 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
+import { MapPin, Users, Activity, BarChart, Search, AlertCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { fetchLocations } from "@/services/supabaseService";
 import { useQuery } from "@tanstack/react-query";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const getHDIColor = (hdi: number | string): string => {
   if (!hdi) return "text-gray-600";
@@ -25,15 +26,43 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString('pt-BR');
 };
 
+// Sample data for development when the database is empty
+const sampleLocations = [
+  {
+    ID_LOCALIDADE: 1,
+    NOME: "São Paulo",
+    region: { REGIAO: "Sudeste" },
+    "População": "12.325.232",
+    IDH: "0.805"
+  },
+  {
+    ID_LOCALIDADE: 2,
+    NOME: "Rio de Janeiro",
+    region: { REGIAO: "Sudeste" },
+    "População": "6.747.815",
+    IDH: "0.799"
+  },
+  {
+    ID_LOCALIDADE: 3,
+    NOME: "Salvador",
+    region: { REGIAO: "Nordeste" },
+    "População": "2.886.698",
+    IDH: "0.759"
+  }
+];
+
 const LocalityData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   
-  const { data: locations = [], isLoading } = useQuery({
+  const { data: locations = [], isLoading, error } = useQuery({
     queryKey: ['locations'],
     queryFn: fetchLocations,
   });
   
-  const filteredLocations = locations.filter(location => 
+  // If no data from API, use sample data for development
+  const displayData = locations.length > 0 ? locations : sampleLocations;
+  
+  const filteredLocations = displayData.filter(location => 
     location.NOME?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     location.region?.REGIAO?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -43,6 +72,26 @@ const LocalityData: React.FC = () => {
       <CardHeader>
         <CardTitle>Dados da Localidade</CardTitle>
         <CardDescription>Informações sobre cidades, população, IDH e ocorrências</CardDescription>
+        
+        {error && (
+          <Alert variant="destructive" className="mt-2">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Erro</AlertTitle>
+            <AlertDescription>
+              Não foi possível carregar os dados das localidades. Tente novamente mais tarde.
+            </AlertDescription>
+          </Alert>
+        )}
+        
+        {locations.length === 0 && !isLoading && !error && (
+          <Alert className="mt-2">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Informação</AlertTitle>
+            <AlertDescription>
+              Não há dados de localidades disponíveis no banco de dados. Exibindo dados de exemplo.
+            </AlertDescription>
+          </Alert>
+        )}
       </CardHeader>
       <CardContent>
         <div className="relative mb-4">

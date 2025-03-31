@@ -1,16 +1,17 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Filter } from "lucide-react";
+import { ChevronRight, Filter, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { fetchMostCommonOccurrenceTypes } from "@/services/supabaseService";
 import { useQuery } from "@tanstack/react-query";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const statusStyle = {
   Crítica: "bg-occurrence-critical text-white",
@@ -22,13 +23,25 @@ const statusStyle = {
   Cancelada: "bg-gray-500 text-white"
 };
 
+// Sample data for development when the database is empty
+const sampleOccurrenceData = [
+  { id: "RB01", description: "Roubo", status: "Alta", count: 134 },
+  { id: "FT03", description: "Furto", status: "Média", count: 89 },
+  { id: "HM01", description: "Homicídio", status: "Crítica", count: 45 },
+  { id: "DG02", description: "Dano ao patrimônio", status: "Baixa", count: 67 },
+  { id: "VI02", description: "Violência doméstica", status: "Alta", count: 103 }
+];
+
 const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
-  const { data: recurringOccurrencesData = [], isLoading, error } = useQuery({
+  const { data: occurencesData = [], isLoading, error } = useQuery({
     queryKey: ['mostCommonOccurrenceTypes'],
     queryFn: () => fetchMostCommonOccurrenceTypes(5),
   });
+  
+  // If no data from API, use sample data for development
+  const recurringOccurrencesData = occurencesData.length > 0 ? occurencesData : sampleOccurrenceData;
 
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
@@ -52,6 +65,26 @@ const RecentOccurrences: React.FC = () => {
         <div>
           <CardTitle>Ocorrências Mais Recorrentes</CardTitle>
           <CardDescription>Tipos de ocorrências mais frequentes no sistema</CardDescription>
+          
+          {error && (
+            <Alert variant="destructive" className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Erro</AlertTitle>
+              <AlertDescription>
+                Não foi possível carregar os dados de ocorrências. Tente novamente mais tarde.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {occurencesData.length === 0 && !isLoading && !error && (
+            <Alert className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Informação</AlertTitle>
+              <AlertDescription>
+                Não há dados de ocorrências disponíveis no banco de dados. Exibindo dados de exemplo.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
         <div className="flex gap-2">
           <Popover>

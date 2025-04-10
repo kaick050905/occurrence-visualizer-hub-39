@@ -8,8 +8,42 @@ import { MapPin, Search, Map } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { fetchRegions, fetchLocationsByRegion } from "@/services/supabaseService";
-import { useQuery } from "@tanstack/react-query";
+
+// Region data with status
+const regionsData = [
+  { name: "Zona Norte", count: 132, percentage: 28, status: "Crítica" },
+  { name: "Zona Sul", count: 97, percentage: 21, status: "Alta" },
+  { name: "Zona Leste", count: 86, percentage: 18, status: "Média" },
+  { name: "Zona Oeste", count: 110, percentage: 23, status: "Alta" },
+  { name: "Centro", count: 45, percentage: 10, status: "Baixa" },
+];
+
+// Districts data
+const districtsData = [
+  { name: "Santana", region: "Zona Norte", count: 48, percentage: 36, status: "Crítica" },
+  { name: "Tucuruvi", region: "Zona Norte", count: 35, percentage: 27, status: "Alta" },
+  { name: "Vila Maria", region: "Zona Norte", count: 28, percentage: 21, status: "Média" },
+  { name: "Jaçanã", region: "Zona Norte", count: 21, percentage: 16, status: "Média" },
+  
+  { name: "Moema", region: "Zona Sul", count: 32, percentage: 33, status: "Alta" },
+  { name: "Itaim Bibi", region: "Zona Sul", count: 28, percentage: 29, status: "Alta" },
+  { name: "Campo Belo", region: "Zona Sul", count: 22, percentage: 23, status: "Média" },
+  { name: "Jabaquara", region: "Zona Sul", count: 15, percentage: 15, status: "Baixa" },
+  
+  { name: "Tatuapé", region: "Zona Leste", count: 30, percentage: 35, status: "Alta" },
+  { name: "Penha", region: "Zona Leste", count: 25, percentage: 29, status: "Alta" },
+  { name: "Itaquera", region: "Zona Leste", count: 18, percentage: 21, status: "Média" },
+  { name: "São Miguel", region: "Zona Leste", count: 13, percentage: 15, status: "Baixa" },
+  
+  { name: "Pinheiros", region: "Zona Oeste", count: 42, percentage: 38, status: "Crítica" },
+  { name: "Butantã", region: "Zona Oeste", count: 34, percentage: 31, status: "Alta" },
+  { name: "Lapa", region: "Zona Oeste", count: 25, percentage: 23, status: "Média" },
+  { name: "Rio Pequeno", region: "Zona Oeste", count: 9, percentage: 8, status: "Baixa" },
+  
+  { name: "Sé", region: "Centro", count: 19, percentage: 42, status: "Alta" },
+  { name: "República", region: "Centro", count: 15, percentage: 33, status: "Média" },
+  { name: "Bela Vista", region: "Centro", count: 11, percentage: 25, status: "Baixa" }
+];
 
 const statusColors = {
   Crítica: "bg-occurrence-critical",
@@ -18,67 +52,14 @@ const statusColors = {
   Baixa: "bg-occurrence-low"
 };
 
-// Helper function to determine status based on occurrence count
-const getStatusFromCount = (count: number): string => {
-  if (count > 100) return "Crítica";
-  if (count > 50) return "Alta";
-  if (count > 20) return "Média";
-  return "Baixa";
-};
-
 const RegionalData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   
-  // Fetch all regions
-  const { data: regionsData = [], isLoading: isRegionsLoading } = useQuery({
-    queryKey: ['regions'],
-    queryFn: fetchRegions,
-  });
-
-  // Fetch districts (locations) by region
-  const { data: districtsData = [], isLoading: isDistrictsLoading } = useQuery({
-    queryKey: ['locationsByRegion', selectedRegion],
-    queryFn: () => selectedRegion ? fetchLocationsByRegion(selectedRegion) : fetchLocationsByRegion(0),
-    enabled: true, // Always enabled to fetch all locations if no region is selected
-  });
-  
-  // Process regions data to add calculated fields
-  const processedRegions = regionsData.map((region) => {
-    const regionLocations = districtsData.filter(loc => loc.ID_REGIAO === region.ID_REGIAO);
-    const count = regionLocations.length;
-    const totalCount = districtsData.length || 1; // Avoid division by zero
-    const percentage = Math.round((count / totalCount) * 100);
-    const status = getStatusFromCount(count);
-    
-    return {
-      ...region,
-      name: region.REGIAO || `Região ${region.ID_REGIAO}`,
-      count: count,
-      percentage: percentage,
-      status: status
-    };
-  });
-  
-  // Filter districts based on search and selected region
   const filteredDistricts = districtsData.filter(district => {
-    const matchesSearch = district.NOME?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
-    const matchesRegion = selectedRegion ? district.ID_REGIAO === selectedRegion : true;
+    const matchesSearch = district.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRegion = selectedRegion ? district.region === selectedRegion : true;
     return matchesSearch && matchesRegion;
-  }).map(district => {
-    // Calculate percentage and status for each district
-    const regionLocations = districtsData.filter(loc => loc.ID_REGIAO === district.ID_REGIAO);
-    const regionTotal = regionLocations.length || 1;
-    const percentage = Math.round((1 / regionTotal) * 100);
-    
-    return {
-      ...district,
-      name: district.NOME || `Localidade ${district.ID_LOCALIDADE}`,
-      region: regionsData.find(r => r.ID_REGIAO === district.ID_REGIAO)?.REGIAO || "Região Desconhecida",
-      count: Math.floor(Math.random() * 50) + 5, // Random count for demonstration
-      percentage: percentage,
-      status: getStatusFromCount(Math.floor(Math.random() * 100) + 1) // Random status for demonstration
-    };
   });
 
   return (
@@ -100,37 +81,31 @@ const RegionalData: React.FC = () => {
               <CardDescription>Distribuição de ocorrências por região</CardDescription>
             </CardHeader>
             <CardContent>
-              {isRegionsLoading ? (
-                <div className="flex items-center justify-center h-[300px]">
-                  <p>Carregando regiões...</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {processedRegions.map((region) => (
-                    <div 
-                      key={region.ID_REGIAO}
-                      className={cn(
-                        "p-3 rounded-lg cursor-pointer transition-all",
-                        selectedRegion === region.ID_REGIAO ? "bg-gray-100" : "hover:bg-gray-50"
-                      )}
-                      onClick={() => setSelectedRegion(selectedRegion === region.ID_REGIAO ? null : region.ID_REGIAO)}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="font-medium">{region.name}</div>
-                        <div className="text-sm text-muted-foreground">{region.count} localidades</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Progress 
-                          value={region.percentage} 
-                          max={100} 
-                          className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
-                        />
-                        <span className="text-sm font-medium">{region.percentage}%</span>
-                      </div>
+              <div className="space-y-6">
+                {regionsData.map((region) => (
+                  <div 
+                    key={region.name}
+                    className={cn(
+                      "p-3 rounded-lg cursor-pointer transition-all",
+                      selectedRegion === region.name ? "bg-gray-100" : "hover:bg-gray-50"
+                    )}
+                    onClick={() => setSelectedRegion(selectedRegion === region.name ? null : region.name)}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="font-medium">{region.name}</div>
+                      <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div className="flex items-center gap-2">
+                      <Progress 
+                        value={region.percentage} 
+                        max={100} 
+                        className={cn("h-2", statusColors[region.status as keyof typeof statusColors])} 
+                      />
+                      <span className="text-sm font-medium">{region.percentage}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
           
@@ -140,7 +115,7 @@ const RegionalData: React.FC = () => {
                 <CardTitle>Bairros</CardTitle>
                 <CardDescription>
                   {selectedRegion 
-                    ? `Ocorrências em bairros da ${processedRegions.find(r => r.ID_REGIAO === selectedRegion)?.name || "região selecionada"}` 
+                    ? `Ocorrências em bairros da ${selectedRegion}` 
                     : "Ocorrências por bairro em todas as regiões"}
                 </CardDescription>
               </div>
@@ -167,14 +142,10 @@ const RegionalData: React.FC = () => {
               </div>
               
               <div className="space-y-4 h-[260px] overflow-y-auto pr-2">
-                {isDistrictsLoading ? (
-                  <div className="flex items-center justify-center h-full">
-                    <p>Carregando localidades...</p>
-                  </div>
-                ) : filteredDistricts.length > 0 ? (
+                {filteredDistricts.length > 0 ? (
                   filteredDistricts.map((district) => (
                     <div 
-                      key={district.ID_LOCALIDADE} 
+                      key={district.name} 
                       className="p-3 border rounded-lg hover:bg-gray-50 transition-all"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">

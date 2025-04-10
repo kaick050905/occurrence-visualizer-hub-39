@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart,
@@ -17,10 +18,8 @@ import {
 } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fetchOccurrencesByYear, fetchMostCommonOccurrenceTypes } from "@/services/supabaseService";
-import { useQuery } from "@tanstack/react-query";
 
-// Sample data for when real data is not available
+// Sample data
 const weeklyData = [
   { name: "Seg", críticas: 4, altas: 8, médias: 15, baixas: 10 },
   { name: "Ter", críticas: 3, altas: 10, médias: 12, baixas: 8 },
@@ -106,12 +105,6 @@ const OccurrenceCharts: React.FC = () => {
   const [crimeType, setCrimeType] = useState<string>("furto");
   const [timePeriod, setTimePeriod] = useState<string>("semanal");
   
-  // Query for yearly data
-  const { data: yearlyData = [], isLoading: isYearlyLoading } = useQuery({
-    queryKey: ['occurrencesByYear'],
-    queryFn: fetchOccurrencesByYear,
-  });
-
   const currentCrimeData = crimeYearlyData[crimeType as keyof typeof crimeYearlyData];
   const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
 
@@ -214,34 +207,31 @@ const OccurrenceCharts: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Total de Ocorrências dos Últimos Anos</CardTitle>
-          <CardDescription>Registros anuais por ano</CardDescription>
+          <CardDescription>Registros anuais de 2022 a 2025</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="chart-container">
-            {isYearlyLoading ? (
-              <div className="flex items-center justify-center h-[250px]">
-                <p>Carregando dados...</p>
-              </div>
-            ) : yearlyData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar 
-                    dataKey="total" 
-                    fill="#3B82F6"
-                    radius={[4, 4, 0, 0]}
-                    name="Total de Ocorrências"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex items-center justify-center h-[250px]">
-                <p>Nenhum dado disponível</p>
-              </div>
-            )}
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar 
+                  dataKey="total" 
+                  fill="#3B82F6"
+                  radius={[4, 4, 0, 0]}
+                  name="Total de Ocorrências"
+                >
+                  {yearlyData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.emProgresso ? "#94A3B8" : "#3B82F6"} 
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
@@ -275,10 +265,7 @@ const OccurrenceCharts: React.FC = () => {
                       label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
                     >
                       {priorityData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={entry.color} 
-                        />
+                        <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +7,7 @@ import Index from "./pages/Index";
 import Reports from "./pages/Reports";
 import RegionalData from "./pages/RegionalData";
 import NotFound from "./pages/NotFound";
+import CityDetails from "./pages/CityDetails";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -28,6 +28,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/relatorios" element={<Reports />} />
             <Route path="/dados-por-regiao" element={<RegionalData />} />
+            <Route path="/cidade/:name" element={<CityDetails />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

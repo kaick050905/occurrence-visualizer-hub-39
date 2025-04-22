@@ -5,6 +5,7 @@ import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 // Sample data for cities
 const citiesData = [
@@ -93,11 +94,16 @@ const formatNumber = (num: number): string => {
 
 const LocalityData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
   
   const filteredCities = citiesData.filter(city => 
     city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     city.region.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleCityClick = (name: string) => {
+    navigate(`/cidade/${encodeURIComponent(name)}`);
+  };
 
   return (
     <Card className="mt-6">
@@ -127,9 +133,11 @@ const LocalityData: React.FC = () => {
               <div className="space-y-4">
                 {filteredCities.length > 0 ? (
                   filteredCities.map((city, index) => (
-                    <div 
-                      key={index} 
-                      className="p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-md transition-all duration-300"
+                    <button
+                      type="button"
+                      key={index}
+                      className="w-full text-left p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-lg hover:bg-gray-50 transition-all duration-300 outline-none focus:ring-2 focus:ring-primary"
+                      onClick={() => handleCityClick(city.name)}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex items-center gap-2">
@@ -166,7 +174,7 @@ const LocalityData: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center py-8">

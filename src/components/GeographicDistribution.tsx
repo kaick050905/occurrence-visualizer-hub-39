@@ -1,20 +1,26 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Region data with city, region name, population, HDI, and occurrences in 2024
+// Regiões listadas pelo usuário, valores fictícios para demonstração
 const regionsData = [
-  { name: "Zona Norte", count: 132, percentage: 28, status: "Crítica" },
-  { name: "Zona Sul", count: 97, percentage: 21, status: "Alta" },
-  { name: "Zona Leste", count: 86, percentage: 18, status: "Média" },
-  { name: "Zona Oeste", count: 110, percentage: 23, status: "Alta" },
-  { name: "Centro", count: 45, percentage: 10, status: "Baixa" },
+  { name: "Araçatuba", count: 38, percentage: 6, status: "Baixa" },
+  { name: "Bauru", count: 52, percentage: 8, status: "Baixa" },
+  { name: "Campinas", count: 87, percentage: 12, status: "Média" },
+  { name: "Capital", count: 210, percentage: 28, status: "Crítica" },
+  { name: "Grande São Paulo", count: 130, percentage: 17, status: "Alta" },
+  { name: "Piracicaba", count: 42, percentage: 5, status: "Baixa" },
+  { name: "Presidente Prudente", count: 29, percentage: 4, status: "Baixa" },
+  { name: "Ribeirão Preto", count: 60, percentage: 7, status: "Média" },
+  { name: "Santos", count: 55, percentage: 7, status: "Média" },
+  { name: "São José do Rio Preto", count: 34, percentage: 5, status: "Baixa" },
+  { name: "São José dos Campos", count: 65, percentage: 8, status: "Alta" },
+  { name: "Sorocaba", count: 41, percentage: 6, status: "Baixa" },
 ];
 
-// 23 types of occurrences data
+// Tipos de ocorrência (mantidos como estavam)
 const occurrenceTypesData = [
   { name: "Furto", count: 245, percentage: 15, status: "Crítica" },
   { name: "Roubo", count: 210, percentage: 13, status: "Crítica" },

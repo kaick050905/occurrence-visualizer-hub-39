@@ -4,20 +4,20 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Maiores cidades do estado de São Paulo, dados populacionais de 2020
+// Regiões listadas pelo usuário, valores fictícios para demonstração
 const regionsData = [
-  { name: "São Paulo", count: 12325232, percentage: 28, status: "Crítica" },
-  { name: "Guarulhos", count: 1404694, percentage: 17, status: "Alta" },
-  { name: "Campinas", count: 1213792, percentage: 12, status: "Alta" },
-  { name: "São Bernardo do Campo", count: 844483, percentage: 10, status: "Média" },
-  { name: "Santo André", count: 721368, percentage: 9, status: "Média" },
-  { name: "São José dos Campos", count: 729737, percentage: 8, status: "Média" },
-  { name: "Osasco", count: 699944, percentage: 7, status: "Média" },
-  { name: "Ribeirão Preto", count: 711825, percentage: 7, status: "Média" },
-  { name: "Sorocaba", count: 687357, percentage: 6, status: "Baixa" },
-  { name: "Santos", count: 433991, percentage: 5, status: "Baixa" },
-  { name: "Mogi das Cruzes", count: 450785, percentage: 5, status: "Baixa" },
-  { name: "Diadema", count: 426757, percentage: 4, status: "Baixa" }
+  { name: "Araçatuba", count: 38, percentage: 6, status: "Baixa" },
+  { name: "Bauru", count: 52, percentage: 8, status: "Baixa" },
+  { name: "Campinas", count: 87, percentage: 12, status: "Média" },
+  { name: "Capital", count: 210, percentage: 28, status: "Crítica" },
+  { name: "Grande São Paulo", count: 130, percentage: 17, status: "Alta" },
+  { name: "Piracicaba", count: 42, percentage: 5, status: "Baixa" },
+  { name: "Presidente Prudente", count: 29, percentage: 4, status: "Baixa" },
+  { name: "Ribeirão Preto", count: 60, percentage: 7, status: "Média" },
+  { name: "Santos", count: 55, percentage: 7, status: "Média" },
+  { name: "São José do Rio Preto", count: 34, percentage: 5, status: "Baixa" },
+  { name: "São José dos Campos", count: 65, percentage: 8, status: "Alta" },
+  { name: "Sorocaba", count: 41, percentage: 6, status: "Baixa" },
 ];
 
 // Tipos de ocorrência (mantidos como estavam)

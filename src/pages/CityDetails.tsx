@@ -15,73 +15,73 @@ const crimesDataByCity: Record<string, { [crime: string]: number[] }> = {
     Estupro: [130, 150, 122, 143, 135, 139],
     Homicídio: [75, 61, 80, 69, 63, 65],
   },
-  "Rio de Janeiro": {
-    Furto: [900, 950, 980, 1200, 1170, 1130],
-    Roubo: [820, 860, 810, 814, 850, 879],
-    Estupro: [115, 110, 120, 112, 118, 125],
-    Homicídio: [54, 61, 49, 62, 55, 53],
-  },
-  "Salvador": {
+  "Guarulhos": {
     Furto: [620, 700, 755, 690, 720, 710],
     Roubo: [510, 550, 534, 522, 571, 560],
     Estupro: [72, 65, 79, 74, 70, 68],
     Homicídio: [32, 40, 38, 36, 35, 33],
   },
-  "Brasília": {
-    Furto: [830, 880, 910, 965, 950, 940],
-    Roubo: [390, 420, 410, 415, 430, 425],
-    Estupro: [58, 65, 63, 69, 61, 68],
-    Homicídio: [26, 29, 25, 27, 29, 28],
-  },
-  "Fortaleza": {
-    Furto: [530, 540, 555, 590, 610, 613],
-    Roubo: [452, 460, 455, 461, 470, 468],
-    Estupro: [63, 66, 69, 72, 71, 68],
-    Homicídio: [19, 22, 21, 23, 20, 21],
-  },
-  "Belo Horizonte": {
-    Furto: [760, 812, 804, 830, 850, 840],
-    Roubo: [621, 674, 663, 650, 672, 665],
-    Estupro: [88, 93, 85, 90, 91, 90],
-    Homicídio: [30, 31, 33, 29, 27, 28],
-  },
-  "Manaus": {
-    Furto: [310, 311, 330, 345, 335, 329],
-    Roubo: [289, 290, 295, 300, 288, 294],
-    Estupro: [33, 35, 36, 38, 31, 30],
-    Homicídio: [19, 18, 17, 19, 22, 18],
-  },
-  "Curitiba": {
+  "Campinas": {
     Furto: [440, 480, 470, 455, 465, 462],
     Roubo: [410, 413, 430, 427, 429, 420],
     Estupro: [43, 46, 41, 44, 40, 42],
     Homicídio: [12, 15, 13, 12, 11, 13],
   },
-  "Recife": {
-    Furto: [520, 561, 549, 555, 562, 558],
-    Roubo: [460, 489, 490, 495, 498, 492],
-    Estupro: [54, 50, 53, 51, 56, 55],
-    Homicídio: [21, 24, 22, 23, 20, 22],
+  "São Bernardo do Campo": {
+    Furto: [380, 395, 410, 400, 405, 408],
+    Roubo: [310, 325, 330, 320, 318, 322],
+    Estupro: [38, 42, 40, 39, 41, 40],
+    Homicídio: [18, 20, 17, 19, 18, 16],
   },
-  "Porto Alegre": {
-    Furto: [413, 429, 430, 444, 452, 460],
-    Roubo: [372, 395, 398, 392, 380, 385],
-    Estupro: [41, 42, 40, 45, 44, 43],
-    Homicídio: [16, 17, 15, 19, 20, 18],
+  "Santo André": {
+    Furto: [320, 335, 350, 345, 340, 342],
+    Roubo: [270, 285, 290, 280, 282, 285],
+    Estupro: [35, 32, 36, 34, 33, 35],
+    Homicídio: [15, 16, 14, 15, 13, 14],
+  },
+  "São José dos Campos": {
+    Furto: [310, 311, 330, 345, 335, 329],
+    Roubo: [289, 290, 295, 300, 288, 294],
+    Estupro: [33, 35, 36, 38, 31, 30],
+    Homicídio: [19, 18, 17, 19, 22, 18],
+  },
+  "Osasco": {
+    Furto: [290, 305, 315, 310, 312, 308],
+    Roubo: [245, 260, 265, 255, 258, 256],
+    Estupro: [27, 30, 28, 29, 27, 28],
+    Homicídio: [14, 16, 15, 13, 14, 15],
+  },
+  "Ribeirão Preto": {
+    Furto: [275, 290, 300, 295, 293, 297],
+    Roubo: [230, 245, 250, 240, 242, 244],
+    Estupro: [25, 28, 26, 27, 25, 26],
+    Homicídio: [12, 14, 13, 11, 12, 13],
+  },
+  "Sorocaba": {
+    Furto: [260, 275, 285, 280, 278, 282],
+    Roubo: [215, 230, 235, 225, 227, 229],
+    Estupro: [23, 26, 24, 25, 23, 24],
+    Homicídio: [10, 12, 11, 9, 10, 11],
+  },
+  "Santos": {
+    Furto: [245, 260, 270, 265, 263, 267],
+    Roubo: [200, 215, 220, 210, 212, 214],
+    Estupro: [21, 24, 22, 23, 21, 22],
+    Homicídio: [9, 11, 10, 8, 9, 10],
   },
 };
 
 const cityHumanNames: Record<string, string> = {
   "São Paulo": "São Paulo",
-  "Rio de Janeiro": "Rio de Janeiro",
-  "Salvador": "Salvador",
-  "Brasília": "Brasília",
-  "Fortaleza": "Fortaleza",
-  "Belo Horizonte": "Belo Horizonte",
-  "Manaus": "Manaus",
-  "Curitiba": "Curitiba",
-  "Recife": "Recife",
-  "Porto Alegre": "Porto Alegre",
+  "Guarulhos": "Guarulhos",
+  "Campinas": "Campinas",
+  "São Bernardo do Campo": "São Bernardo do Campo",
+  "Santo André": "Santo André",
+  "São José dos Campos": "São José dos Campos",
+  "Osasco": "Osasco",
+  "Ribeirão Preto": "Ribeirão Preto",
+  "Sorocaba": "Sorocaba",
+  "Santos": "Santos",
 };
 
 const years = ["2019", "2020", "2021", "2022", "2023", "2024"];

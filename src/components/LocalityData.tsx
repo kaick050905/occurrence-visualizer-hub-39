@@ -11,73 +11,73 @@ import { useNavigate } from "react-router-dom";
 const citiesData = [
   { 
     name: "São Paulo", 
-    region: "Sudeste", 
-    population: "12.4 milhões", 
+    region: "Capital", 
+    population: "12.3 milhões", 
     hdi: 0.805, 
     occurrences2024: 48325 
   },
   { 
-    name: "Rio de Janeiro", 
-    region: "Sudeste", 
-    population: "6.7 milhões", 
-    hdi: 0.799, 
-    occurrences2024: 42150 
-  },
-  { 
-    name: "Salvador", 
-    region: "Nordeste", 
-    population: "2.9 milhões", 
-    hdi: 0.759, 
-    occurrences2024: 27980 
-  },
-  { 
-    name: "Brasília", 
-    region: "Centro-Oeste", 
-    population: "3.1 milhões", 
-    hdi: 0.824, 
-    occurrences2024: 21540 
-  },
-  { 
-    name: "Fortaleza", 
-    region: "Nordeste", 
-    population: "2.7 milhões", 
-    hdi: 0.754, 
-    occurrences2024: 25670 
-  },
-  { 
-    name: "Belo Horizonte", 
-    region: "Sudeste", 
-    population: "2.5 milhões", 
-    hdi: 0.810, 
-    occurrences2024: 19850 
-  },
-  { 
-    name: "Manaus", 
-    region: "Norte", 
-    population: "2.2 milhões", 
-    hdi: 0.737, 
-    occurrences2024: 18720 
-  },
-  { 
-    name: "Curitiba", 
-    region: "Sul", 
-    population: "1.9 milhões", 
-    hdi: 0.823, 
+    name: "Guarulhos", 
+    region: "Grande São Paulo", 
+    population: "1.4 milhões", 
+    hdi: 0.763, 
     occurrences2024: 15320 
   },
   { 
-    name: "Recife", 
-    region: "Nordeste", 
-    population: "1.6 milhões", 
-    hdi: 0.772, 
-    occurrences2024: 17830 
+    name: "Campinas", 
+    region: "Interior", 
+    population: "1.2 milhões", 
+    hdi: 0.805, 
+    occurrences2024: 12450 
   },
   { 
-    name: "Porto Alegre", 
-    region: "Sul", 
-    population: "1.4 milhões", 
+    name: "São Bernardo do Campo", 
+    region: "Grande São Paulo", 
+    population: "844 mil", 
     hdi: 0.805, 
-    occurrences2024: 14280 
+    occurrences2024: 9870 
+  },
+  { 
+    name: "Santo André", 
+    region: "Grande São Paulo", 
+    population: "722 mil", 
+    hdi: 0.815, 
+    occurrences2024: 8540 
+  },
+  { 
+    name: "São José dos Campos", 
+    region: "Vale do Paraíba", 
+    population: "729 mil", 
+    hdi: 0.807, 
+    occurrences2024: 7890 
+  },
+  { 
+    name: "Osasco", 
+    region: "Grande São Paulo", 
+    population: "699 mil", 
+    hdi: 0.776, 
+    occurrences2024: 7650 
+  },
+  { 
+    name: "Ribeirão Preto", 
+    region: "Interior", 
+    population: "711 mil", 
+    hdi: 0.800, 
+    occurrences2024: 7320 
+  },
+  { 
+    name: "Sorocaba", 
+    region: "Interior", 
+    population: "687 mil", 
+    hdi: 0.798, 
+    occurrences2024: 6980 
+  },
+  { 
+    name: "Santos", 
+    region: "Litoral", 
+    population: "433 mil", 
+    hdi: 0.840, 
+    occurrences2024: 6540 
   }
 ];
 
@@ -201,3 +201,4 @@ const LocalityData: React.FC = () => {
 };
 
 export default LocalityData;
+

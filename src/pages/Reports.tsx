@@ -1,16 +1,16 @@
-
 import React from "react";
 import DashboardHeader from "@/components/DashboardHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Filter, Calendar } from "lucide-react";
+import { FileText, Download, Filter, Calendar, Moon, Sun } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { toast } from "sonner";
 
-// Sample data for reports
 const reportsData = [
   { 
     id: "REL-2024-001", 
@@ -57,16 +57,47 @@ const statusStyle = {
 };
 
 const Reports: React.FC = () => {
+  const { theme, setTheme } = useTheme();
+
+  const handleDownloadReport = () => {
+    toast.success("Download da planilha iniciado");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-4 px-4 md:px-6 lg:px-8">
-        <DashboardHeader />
+        <div className="flex justify-between items-center">
+          <DashboardHeader />
+          <Button
+            variant="outline"
+            size="icon"
+            className="ml-2"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )}
+          </Button>
+        </div>
         
         <div className="my-6">
-          <h1 className="text-3xl font-bold tracking-tight">Relatórios</h1>
-          <p className="text-muted-foreground mt-2">
-            Acesse, exporte e gerencie relatórios de segurança e ocorrências.
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Relatórios</h1>
+              <p className="text-muted-foreground mt-2">
+                Acesse, exporte e gerencie relatórios de segurança e ocorrências.
+              </p>
+            </div>
+            <Button 
+              onClick={handleDownloadReport}
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Baixar Planilha
+            </Button>
+          </div>
         </div>
         
         <Tabs defaultValue="disponiveis" className="mb-6">

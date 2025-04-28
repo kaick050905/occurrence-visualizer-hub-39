@@ -1,3 +1,4 @@
+
 import React from "react";
 import DashboardHeader from "@/components/DashboardHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -66,12 +67,12 @@ const Reports: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-4 px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-4">
           <DashboardHeader />
           <Button
             variant="outline"
             size="icon"
-            className="ml-2"
+            className="ml-2 z-10"
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
           >
             {theme === "dark" ? (
@@ -83,7 +84,7 @@ const Reports: React.FC = () => {
         </div>
         
         <div className="my-6">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center flex-wrap gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Relatórios</h1>
               <p className="text-muted-foreground mt-2">
@@ -92,10 +93,11 @@ const Reports: React.FC = () => {
             </div>
             <Button 
               onClick={handleDownloadReport}
-              className="gap-2"
+              className="gap-2 flex items-center"
+              size="default"
             >
               <Download className="h-4 w-4" />
-              Baixar Planilha
+              <span>Baixar Planilha</span>
             </Button>
           </div>
         </div>

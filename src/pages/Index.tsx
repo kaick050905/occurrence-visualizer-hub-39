@@ -8,17 +8,39 @@ import LocalityData from "@/components/LocalityData";
 import SafetyCardsCarousel from "@/components/SafetyCards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Link } from "react-router-dom";
 
 const Index = () => {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-4 px-4 md:px-6 lg:px-8">
-        <DashboardHeader />
+        <div className="flex justify-between items-center mb-4">
+          <DashboardHeader />
+          <Button
+            variant="outline"
+            size="icon"
+            className="ml-2 z-10"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )}
+          </Button>
+        </div>
         
         <Tabs defaultValue="dashboard" className="mb-6">
           <TabsList className="grid w-full grid-cols-2 md:w-auto">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="relatorios">Relatórios</TabsTrigger>
+            <TabsTrigger value="relatorios" asChild>
+              <Link to="/relatorios">Relatórios</Link>
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="dashboard" className="mt-4 space-y-4">
@@ -33,15 +55,6 @@ const Index = () => {
             
             <LocalityData />
             <RecentOccurrences />
-          </TabsContent>
-          
-          <TabsContent value="relatorios" className="mt-4">
-            <Card className="p-6 flex items-center justify-center min-h-[300px]">
-              <p className="text-muted-foreground text-center">
-                Página de relatórios em desenvolvimento.<br />
-                Esta seção irá conter relatórios detalhados e exportáveis.
-              </p>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>

@@ -6,6 +6,7 @@ import { ArrowRight, BarChart2, PieChart, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart as RLineChart, Line, PieChart as RCPieChart, Pie, Cell } from "recharts";
+import { useTheme } from "next-themes";
 
 // Simular dados de crimes por cidade
 const crimesDataByCity: Record<string, { [crime: string]: number[] }> = {
@@ -88,9 +89,27 @@ const years = ["2019", "2020", "2021", "2022", "2023", "2024"];
 
 const pieColors = ["#3B82F6", "#EF4444", "#F59E0B", "#10B981"];
 
+// Custom chart tooltip for dark mode support
+const CustomTooltip = ({ active, payload, label, theme }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className={`p-2 border rounded shadow-sm ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-gray-800'}`}>
+        <p className="font-medium">{`${label}`}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={`item-${index}`} style={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value}`}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 const CityDetails: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const unescapedName = name ? decodeURIComponent(name) : undefined;
   const cityCrimes = unescapedName ? crimesDataByCity[unescapedName] : undefined;
@@ -157,9 +176,9 @@ const CityDetails: React.FC = () => {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barData}>
-                      <XAxis dataKey="year" />
-                      <YAxis />
-                      <Tooltip />
+                      <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
+                      <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
+                      <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
                       <Bar dataKey="Furto" fill="#3B82F6" />
                       <Bar dataKey="Roubo" fill="#EF4444" />
@@ -174,9 +193,9 @@ const CityDetails: React.FC = () => {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <RLineChart data={barData}>
-                      <XAxis dataKey="year" />
-                      <YAxis />
-                      <Tooltip />
+                      <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
+                      <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
+                      <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
                       <Line type="monotone" dataKey="Furto" stroke="#3B82F6" strokeWidth={2} />
                       <Line type="monotone" dataKey="Roubo" stroke="#EF4444" strokeWidth={2} />
@@ -205,7 +224,7 @@ const CityDetails: React.FC = () => {
                           <Cell key={`cell-${entry.name}`} fill={pieColors[i % pieColors.length]} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip theme={theme} />} />
                     </RCPieChart>
                   </ResponsiveContainer>
                 </div>

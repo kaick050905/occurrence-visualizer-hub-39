@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { useTheme } from "next-themes";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -31,14 +32,14 @@ const crimeStats = [
     count: 12567, 
     yearGrowth: 7.5,
     icon: <TrendingUp className="h-6 w-6 text-orange-500" />,
-    color: "border-l-orange-500 bg-gradient-to-br from-white to-orange-50"
+    color: "border-l-orange-500"
   },
   { 
     type: "Roubo", 
     count: 8932, 
     yearGrowth: 5.2,
     icon: <TrendingDown className="h-6 w-6 text-red-600" />,
-    color: "border-l-red-600 bg-gradient-to-br from-white to-red-50"
+    color: "border-l-red-600"
   }
 ];
 
@@ -55,6 +56,8 @@ interface SingleCityRegionCardProps {
 
 // Component for city or region safety card with a single item
 const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass }) => {
+  const { theme } = useTheme();
+  
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", colorClass)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -73,8 +76,8 @@ const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data
               <div className={cn(
                 "flex items-center text-xs rounded-full px-2 py-0.5",
                 data.trend > 0 
-                  ? "bg-red-100 text-red-700" 
-                  : "bg-green-100 text-green-700"
+                  ? "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300" 
+                  : "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
               )}>
                 {data.trend > 0 ? <ArrowUp className="h-3 w-3 mr-0.5" /> : <ArrowDown className="h-3 w-3 mr-0.5" />}
                 {Math.abs(data.trend)}%
@@ -89,6 +92,8 @@ const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data
 
 // Component for crime statistics card
 const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
+  const { theme } = useTheme();
+  
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", data.color)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -101,8 +106,8 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
           <span className={cn(
             "inline-flex items-center rounded-sm px-2 py-1 font-medium",
             data.yearGrowth > 0
-              ? "bg-red-100 text-red-800"
-              : "bg-green-100 text-green-800"
+              ? "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300"
+              : "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300"
           )}>
             {data.yearGrowth > 0 ? "+" : ""}
             {data.yearGrowth}%

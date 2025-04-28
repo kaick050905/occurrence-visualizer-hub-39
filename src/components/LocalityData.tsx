@@ -82,10 +82,10 @@ const citiesData = [
 ];
 
 const getHDIColor = (hdi: number): string => {
-  if (hdi >= 0.8) return "text-green-600";
-  if (hdi >= 0.7) return "text-yellow-600";
-  if (hdi >= 0.6) return "text-orange-600";
-  return "text-red-600";
+  if (hdi >= 0.8) return "text-green-600 dark:text-green-400";
+  if (hdi >= 0.7) return "text-yellow-600 dark:text-yellow-400";
+  if (hdi >= 0.6) return "text-orange-600 dark:text-orange-400";
+  return "text-red-600 dark:text-red-400";
 };
 
 const formatNumber = (num: number): string => {
@@ -136,7 +136,7 @@ const LocalityData: React.FC = () => {
                     <button
                       type="button"
                       key={index}
-                      className="w-full text-left p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-lg hover:bg-gray-50 transition-all duration-300 outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full text-left p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-lg hover:bg-gray-50 transition-all duration-300 outline-none focus:ring-2 focus:ring-primary dark:from-gray-800 dark:to-gray-900 dark:hover:bg-gray-800 dark:border-gray-700"
                       onClick={() => handleCityClick(city.name)}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -201,4 +201,3 @@ const LocalityData: React.FC = () => {
 };
 
 export default LocalityData;
-

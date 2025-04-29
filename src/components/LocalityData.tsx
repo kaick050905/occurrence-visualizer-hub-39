@@ -7,6 +7,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 
+// Atualizando para usar as mesmas regiões que estão em Distribuição
+const regionsData = [
+  { name: "Araçatuba", count: 38, percentage: 6, status: "Baixa" },
+  { name: "Bauru", count: 52, percentage: 8, status: "Baixa" },
+  { name: "Campinas", count: 87, percentage: 12, status: "Média" },
+  { name: "Capital", count: 210, percentage: 28, status: "Crítica" },
+  { name: "Grande São Paulo", count: 130, percentage: 17, status: "Alta" },
+  { name: "Piracicaba", count: 42, percentage: 5, status: "Baixa" },
+  { name: "Presidente Prudente", count: 29, percentage: 4, status: "Baixa" },
+  { name: "Ribeirão Preto", count: 60, percentage: 7, status: "Média" },
+  { name: "Santos", count: 55, percentage: 7, status: "Média" },
+  { name: "São José do Rio Preto", count: 34, percentage: 5, status: "Baixa" },
+  { name: "São José dos Campos", count: 65, percentage: 8, status: "Alta" },
+  { name: "Sorocaba", count: 41, percentage: 6, status: "Baixa" },
+];
+
 // Sample data for cities
 const citiesData = [
   { 
@@ -94,15 +110,25 @@ const formatNumber = (num: number): string => {
 
 const LocalityData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const navigate = useNavigate();
   
   const filteredCities = citiesData.filter(city => 
-    city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    city.region.toLowerCase().includes(searchTerm.toLowerCase())
+    (city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    city.region.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedRegion ? city.region === selectedRegion : true)
+  );
+
+  const filteredRegions = regionsData.filter(region =>
+    region.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleCityClick = (name: string) => {
     navigate(`/cidade/${encodeURIComponent(name)}`);
+  };
+
+  const handleRegionSelect = (region: string) => {
+    setSelectedRegion(selectedRegion === region ? null : region);
   };
 
   return (
@@ -123,9 +149,9 @@ const LocalityData: React.FC = () => {
         </div>
         
         <Tabs defaultValue="cidades">
-          <TabsList className="mb-4">
-            <TabsTrigger value="cidades">Por Cidade</TabsTrigger>
-            <TabsTrigger value="regiao">Por Região</TabsTrigger>
+          <TabsList className="mb-4 w-full">
+            <TabsTrigger value="cidades" className="flex-1">Por Cidade</TabsTrigger>
+            <TabsTrigger value="regiao" className="flex-1">Por Região</TabsTrigger>
           </TabsList>
           
           <TabsContent value="cidades">
@@ -186,13 +212,53 @@ const LocalityData: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="regiao">
-            <div className="flex flex-col items-center justify-center space-y-4 h-[300px]">
-              <BarChart className="h-12 w-12 text-muted-foreground opacity-50" />
-              <div className="text-xl font-medium">Dados por região em desenvolvimento</div>
-              <p className="text-muted-foreground text-center max-w-md">
-                Os dados detalhados por região estarão disponíveis na próxima atualização do sistema.
-              </p>
-            </div>
+            <ScrollArea className="h-[300px] pr-4">
+              <div className="space-y-4">
+                {filteredRegions.length > 0 ? (
+                  filteredRegions.map((region, index) => (
+                    <button
+                      type="button"
+                      key={index}
+                      className={`w-full text-left p-4 border rounded-lg transition-all duration-300 outline-none focus:ring-2 focus:ring-primary ${
+                        selectedRegion === region.name 
+                          ? "bg-gray-100 dark:bg-gray-800 border-primary" 
+                          : "bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
+                      onClick={() => handleRegionSelect(region.name)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-5 w-5 text-primary" />
+                          <span className="font-semibold">{region.name}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {region.count} ocorrências
+                        </div>
+                      </div>
+                      
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                          <div 
+                            className={`h-2.5 rounded-full ${
+                              region.status === "Crítica" ? "bg-occurrence-critical" :
+                              region.status === "Alta" ? "bg-occurrence-high" :
+                              region.status === "Média" ? "bg-occurrence-medium" :
+                              "bg-occurrence-low"
+                            }`}
+                            style={{ width: `${region.percentage}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs font-medium">{region.percentage}%</span>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8">
+                    <p className="text-muted-foreground">Nenhuma região encontrada</p>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
           </TabsContent>
         </Tabs>
       </CardContent>

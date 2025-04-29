@@ -17,6 +17,14 @@ import {
 } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { motion } from "framer-motion";
+import { 
+  Tooltip as UITooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 // Sample data
 const weeklyData = [
@@ -110,206 +118,232 @@ const OccurrenceCharts: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <Card className="col-span-1 md:col-span-2">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Ocorrências por Dia</CardTitle>
-            <CardDescription>Distribuição diária de ocorrências por prioridade</CardDescription>
-          </div>
-          <Select 
-            defaultValue="semanal" 
-            value={timePeriod}
-            onValueChange={(value) => setTimePeriod(value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="semanal">Últimos 7 dias</SelectItem>
-              <SelectItem value="quinzenal">Últimos 15 dias</SelectItem>
-              <SelectItem value="mensal">Últimos 30 dias</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardHeader>
-        <CardContent>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="críticas" name="Críticas" stackId="a" fill="#7F1D1D" />
-                <Bar dataKey="altas" name="Altas" stackId="a" fill="#EF4444" />
-                <Bar dataKey="médias" name="Médias" stackId="a" fill="#F59E0B" />
-                <Bar dataKey="baixas" name="Baixas" stackId="a" fill="#10B981" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="col-span-1 md:col-span-2">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Evolução de Crimes por Ano</CardTitle>
-            <CardDescription>Crescimento anual por tipo de crime</CardDescription>
-          </div>
-          <Select 
-            value={crimeType} 
-            onValueChange={(value) => setCrimeType(value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Tipo de Crime" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="furto">Furto</SelectItem>
-              <SelectItem value="roubo">Roubo</SelectItem>
-              <SelectItem value="estupro">Estupro</SelectItem>
-              <SelectItem value="homicidio">Homicídio</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardHeader>
-        <CardContent>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart
-                data={currentCrimeData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="year" 
-                  padding={{ left: 20, right: 20 }}
-                />
-                <YAxis />
-                <Tooltip 
-                  formatter={(value) => [`${value} ocorrências`, `Total de ${crimeType}`]}
-                  labelFormatter={(label) => `Ano: ${label}`}
-                />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="count"
-                  name={`Total de ${crimeType}`}
-                  stroke={colorForCrime}
-                  strokeWidth={3}
-                  dot={{ r: 6, strokeWidth: 2 }}
-                  activeDot={{ r: 8, strokeWidth: 2 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Total de Ocorrências dos Últimos Anos</CardTitle>
-          <CardDescription>Registros anuais de 2022 a 2025</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar 
-                  dataKey="total" 
-                  fill="#3B82F6"
-                  radius={[4, 4, 0, 0]}
-                  name="Total de Ocorrências"
-                >
-                  {yearlyData.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
-                      fill={entry.emProgresso ? "#94A3B8" : "#3B82F6"} 
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <Tabs defaultValue="priority">
-            <div className="flex items-center justify-between">
-              <CardTitle>Distribuição</CardTitle>
-              <TabsList>
-                <TabsTrigger value="priority">Prioridade</TabsTrigger>
-                <TabsTrigger value="category">Categoria</TabsTrigger>
-              </TabsList>
+      <motion.div 
+        className="col-span-1 md:col-span-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle>Ocorrências por Dia</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Distribuição diária de ocorrências agrupadas por nível de prioridade</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
             </div>
-          </Tabs>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="priority">
-            <TabsContent value="priority" className="mt-0">
-              <div className="chart-container">
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie
-                      data={priorityData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {priorityData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+            <Select 
+              defaultValue="semanal" 
+              value={timePeriod}
+              onValueChange={(value) => setTimePeriod(value)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Período" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="semanal">Últimos 7 dias</SelectItem>
+                <SelectItem value="quinzenal">Últimos 15 dias</SelectItem>
+                <SelectItem value="mensal">Últimos 30 dias</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardHeader>
+          <CardContent>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="críticas" name="Críticas" stackId="a" fill="#7F1D1D" />
+                  <Bar dataKey="altas" name="Altas" stackId="a" fill="#EF4444" />
+                  <Bar dataKey="médias" name="Médias" stackId="a" fill="#F59E0B" />
+                  <Bar dataKey="baixas" name="Baixas" stackId="a" fill="#10B981" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div 
+        className="col-span-1 md:col-span-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle>Evolução de Crimes por Ano</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Tendência anual do número de ocorrências por tipo de crime</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+            <Select 
+              value={crimeType} 
+              onValueChange={(value) => setCrimeType(value)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Tipo de Crime" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="furto">Furto</SelectItem>
+                <SelectItem value="roubo">Roubo</SelectItem>
+                <SelectItem value="estupro">Estupro</SelectItem>
+                <SelectItem value="homicidio">Homicídio</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardHeader>
+          <CardContent>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart
+                  data={currentCrimeData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="year" 
+                    padding={{ left: 20, right: 20 }}
+                  />
+                  <YAxis />
+                  <Tooltip 
+                    formatter={(value) => [`${value} ocorrências`, `Total de ${crimeType}`]}
+                    labelFormatter={(label) => `Ano: ${label}`}
+                  />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="count"
+                    name={`Total de ${crimeType}`}
+                    stroke={colorForCrime}
+                    strokeWidth={3}
+                    dot={{ r: 6, strokeWidth: 2 }}
+                    activeDot={{ r: 8, strokeWidth: 2 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <CardTitle>Total de Ocorrências dos Últimos Anos</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Comparativo anual do total de ocorrências registradas</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+            <CardDescription>Registros anuais de 2022 a 2025</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar 
+                    dataKey="total" 
+                    fill="#3B82F6"
+                    radius={[4, 4, 0, 0]}
+                    name="Total de Ocorrências"
+                    className="transition-all duration-300"
+                  >
+                    {yearlyData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.emProgresso ? "#94A3B8" : "#3B82F6"} 
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CardTitle>Distribuição</CardTitle>
+                <TooltipProvider>
+                  <UITooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Distribuição percentual das ocorrências por nível de prioridade</p>
+                    </TooltipContent>
+                  </UITooltip>
+                </TooltipProvider>
               </div>
-            </TabsContent>
-            <TabsContent value="category" className="mt-0">
-              <div className="chart-container">
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie
-                      data={categoryData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {categoryData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={[
-                            "#3B82F6",
-                            "#2563EB",
-                            "#1D4ED8",
-                            "#1E40AF",
-                            "#1E3A8A",
-                            "#172554",
-                          ][index % 6]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={priorityData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    className="transition-transform duration-300 hover:scale-105"
+                  >
+                    {priorityData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 };

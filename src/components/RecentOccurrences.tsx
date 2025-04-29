@@ -1,14 +1,21 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Filter } from "lucide-react";
+import { ChevronRight, Filter, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 // Sample data for most recurring occurrences - Updated with ID_TIPO instead of ID
 const recurringOccurrencesData = [
@@ -70,85 +77,127 @@ const RecentOccurrences: React.FC = () => {
     : recurringOccurrencesData;
 
   return (
-    <Card className="mt-6">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>Ocorrências Mais Recorrentes</CardTitle>
-          <CardDescription>Tipos de ocorrências mais frequentes no sistema</CardDescription>
-        </div>
-        <div className="flex gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 gap-1">
-                <Filter className="h-3.5 w-3.5" />
-                <span>Filtrar</span>
-                {statusFilter.length > 0 && (
-                  <Badge variant="secondary" className="ml-1 rounded-full px-1">
-                    {statusFilter.length}
-                  </Badge>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-48 p-3">
-              <div className="space-y-2">
-                <h4 className="font-medium text-sm">Filtrar por status</h4>
-                <div className="space-y-2">
-                  {["Crítica", "Alta", "Média", "Baixa"].map((status) => (
-                    <div key={status} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`status-${status}`} 
-                        checked={statusFilter.includes(status)}
-                        onCheckedChange={() => toggleStatusFilter(status)}
-                      />
-                      <Label htmlFor={`status-${status}`} className="flex items-center space-x-1 text-sm">
-                        <span>{status}</span>
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID Tipo</TableHead>
-                <TableHead>Descrição</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Total Ocorrências</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOccurrences.map((occurrence) => (
-                <TableRow key={occurrence.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                  <TableCell className="font-medium">{occurrence.id}</TableCell>
-                  <TableCell>{occurrence.description}</TableCell>
-                  <TableCell>
-                    <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle])}>
-                      {occurrence.status}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      <Card className="mt-6">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CardTitle>Ocorrências Mais Recorrentes</CardTitle>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Tipos de ocorrências com maior frequência no sistema</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <CardDescription>Tipos de ocorrências mais frequentes no sistema</CardDescription>
+          </div>
+          <div className="flex gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-8 gap-1">
+                  <Filter className="h-3.5 w-3.5" />
+                  <span>Filtrar</span>
+                  {statusFilter.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 rounded-full px-1">
+                      {statusFilter.length}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="font-medium">{occurrence.count}</TableCell>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-3">
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Filtrar por status</h4>
+                  <div className="space-y-2">
+                    {["Crítica", "Alta", "Média", "Baixa"].map((status) => (
+                      <div key={status} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`status-${status}`} 
+                          checked={statusFilter.includes(status)}
+                          onCheckedChange={() => toggleStatusFilter(status)}
+                        />
+                        <Label htmlFor={`status-${status}`} className="flex items-center space-x-1 text-sm">
+                          <span>{status}</span>
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID Tipo</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Total Ocorrências</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between border-t p-4">
-        <div className="text-xs text-muted-foreground">
-          Mostrando {filteredOccurrences.length} de {recurringOccurrencesData.length} ocorrências
-        </div>
-        <Button variant="outline" size="sm" className="gap-1">
-          <span>Ver Todas</span>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </CardFooter>
-    </Card>
+              </TableHeader>
+              <TableBody>
+                {filteredOccurrences.map((occurrence, index) => (
+                  <motion.tr
+                    key={occurrence.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
+                    component={TableRow}
+                  >
+                    <TableCell className="font-medium">{occurrence.id}</TableCell>
+                    <TableCell>
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <span className="cursor-help">{occurrence.description}</span>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-80">
+                          <div className="flex justify-between">
+                            <div>
+                              <h4 className="text-sm font-semibold">{occurrence.description}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                Código de referência: {occurrence.id}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-xs">Este tipo de ocorrência representa {Math.round((occurrence.count / 955) * 100)}% do total registrado.</p>
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle])}>
+                        {occurrence.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="font-medium">{occurrence.count}</TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between border-t p-4">
+          <div className="text-xs text-muted-foreground">
+            Mostrando {filteredOccurrences.length} de {recurringOccurrencesData.length} ocorrências
+          </div>
+          <Button variant="outline" size="sm" className="gap-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+            <span>Ver Todas</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 

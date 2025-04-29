@@ -152,7 +152,6 @@ const RecentOccurrences: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
-                    component={TableRow}
                   >
                     <TableCell className="font-medium">{occurrence.id}</TableCell>
                     <TableCell>

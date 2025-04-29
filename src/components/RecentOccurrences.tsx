@@ -124,7 +124,7 @@ const RecentOccurrences: React.FC = () => {
             </TableHeader>
             <TableBody>
               {filteredOccurrences.map((occurrence) => (
-                <TableRow key={occurrence.id} className="hover:bg-gray-50 transition-colors duration-200">
+                <TableRow key={occurrence.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
                   <TableCell className="font-medium">{occurrence.id}</TableCell>
                   <TableCell>{occurrence.description}</TableCell>
                   <TableCell>

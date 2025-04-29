@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -94,11 +93,12 @@ const categoryData = [
   { name: "Outros", value: 25 },
 ];
 
+// Updated color scheme with better dark mode visibility
 const crimeTypeColors = {
   furto: "#3B82F6",
   roubo: "#EF4444",
   estupro: "#7C3AED",
-  homicidio: "#111827"
+  homicidio: "#EC4899" // Changed to a brighter pink color for better dark mode visibility
 };
 
 const OccurrenceCharts: React.FC = () => {

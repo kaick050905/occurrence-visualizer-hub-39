@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -71,7 +72,7 @@ const GeographicDistribution: React.FC = () => {
           <TabsContent value="regiao">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
               {regionsData.map((region) => (
-                <div key={region.name} className="border p-3 rounded-lg hover:bg-gray-50 transition-all">
+                <div key={region.name} className="border p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1">
                     <div className="font-medium">{region.name}</div>
                     <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>

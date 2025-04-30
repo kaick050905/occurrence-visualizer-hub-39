@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Reports from "./pages/Reports";
 import RegionalData from "./pages/RegionalData";
+import RegionDetails from "./pages/RegionDetails";
 import NotFound from "./pages/NotFound";
 import CityDetails from "./pages/CityDetails";
 import { useEffect } from "react";
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/relatorios" element={<Reports />} />
               <Route path="/dados-por-regiao" element={<RegionalData />} />
               <Route path="/cidade/:name" element={<CityDetails />} />
+              <Route path="/regiao/:name" element={<RegionDetails />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
@@ -238,6 +237,11 @@ const LocalityData: React.FC = () => {
     setExpandedRegion(expandedRegion === name ? null : name);
   };
 
+  const handleViewRegionDetails = (regionName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/regiao/${encodeURIComponent(regionName)}`);
+  };
+
   return (
     <Card className="mt-6">
       <CardHeader>
@@ -400,7 +404,7 @@ const LocalityData: React.FC = () => {
                               A região de {region.name} representa {region.percentage}% das ocorrências totais no estado,
                               com um total de {formatNumber(region.occurrences2024)} registros em 2024.
                             </p>
-                            <div className="mt-4 flex justify-center">
+                            <div className="mt-4 flex justify-center gap-3">
                               <Button 
                                 className="w-full sm:w-auto"
                                 onClick={(e) => {
@@ -408,7 +412,14 @@ const LocalityData: React.FC = () => {
                                   handleRegionSelect(region.name);
                                 }}
                               >
-                                Ver cidades desta região
+                                Filtrar cidades desta região
+                              </Button>
+                              <Button 
+                                className="w-full sm:w-auto"
+                                variant="outline"
+                                onClick={(e) => handleViewRegionDetails(region.name, e)}
+                              >
+                                Ver detalhes da região
                               </Button>
                             </div>
                           </div>

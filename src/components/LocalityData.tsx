@@ -404,18 +404,8 @@ const LocalityData: React.FC = () => {
                               A região de {region.name} representa {region.percentage}% das ocorrências totais no estado,
                               com um total de {formatNumber(region.occurrences2024)} registros em 2024.
                             </p>
-                            <div className="mt-4 flex justify-center gap-3">
+                            <div className="mt-4 flex justify-center">
                               <Button 
-                                className="w-full sm:w-auto"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleRegionSelect(region.name);
-                                }}
-                              >
-                                Filtrar cidades desta região
-                              </Button>
-                              <Button 
-                                className="w-full sm:w-auto"
                                 variant="outline"
                                 onClick={(e) => handleViewRegionDetails(region.name, e)}
                               >

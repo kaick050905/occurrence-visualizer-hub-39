@@ -7,16 +7,10 @@ import GeographicDistribution from "@/components/GeographicDistribution";
 import LocalityData from "@/components/LocalityData";
 import SafetyCardsCarousel from "@/components/SafetyCards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Index = () => {
-  const { theme, setTheme } = useTheme();
-
   return (
     <motion.div 
       className="min-h-screen bg-background"
@@ -25,21 +19,7 @@ const Index = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="container py-4 px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-4">
-          <DashboardHeader />
-          <Button
-            variant="outline"
-            size="icon"
-            className="ml-2 z-10 transition-all duration-300 hover:rotate-12"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-[1.2rem] w-[1.2rem]" />
-            ) : (
-              <Moon className="h-[1.2rem] w-[1.2rem]" />
-            )}
-          </Button>
-        </div>
+        <DashboardHeader />
         
         <Tabs defaultValue="dashboard" className="mb-6">
           <TabsList className="grid w-full grid-cols-2 md:w-auto">

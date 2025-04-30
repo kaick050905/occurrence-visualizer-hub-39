@@ -5,6 +5,7 @@ import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 // Updated region data model with more details
@@ -208,6 +209,7 @@ const LocalityData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [expandedRegion, setExpandedRegion] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("cidades");
   const navigate = useNavigate();
   
   const filteredCities = citiesData.filter(city => 
@@ -226,6 +228,10 @@ const LocalityData: React.FC = () => {
 
   const handleRegionSelect = (region: string) => {
     setSelectedRegion(selectedRegion === region ? null : region);
+    // When selecting a region, switch to cities tab
+    if (selectedRegion !== region) {
+      setActiveTab("cidades");
+    }
   };
   
   const handleRegionClick = (name: string) => {
@@ -249,7 +255,7 @@ const LocalityData: React.FC = () => {
           />
         </div>
         
-        <Tabs defaultValue="cidades">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4 w-full">
             <TabsTrigger value="cidades" className="flex-1">Por Cidade</TabsTrigger>
             <TabsTrigger value="regiao" className="flex-1">Por Região</TabsTrigger>
@@ -394,12 +400,17 @@ const LocalityData: React.FC = () => {
                               A região de {region.name} representa {region.percentage}% das ocorrências totais no estado,
                               com um total de {formatNumber(region.occurrences2024)} registros em 2024.
                             </p>
-                            <button 
-                              className="mt-3 text-primary hover:underline font-medium"
-                              onClick={() => handleRegionSelect(region.name)}
-                            >
-                              Ver cidades desta região
-                            </button>
+                            <div className="mt-4 flex justify-center">
+                              <Button 
+                                className="w-full sm:w-auto"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRegionSelect(region.name);
+                                }}
+                              >
+                                Ver cidades desta região
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       )}

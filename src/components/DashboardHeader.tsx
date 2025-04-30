@@ -3,10 +3,12 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const DashboardHeader: React.FC = () => {
   const today = new Date();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   
   const formattedDate = today.toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -42,6 +44,19 @@ const DashboardHeader: React.FC = () => {
             {capitalizedDate}
           </motion.p>
         </div>
+        
+        <Button
+          variant="outline"
+          size="icon"
+          className="transition-all duration-300 hover:rotate-12"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "dark" ? (
+            <Sun className="h-[1.2rem] w-[1.2rem]" />
+          ) : (
+            <Moon className="h-[1.2rem] w-[1.2rem]" />
+          )}
+        </Button>
       </Card>
     </motion.div>
   );

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,11 +17,12 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import OccurrenceDetails from "./OccurrenceDetails";
 
-// Sample data for most recurring occurrences - Updated with ID_TIPO instead of ID
+// Sample data for most recurring occurrences
 const recurringOccurrencesData = [
   {
-    id: "TP-001",  // ID_TIPO em formato de código
+    id: "TP-001",
     description: "Furto de Veículo",
     status: "Crítica",
     count: 245,
@@ -63,6 +65,8 @@ const statusStyle = {
 
 const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [selectedOccurrence, setSelectedOccurrence] = useState<typeof recurringOccurrencesData[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
@@ -70,6 +74,11 @@ const RecentOccurrences: React.FC = () => {
         ? prevFilters.filter(s => s !== status)
         : [...prevFilters, status]
     );
+  };
+
+  const handleOccurrenceClick = (occurrence: typeof recurringOccurrencesData[0]) => {
+    setSelectedOccurrence(occurrence);
+    setIsDialogOpen(true);
   };
 
   const filteredOccurrences = statusFilter.length > 0
@@ -113,7 +122,7 @@ const RecentOccurrences: React.FC = () => {
               </PopoverTrigger>
               <PopoverContent className="w-48 p-3">
                 <div className="space-y-2">
-                  <h4 className="font-medium text-sm">Filtrar por status</h4>
+                  <h4 className="font-medium text-sm">Filtrar por nível</h4>
                   <div className="space-y-2">
                     {["Crítica", "Alta", "Média", "Baixa"].map((status) => (
                       <div key={status} className="flex items-center space-x-2">
@@ -140,7 +149,7 @@ const RecentOccurrences: React.FC = () => {
                 <TableRow>
                   <TableHead>ID Tipo</TableHead>
                   <TableHead>Descrição</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Nível</TableHead>
                   <TableHead>Total Ocorrências</TableHead>
                 </TableRow>
               </TableHeader>
@@ -151,7 +160,8 @@ const RecentOccurrences: React.FC = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+                    onClick={() => handleOccurrenceClick(occurrence)}
                   >
                     <TableCell className="font-medium">{occurrence.id}</TableCell>
                     <TableCell>
@@ -196,6 +206,13 @@ const RecentOccurrences: React.FC = () => {
           </Button>
         </CardFooter>
       </Card>
+
+      {/* Occurrence Details Dialog */}
+      <OccurrenceDetails 
+        open={isDialogOpen} 
+        onOpenChange={setIsDialogOpen} 
+        occurrence={selectedOccurrence} 
+      />
     </motion.div>
   );
 };

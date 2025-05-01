@@ -3,9 +3,8 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { Moon, Sun, BookOpen } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 const DashboardHeader: React.FC = () => {
   const today = new Date();
@@ -46,27 +45,18 @@ const DashboardHeader: React.FC = () => {
           </motion.p>
         </div>
         
-        <div className="flex items-center gap-2">
-          <Link to="/sobre">
-            <Button variant="outline" className="gap-2">
-              <BookOpen className="h-4 w-4" />
-              Sobre o Projeto
-            </Button>
-          </Link>
-          
-          <Button
-            variant="outline"
-            size="icon"
-            className="transition-all duration-300 hover:rotate-12 ml-2"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-[1.2rem] w-[1.2rem]" />
-            ) : (
-              <Moon className="h-[1.2rem] w-[1.2rem]" />
-            )}
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          className="transition-all duration-300 hover:rotate-12"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "dark" ? (
+            <Sun className="h-[1.2rem] w-[1.2rem]" />
+          ) : (
+            <Moon className="h-[1.2rem] w-[1.2rem]" />
+          )}
+        </Button>
       </Card>
     </motion.div>
   );

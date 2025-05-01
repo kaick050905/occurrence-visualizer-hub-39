@@ -79,6 +79,19 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
 
   const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#a855f7"];
 
+  // Custom tooltip to ensure visibility in dark mode
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
+          <p className="font-medium text-gray-900 dark:text-gray-100">{`Ano: ${label}`}</p>
+          <p className="text-gray-700 dark:text-gray-300">{`${payload[0].name}: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -86,7 +99,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
             <span className="text-primary">{occurrence.id}</span> - {occurrence.description}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-muted-foreground dark:text-gray-300">
             Detalhes completos sobre esta ocorrência
           </DialogDescription>
         </DialogHeader>
@@ -94,7 +107,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total Registrado</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Total Registrado</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">{occurrence.count}</p>
@@ -103,7 +116,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total em 2024</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Total em 2024</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">{growthData.find(item => item.year === 2024)?.count || 0}</p>
@@ -112,7 +125,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Crescimento (2023-2024)</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Crescimento (2023-2024)</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center">
               <p className="text-2xl font-bold">
@@ -169,9 +182,9 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
                   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="year" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`${value} ocorrências`, 'Total']} />
+                  <XAxis dataKey="year" stroke="currentColor" />
+                  <YAxis stroke="currentColor" />
+                  <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="count" name="Total de Ocorrências">
                     {growthData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />

@@ -1,7 +1,6 @@
 
 import React from "react";
 import DashboardHeader from "@/components/DashboardHeader";
-import MainNavigation from "@/components/MainNavigation";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -16,7 +15,6 @@ const About = () => {
     >
       <div className="container py-4 px-4 md:px-6 lg:px-8">
         <DashboardHeader />
-        <MainNavigation />
         
         <Card className="mt-6">
           <CardHeader>

@@ -11,6 +11,7 @@ import RegionalData from "./pages/RegionalData";
 import RegionDetails from "./pages/RegionDetails";
 import NotFound from "./pages/NotFound";
 import CityDetails from "./pages/CityDetails";
+import About from "./pages/About";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => {
               <Route path="/dados-por-regiao" element={<RegionalData />} />
               <Route path="/cidade/:name" element={<CityDetails />} />
               <Route path="/regiao/:name" element={<RegionDetails />} />
+              <Route path="/sobre" element={<About />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

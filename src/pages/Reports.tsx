@@ -37,11 +37,14 @@ const Reports: React.FC = () => {
         <DashboardHeader />
         
         <Tabs defaultValue="relatorios" className="mb-6">
-          <TabsList className="grid w-full grid-cols-2 md:w-auto">
+          <TabsList className="grid w-full grid-cols-3 md:w-auto">
             <TabsTrigger value="dashboard" asChild>
               <Link to="/">Dashboard</Link>
             </TabsTrigger>
             <TabsTrigger value="relatorios">Relatórios</TabsTrigger>
+            <TabsTrigger value="sobre" asChild>
+              <Link to="/sobre">Sobre o projeto</Link>
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="relatorios" className="mt-4 space-y-4">

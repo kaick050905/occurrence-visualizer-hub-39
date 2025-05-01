@@ -22,10 +22,13 @@ const Index = () => {
         <DashboardHeader />
         
         <Tabs defaultValue="dashboard" className="mb-6">
-          <TabsList className="grid w-full grid-cols-2 md:w-auto">
+          <TabsList className="grid w-full grid-cols-3 md:w-auto">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="relatorios" asChild>
               <Link to="/relatorios">Relatórios</Link>
+            </TabsTrigger>
+            <TabsTrigger value="sobre" asChild>
+              <Link to="/sobre">Sobre o projeto</Link>
             </TabsTrigger>
           </TabsList>
           

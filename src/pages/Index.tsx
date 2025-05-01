@@ -9,6 +9,7 @@ import SafetyCardsCarousel from "@/components/SafetyCards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import MainNavigation from "@/components/MainNavigation";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
     >
       <div className="container py-4 px-4 md:px-6 lg:px-8">
         <DashboardHeader />
+        <MainNavigation />
         
         <Tabs defaultValue="dashboard" className="mb-6">
           <TabsList className="grid w-full grid-cols-2 md:w-auto">

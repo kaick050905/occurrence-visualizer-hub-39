@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -25,6 +26,28 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
+
+// Sample data for the top 10 cities with most occurrences
+const topCitiesData = [
+  { city: "São Paulo", count: 2150, severity: "Crítica" },
+  { city: "Guarulhos", count: 1780, severity: "Alta" },
+  { city: "Campinas", count: 1430, severity: "Média" },
+  { city: "São Bernardo do Campo", count: 1210, severity: "Alta" },
+  { city: "Santo André", count: 980, severity: "Média" },
+  { city: "Osasco", count: 870, severity: "Baixa" },
+  { city: "São José dos Campos", count: 760, severity: "Baixa" },
+  { city: "Ribeirão Preto", count: 680, severity: "Média" },
+  { city: "Sorocaba", count: 590, severity: "Baixa" },
+  { city: "Santos", count: 540, severity: "Baixa" }
+];
+
+// Severity colors
+const severityColors = {
+  "Crítica": "#7F1D1D",
+  "Alta": "#EF4444",
+  "Média": "#F59E0B",
+  "Baixa": "#10B981"
+};
 
 // Sample data
 const weeklyData = [
@@ -116,6 +139,21 @@ const OccurrenceCharts: React.FC = () => {
   const currentCrimeData = crimeYearlyData[crimeType as keyof typeof crimeYearlyData];
   const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
 
+  // Custom tooltip for the horizontal bar chart
+  const CustomBarTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
+          <p className="font-medium text-gray-900 dark:text-gray-100">{data.city}</p>
+          <p className="text-gray-700 dark:text-gray-300">Total: {data.count}</p>
+          <p className="text-gray-700 dark:text-gray-300">Severidade: {data.severity}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <motion.div 
@@ -127,46 +165,48 @@ const OccurrenceCharts: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle>Ocorrências por Dia</CardTitle>
+              <CardTitle>Top 10 Cidades com Mais Ocorrências</CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Distribuição diária de ocorrências agrupadas por nível de prioridade</p>
+                    <p>As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <Select 
-              defaultValue="semanal" 
-              value={timePeriod}
-              onValueChange={(value) => setTimePeriod(value)}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="semanal">Últimos 7 dias</SelectItem>
-                <SelectItem value="quinzenal">Últimos 15 dias</SelectItem>
-                <SelectItem value="mensal">Últimos 30 dias</SelectItem>
-              </SelectContent>
-            </Select>
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart 
+                  data={topCitiesData} 
+                  layout="vertical" 
+                  margin={{ top: 20, right: 30, left: 100, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
+                  <XAxis type="number" />
+                  <YAxis 
+                    type="category" 
+                    dataKey="city" 
+                    tick={{ fill: 'currentColor' }}
+                  />
+                  <Tooltip content={<CustomBarTooltip />} />
                   <Legend />
-                  <Bar dataKey="críticas" name="Críticas" stackId="a" fill="#7F1D1D" />
-                  <Bar dataKey="altas" name="Altas" stackId="a" fill="#EF4444" />
-                  <Bar dataKey="médias" name="Médias" stackId="a" fill="#F59E0B" />
-                  <Bar dataKey="baixas" name="Baixas" stackId="a" fill="#10B981" />
+                  <Bar 
+                    dataKey="count" 
+                    name="Total de Ocorrências" 
+                    radius={[0, 4, 4, 0]}
+                  >
+                    {topCitiesData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={severityColors[entry.severity as keyof typeof severityColors]} 
+                      />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>

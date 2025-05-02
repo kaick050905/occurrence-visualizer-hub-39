@@ -27,19 +27,81 @@ import {
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
 
-// Sample data for the top 10 cities with most occurrences
-const topCitiesData = [
-  { city: "São Paulo", count: 2150, severity: "Crítica" },
-  { city: "Guarulhos", count: 1780, severity: "Alta" },
-  { city: "Campinas", count: 1430, severity: "Média" },
-  { city: "São Bernardo do Campo", count: 1210, severity: "Alta" },
-  { city: "Santo André", count: 980, severity: "Média" },
-  { city: "Osasco", count: 870, severity: "Baixa" },
-  { city: "São José dos Campos", count: 760, severity: "Baixa" },
-  { city: "Ribeirão Preto", count: 680, severity: "Média" },
-  { city: "Sorocaba", count: 590, severity: "Baixa" },
-  { city: "Santos", count: 540, severity: "Baixa" }
-];
+// Sample data for the top 10 cities with most occurrences by year
+const topCitiesByYear = {
+  "2020": [
+    { city: "São Paulo", count: 1850, severity: "Crítica" },
+    { city: "Guarulhos", count: 1580, severity: "Alta" },
+    { city: "Campinas", count: 1230, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 1010, severity: "Alta" },
+    { city: "Santo André", count: 880, severity: "Média" },
+    { city: "Osasco", count: 770, severity: "Baixa" },
+    { city: "São José dos Campos", count: 660, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 580, severity: "Média" },
+    { city: "Sorocaba", count: 490, severity: "Baixa" },
+    { city: "Santos", count: 440, severity: "Baixa" }
+  ],
+  "2021": [
+    { city: "São Paulo", count: 1950, severity: "Crítica" },
+    { city: "Guarulhos", count: 1680, severity: "Alta" },
+    { city: "Campinas", count: 1330, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 1110, severity: "Alta" },
+    { city: "Santo André", count: 920, severity: "Média" },
+    { city: "Osasco", count: 820, severity: "Baixa" },
+    { city: "São José dos Campos", count: 710, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 630, severity: "Média" },
+    { city: "Sorocaba", count: 540, severity: "Baixa" },
+    { city: "Santos", count: 490, severity: "Baixa" }
+  ],
+  "2022": [
+    { city: "São Paulo", count: 2050, severity: "Crítica" },
+    { city: "Guarulhos", count: 1730, severity: "Alta" },
+    { city: "Campinas", count: 1380, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 1160, severity: "Alta" },
+    { city: "Santo André", count: 950, severity: "Média" },
+    { city: "Osasco", count: 840, severity: "Baixa" },
+    { city: "São José dos Campos", count: 730, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 650, severity: "Média" },
+    { city: "Sorocaba", count: 560, severity: "Baixa" },
+    { city: "Santos", count: 510, severity: "Baixa" }
+  ],
+  "2023": [
+    { city: "São Paulo", count: 2100, severity: "Crítica" },
+    { city: "Guarulhos", count: 1750, severity: "Alta" },
+    { city: "Campinas", count: 1400, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 1180, severity: "Alta" },
+    { city: "Santo André", count: 970, severity: "Média" },
+    { city: "Osasco", count: 860, severity: "Baixa" },
+    { city: "São José dos Campos", count: 750, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 670, severity: "Média" },
+    { city: "Sorocaba", count: 580, severity: "Baixa" },
+    { city: "Santos", count: 530, severity: "Baixa" }
+  ],
+  "2024": [
+    { city: "São Paulo", count: 2150, severity: "Crítica" },
+    { city: "Guarulhos", count: 1780, severity: "Alta" },
+    { city: "Campinas", count: 1430, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 1210, severity: "Alta" },
+    { city: "Santo André", count: 980, severity: "Média" },
+    { city: "Osasco", count: 870, severity: "Baixa" },
+    { city: "São José dos Campos", count: 760, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 680, severity: "Média" },
+    { city: "Sorocaba", count: 590, severity: "Baixa" },
+    { city: "Santos", count: 540, severity: "Baixa" }
+  ],
+  "2025": [
+    { city: "São Paulo", count: 750, severity: "Crítica" },
+    { city: "Guarulhos", count: 580, severity: "Alta" },
+    { city: "Campinas", count: 430, severity: "Média" },
+    { city: "São Bernardo do Campo", count: 310, severity: "Alta" },
+    { city: "Santo André", count: 280, severity: "Média" },
+    { city: "Osasco", count: 170, severity: "Baixa" },
+    { city: "São José dos Campos", count: 160, severity: "Baixa" },
+    { city: "Ribeirão Preto", count: 180, severity: "Média" },
+    { city: "Sorocaba", count: 190, severity: "Baixa" },
+    { city: "Santos", count: 140, severity: "Baixa" }
+  ]
+};
 
 // Severity colors
 const severityColors = {
@@ -448,10 +510,16 @@ const OccurrenceCharts: React.FC = () => {
   const [crimeType, setCrimeType] = useState<string>("furto");
   const [timePeriod, setTimePeriod] = useState<string>("semanal");
   const [selectedYear, setSelectedYear] = useState<string>("2024");
+  const [topCitiesYear, setTopCitiesYear] = useState<string>("2024");
   
-  const currentYearData = crimeYearlyDataByYear[selectedYear as keyof typeof crimeYearlyDataByYear];
+  // Use proper type casting for accessing the data
+  const selectedYearNumber = parseInt(selectedYear);
+  const currentYearData = crimeYearlyDataByYear[selectedYearNumber as keyof typeof crimeYearlyDataByYear];
   const currentCrimeData = currentYearData ? currentYearData[crimeType as keyof typeof currentYearData] : [];
   const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
+  
+  // Get the correct top cities data based on the selected year
+  const topCitiesData = topCitiesByYear[topCitiesYear as keyof typeof topCitiesByYear] || topCitiesByYear["2024"];
 
   // Custom tooltip for the horizontal bar chart
   const CustomBarTooltip = ({ active, payload }: any) => {
@@ -508,6 +576,22 @@ const OccurrenceCharts: React.FC = () => {
                 </UITooltip>
               </TooltipProvider>
             </div>
+            <Select 
+              value={topCitiesYear} 
+              onValueChange={(value) => setTopCitiesYear(value)}
+            >
+              <SelectTrigger className="w-[100px]">
+                <SelectValue placeholder="Ano" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2020">2020</SelectItem>
+                <SelectItem value="2021">2021</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+                <SelectItem value="2025">2025</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
             <div className="chart-container">
@@ -562,7 +646,7 @@ const OccurrenceCharts: React.FC = () => {
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>Tendência mensal de ocorrências por tipo de crime. Selecione o ano e o tipo de crime para visualizar diferentes períodos e categorias.</p>
+                    <p>Tendência mensal de ocorrências por tipo de crime. Selecione o tipo de crime para visualizar diferentes categorias.</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -614,10 +698,12 @@ const OccurrenceCharts: React.FC = () => {
                     padding={{ left: 20, right: 20 }}
                     height={60}
                     tick={{ 
-                      angle: -45,
                       textAnchor: 'end',
-                      fill: 'currentColor'
+                      fill: 'currentColor',
+                      dy: 8
                     }}
+                    tickSize={8}
+                    angle={-45}
                   />
                   <YAxis />
                   <Tooltip content={<CustomChartTooltip />} />

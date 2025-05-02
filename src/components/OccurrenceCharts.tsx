@@ -60,44 +60,356 @@ const weeklyData = [
   { name: "Dom", críticas: 1, altas: 3, médias: 5, baixas: 4 },
 ];
 
-// Yearly data for crime types
-const crimeYearlyData = {
-  furto: [
-    { year: "2018", count: 10250 },
-    { year: "2019", count: 11320 },
-    { year: "2020", count: 9845 },
-    { year: "2021", count: 10580 },
-    { year: "2022", count: 12450 },
-    { year: "2023", count: 13650 },
-    { year: "2024", count: 12567 },
-  ],
-  roubo: [
-    { year: "2018", count: 8650 },
-    { year: "2019", count: 9120 },
-    { year: "2020", count: 7845 },
-    { year: "2021", count: 8280 },
-    { year: "2022", count: 9150 },
-    { year: "2023", count: 9650 },
-    { year: "2024", count: 8932 },
-  ],
-  estupro: [
-    { year: "2018", count: 2150 },
-    { year: "2019", count: 2320 },
-    { year: "2020", count: 2045 },
-    { year: "2021", count: 2180 },
-    { year: "2022", count: 2350 },
-    { year: "2023", count: 2450 },
-    { year: "2024", count: 2267 },
-  ],
-  homicidio: [
-    { year: "2018", count: 1450 },
-    { year: "2019", count: 1380 },
-    { year: "2020", count: 1245 },
-    { year: "2021", count: 1180 },
-    { year: "2022", count: 1050 },
-    { year: "2023", count: 950 },
-    { year: "2024", count: 876 },
-  ],
+// Yearly data for crime types by year
+const crimeYearlyDataByYear = {
+  2020: {
+    furto: [
+      { year: "Jan", count: 850 },
+      { year: "Fev", count: 820 },
+      { year: "Mar", count: 790 },
+      { year: "Abr", count: 845 },
+      { year: "Mai", count: 910 },
+      { year: "Jun", count: 930 },
+      { year: "Jul", count: 950 },
+      { year: "Ago", count: 970 },
+      { year: "Set", count: 930 },
+      { year: "Out", count: 890 },
+      { year: "Nov", count: 910 },
+      { year: "Dez", count: 950 },
+    ],
+    roubo: [
+      { year: "Jan", count: 720 },
+      { year: "Fev", count: 690 },
+      { year: "Mar", count: 650 },
+      { year: "Abr", count: 685 },
+      { year: "Mai", count: 710 },
+      { year: "Jun", count: 730 },
+      { year: "Jul", count: 745 },
+      { year: "Ago", count: 760 },
+      { year: "Set", count: 725 },
+      { year: "Out", count: 690 },
+      { year: "Nov", count: 705 },
+      { year: "Dez", count: 735 },
+    ],
+    estupro: [
+      { year: "Jan", count: 175 },
+      { year: "Fev", count: 165 },
+      { year: "Mar", count: 160 },
+      { year: "Abr", count: 170 },
+      { year: "Mai", count: 180 },
+      { year: "Jun", count: 185 },
+      { year: "Jul", count: 190 },
+      { year: "Ago", count: 195 },
+      { year: "Set", count: 185 },
+      { year: "Out", count: 175 },
+      { year: "Nov", count: 180 },
+      { year: "Dez", count: 190 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 115 },
+      { year: "Fev", count: 105 },
+      { year: "Mar", count: 100 },
+      { year: "Abr", count: 110 },
+      { year: "Mai", count: 120 },
+      { year: "Jun", count: 130 },
+      { year: "Jul", count: 120 },
+      { year: "Ago", count: 115 },
+      { year: "Set", count: 110 },
+      { year: "Out", count: 100 },
+      { year: "Nov", count: 105 },
+      { year: "Dez", count: 115 },
+    ],
+  },
+  2021: {
+    furto: [
+      { year: "Jan", count: 920 },
+      { year: "Fev", count: 890 },
+      { year: "Mar", count: 860 },
+      { year: "Abr", count: 915 },
+      { year: "Mai", count: 980 },
+      { year: "Jun", count: 1000 },
+      { year: "Jul", count: 1020 },
+      { year: "Ago", count: 1040 },
+      { year: "Set", count: 1000 },
+      { year: "Out", count: 960 },
+      { year: "Nov", count: 980 },
+      { year: "Dez", count: 1020 },
+    ],
+    roubo: [
+      { year: "Jan", count: 780 },
+      { year: "Fev", count: 750 },
+      { year: "Mar", count: 710 },
+      { year: "Abr", count: 745 },
+      { year: "Mai", count: 770 },
+      { year: "Jun", count: 790 },
+      { year: "Jul", count: 805 },
+      { year: "Ago", count: 820 },
+      { year: "Set", count: 785 },
+      { year: "Out", count: 750 },
+      { year: "Nov", count: 765 },
+      { year: "Dez", count: 795 },
+    ],
+    estupro: [
+      { year: "Jan", count: 190 },
+      { year: "Fev", count: 180 },
+      { year: "Mar", count: 175 },
+      { year: "Abr", count: 185 },
+      { year: "Mai", count: 195 },
+      { year: "Jun", count: 200 },
+      { year: "Jul", count: 205 },
+      { year: "Ago", count: 210 },
+      { year: "Set", count: 200 },
+      { year: "Out", count: 190 },
+      { year: "Nov", count: 195 },
+      { year: "Dez", count: 205 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 105 },
+      { year: "Fev", count: 95 },
+      { year: "Mar", count: 90 },
+      { year: "Abr", count: 100 },
+      { year: "Mai", count: 110 },
+      { year: "Jun", count: 120 },
+      { year: "Jul", count: 110 },
+      { year: "Ago", count: 105 },
+      { year: "Set", count: 100 },
+      { year: "Out", count: 90 },
+      { year: "Nov", count: 95 },
+      { year: "Dez", count: 105 },
+    ],
+  },
+  2022: {
+    furto: [
+      { year: "Jan", count: 1020 },
+      { year: "Fev", count: 990 },
+      { year: "Mar", count: 960 },
+      { year: "Abr", count: 1015 },
+      { year: "Mai", count: 1080 },
+      { year: "Jun", count: 1100 },
+      { year: "Jul", count: 1120 },
+      { year: "Ago", count: 1140 },
+      { year: "Set", count: 1100 },
+      { year: "Out", count: 1060 },
+      { year: "Nov", count: 1080 },
+      { year: "Dez", count: 1120 },
+    ],
+    roubo: [
+      { year: "Jan", count: 850 },
+      { year: "Fev", count: 820 },
+      { year: "Mar", count: 780 },
+      { year: "Abr", count: 815 },
+      { year: "Mai", count: 840 },
+      { year: "Jun", count: 860 },
+      { year: "Jul", count: 875 },
+      { year: "Ago", count: 890 },
+      { year: "Set", count: 855 },
+      { year: "Out", count: 820 },
+      { year: "Nov", count: 835 },
+      { year: "Dez", count: 865 },
+    ],
+    estupro: [
+      { year: "Jan", count: 210 },
+      { year: "Fev", count: 200 },
+      { year: "Mar", count: 195 },
+      { year: "Abr", count: 205 },
+      { year: "Mai", count: 215 },
+      { year: "Jun", count: 220 },
+      { year: "Jul", count: 225 },
+      { year: "Ago", count: 230 },
+      { year: "Set", count: 220 },
+      { year: "Out", count: 210 },
+      { year: "Nov", count: 215 },
+      { year: "Dez", count: 225 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 95 },
+      { year: "Fev", count: 85 },
+      { year: "Mar", count: 80 },
+      { year: "Abr", count: 90 },
+      { year: "Mai", count: 100 },
+      { year: "Jun", count: 110 },
+      { year: "Jul", count: 100 },
+      { year: "Ago", count: 95 },
+      { year: "Set", count: 90 },
+      { year: "Out", count: 80 },
+      { year: "Nov", count: 85 },
+      { year: "Dez", count: 95 },
+    ],
+  },
+  2023: {
+    furto: [
+      { year: "Jan", count: 1120 },
+      { year: "Fev", count: 1090 },
+      { year: "Mar", count: 1060 },
+      { year: "Abr", count: 1115 },
+      { year: "Mai", count: 1180 },
+      { year: "Jun", count: 1200 },
+      { year: "Jul", count: 1220 },
+      { year: "Ago", count: 1240 },
+      { year: "Set", count: 1200 },
+      { year: "Out", count: 1160 },
+      { year: "Nov", count: 1180 },
+      { year: "Dez", count: 1220 },
+    ],
+    roubo: [
+      { year: "Jan", count: 920 },
+      { year: "Fev", count: 890 },
+      { year: "Mar", count: 850 },
+      { year: "Abr", count: 885 },
+      { year: "Mai", count: 910 },
+      { year: "Jun", count: 930 },
+      { year: "Jul", count: 945 },
+      { year: "Ago", count: 960 },
+      { year: "Set", count: 925 },
+      { year: "Out", count: 890 },
+      { year: "Nov", count: 905 },
+      { year: "Dez", count: 935 },
+    ],
+    estupro: [
+      { year: "Jan", count: 230 },
+      { year: "Fev", count: 220 },
+      { year: "Mar", count: 215 },
+      { year: "Abr", count: 225 },
+      { year: "Mai", count: 235 },
+      { year: "Jun", count: 240 },
+      { year: "Jul", count: 245 },
+      { year: "Ago", count: 250 },
+      { year: "Set", count: 240 },
+      { year: "Out", count: 230 },
+      { year: "Nov", count: 235 },
+      { year: "Dez", count: 245 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 85 },
+      { year: "Fev", count: 75 },
+      { year: "Mar", count: 70 },
+      { year: "Abr", count: 80 },
+      { year: "Mai", count: 90 },
+      { year: "Jun", count: 100 },
+      { year: "Jul", count: 90 },
+      { year: "Ago", count: 85 },
+      { year: "Set", count: 80 },
+      { year: "Out", count: 70 },
+      { year: "Nov", count: 75 },
+      { year: "Dez", count: 85 },
+    ],
+  },
+  2024: {
+    furto: [
+      { year: "Jan", count: 1220 },
+      { year: "Fev", count: 1190 },
+      { year: "Mar", count: 1160 },
+      { year: "Abr", count: 1215 },
+      { year: "Mai", count: 1280 },
+      { year: "Jun", count: 1300 },
+      { year: "Jul", count: 1320 },
+      { year: "Ago", count: 1260 },
+      { year: "Set", count: 1200 },
+      { year: "Out", count: 1160 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    roubo: [
+      { year: "Jan", count: 990 },
+      { year: "Fev", count: 960 },
+      { year: "Mar", count: 920 },
+      { year: "Abr", count: 955 },
+      { year: "Mai", count: 980 },
+      { year: "Jun", count: 1000 },
+      { year: "Jul", count: 975 },
+      { year: "Ago", count: 940 },
+      { year: "Set", count: 900 },
+      { year: "Out", count: 860 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    estupro: [
+      { year: "Jan", count: 250 },
+      { year: "Fev", count: 240 },
+      { year: "Mar", count: 235 },
+      { year: "Abr", count: 245 },
+      { year: "Mai", count: 255 },
+      { year: "Jun", count: 260 },
+      { year: "Jul", count: 250 },
+      { year: "Ago", count: 240 },
+      { year: "Set", count: 230 },
+      { year: "Out", count: 225 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 75 },
+      { year: "Fev", count: 65 },
+      { year: "Mar", count: 60 },
+      { year: "Abr", count: 70 },
+      { year: "Mai", count: 80 },
+      { year: "Jun", count: 90 },
+      { year: "Jul", count: 80 },
+      { year: "Ago", count: 70 },
+      { year: "Set", count: 65 },
+      { year: "Out", count: 60 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+  },
+  2025: {
+    furto: [
+      { year: "Jan", count: 320 },
+      { year: "Fev", count: 290 },
+      { year: "Mar", count: 260 },
+      { year: "Abr", count: 0 },
+      { year: "Mai", count: 0 },
+      { year: "Jun", count: 0 },
+      { year: "Jul", count: 0 },
+      { year: "Ago", count: 0 },
+      { year: "Set", count: 0 },
+      { year: "Out", count: 0 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    roubo: [
+      { year: "Jan", count: 210 },
+      { year: "Fev", count: 180 },
+      { year: "Mar", count: 160 },
+      { year: "Abr", count: 0 },
+      { year: "Mai", count: 0 },
+      { year: "Jun", count: 0 },
+      { year: "Jul", count: 0 },
+      { year: "Ago", count: 0 },
+      { year: "Set", count: 0 },
+      { year: "Out", count: 0 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    estupro: [
+      { year: "Jan", count: 70 },
+      { year: "Fev", count: 60 },
+      { year: "Mar", count: 55 },
+      { year: "Abr", count: 0 },
+      { year: "Mai", count: 0 },
+      { year: "Jun", count: 0 },
+      { year: "Jul", count: 0 },
+      { year: "Ago", count: 0 },
+      { year: "Set", count: 0 },
+      { year: "Out", count: 0 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+    homicidio: [
+      { year: "Jan", count: 35 },
+      { year: "Fev", count: 30 },
+      { year: "Mar", count: 25 },
+      { year: "Abr", count: 0 },
+      { year: "Mai", count: 0 },
+      { year: "Jun", count: 0 },
+      { year: "Jul", count: 0 },
+      { year: "Ago", count: 0 },
+      { year: "Set", count: 0 },
+      { year: "Out", count: 0 },
+      { year: "Nov", count: 0 },
+      { year: "Dez", count: 0 },
+    ],
+  }
 };
 
 // Yearly total data
@@ -135,8 +447,10 @@ const crimeTypeColors = {
 const OccurrenceCharts: React.FC = () => {
   const [crimeType, setCrimeType] = useState<string>("furto");
   const [timePeriod, setTimePeriod] = useState<string>("semanal");
+  const [selectedYear, setSelectedYear] = useState<string>("2024");
   
-  const currentCrimeData = crimeYearlyData[crimeType as keyof typeof crimeYearlyData];
+  const currentYearData = crimeYearlyDataByYear[selectedYear as keyof typeof crimeYearlyDataByYear];
+  const currentCrimeData = currentYearData ? currentYearData[crimeType as keyof typeof currentYearData] : [];
   const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
 
   // Custom tooltip for the horizontal bar chart
@@ -148,6 +462,23 @@ const OccurrenceCharts: React.FC = () => {
           <p className="font-medium text-gray-900 dark:text-gray-100">{data.city}</p>
           <p className="text-gray-700 dark:text-gray-300">Total: {data.count}</p>
           <p className="text-gray-700 dark:text-gray-300">Severidade: {data.severity}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom tooltip for other charts
+  const CustomChartTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
+          <p className="font-medium text-gray-900 dark:text-gray-100">{`${label}`}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={`item-${index}`} className="text-gray-700 dark:text-gray-300" style={{ color: entry.color }}>
+              {`${entry.name}: ${entry.value}`}
+            </p>
+          ))}
         </div>
       );
     }
@@ -171,8 +502,8 @@ const OccurrenceCharts: React.FC = () => {
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante</p>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante. Barras mais longas indicam mais ocorrências.</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -184,7 +515,7 @@ const OccurrenceCharts: React.FC = () => {
                 <BarChart 
                   data={topCitiesData} 
                   layout="vertical" 
-                  margin={{ top: 20, right: 30, left: 100, bottom: 5 }}
+                  margin={{ top: 20, right: 30, left: 120, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" />
@@ -192,6 +523,7 @@ const OccurrenceCharts: React.FC = () => {
                     type="category" 
                     dataKey="city" 
                     tick={{ fill: 'currentColor' }}
+                    width={110}
                   />
                   <Tooltip content={<CustomBarTooltip />} />
                   <Legend />
@@ -229,44 +561,66 @@ const OccurrenceCharts: React.FC = () => {
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Tendência anual do número de ocorrências por tipo de crime</p>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>Tendência mensal de ocorrências por tipo de crime. Selecione o ano e o tipo de crime para visualizar diferentes períodos e categorias.</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <Select 
-              value={crimeType} 
-              onValueChange={(value) => setCrimeType(value)}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Tipo de Crime" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="furto">Furto</SelectItem>
-                <SelectItem value="roubo">Roubo</SelectItem>
-                <SelectItem value="estupro">Estupro</SelectItem>
-                <SelectItem value="homicidio">Homicídio</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-2">
+              <Select 
+                value={selectedYear} 
+                onValueChange={(value) => setSelectedYear(value)}
+              >
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue placeholder="Ano" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2020">2020</SelectItem>
+                  <SelectItem value="2021">2021</SelectItem>
+                  <SelectItem value="2022">2022</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                  <SelectItem value="2024">2024</SelectItem>
+                  <SelectItem value="2025">2025</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select 
+                value={crimeType} 
+                onValueChange={(value) => setCrimeType(value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Tipo de Crime" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="furto">Furto</SelectItem>
+                  <SelectItem value="roubo">Roubo</SelectItem>
+                  <SelectItem value="estupro">Estupro</SelectItem>
+                  <SelectItem value="homicidio">Homicídio</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart
                   data={currentCrimeData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="year" 
                     padding={{ left: 20, right: 20 }}
+                    height={60}
+                    tick={{ 
+                      angle: -45,
+                      textAnchor: 'end',
+                      fill: 'currentColor'
+                    }}
                   />
                   <YAxis />
-                  <Tooltip 
-                    formatter={(value) => [`${value} ocorrências`, `Total de ${crimeType}`]}
-                    labelFormatter={(label) => `Ano: ${label}`}
-                  />
+                  <Tooltip content={<CustomChartTooltip />} />
                   <Legend />
                   <Line
                     type="monotone"
@@ -298,8 +652,8 @@ const OccurrenceCharts: React.FC = () => {
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Comparativo anual do total de ocorrências registradas</p>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>Comparativo anual do total de ocorrências registradas. Barras em tons mais claros representam anos em andamento com dados parciais.</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -309,11 +663,11 @@ const OccurrenceCharts: React.FC = () => {
           <CardContent>
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip content={<CustomChartTooltip />} />
                   <Bar 
                     dataKey="total" 
                     fill="#3B82F6"
@@ -350,8 +704,8 @@ const OccurrenceCharts: React.FC = () => {
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Distribuição percentual das ocorrências por nível de prioridade</p>
+                    <TooltipContent className="p-3 max-w-xs">
+                      <p>Distribuição percentual das ocorrências por nível de prioridade. Cada segmento representa uma proporção das ocorrências totais conforme sua classificação de gravidade.</p>
                     </TooltipContent>
                   </UITooltip>
                 </TooltipProvider>
@@ -377,7 +731,7 @@ const OccurrenceCharts: React.FC = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip content={<CustomChartTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

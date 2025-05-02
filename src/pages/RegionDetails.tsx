@@ -8,6 +8,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart as RLineChart, Line, PieChart as RCPieChart, Pie, Cell } from "recharts";
 import { useTheme } from "next-themes";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { 
+  Tooltip as UITooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Simular dados de crimes por região
@@ -264,13 +271,46 @@ const RegionDetails: React.FC = () => {
           <CardContent>
             <Tabs defaultValue="bar">
               <TabsList className="mb-4">
-                <TabsTrigger value="bar"><BarChart2 className="mr-1" size={16} />Barras</TabsTrigger>
-                <TabsTrigger value="line"><LineChart className="mr-1" size={16} />Linhas</TabsTrigger>
-                <TabsTrigger value="pie"><PieChart className="mr-1" size={16} />Pizza</TabsTrigger>
-                <TabsTrigger value="cities"><MapPin className="mr-1" size={16} />Cidades</TabsTrigger>
+                <TabsTrigger value="bar">
+                  <div className="flex items-center gap-1">
+                    <BarChart2 size={16} />
+                    <span className="hidden sm:inline">Barras</span>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="line">
+                  <div className="flex items-center gap-1">
+                    <LineChart size={16} />
+                    <span className="hidden sm:inline">Linhas</span>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="pie">
+                  <div className="flex items-center gap-1">
+                    <PieChart size={16} />
+                    <span className="hidden sm:inline">Pizza</span>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="cities">
+                  <div className="flex items-center gap-1">
+                    <MapPin size={16} />
+                    <span className="hidden sm:inline">Cidades</span>
+                  </div>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="bar">
+                <div className="flex items-center mb-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Crimes por Ano</h3>
+                  <TooltipProvider>
+                    <UITooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
+                      </TooltipTrigger>
+                      <TooltipContent className="p-3 max-w-xs">
+                        <p>Distribuição anual de crimes por tipo na região. Cada barra representa o número de ocorrências para cada categoria de crime.</p>
+                      </TooltipContent>
+                    </UITooltip>
+                  </TooltipProvider>
+                </div>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barData}>
@@ -288,6 +328,19 @@ const RegionDetails: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="line">
+                <div className="flex items-center mb-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Evolução Temporal</h3>
+                  <TooltipProvider>
+                    <UITooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
+                      </TooltipTrigger>
+                      <TooltipContent className="p-3 max-w-xs">
+                        <p>Tendência temporal dos diferentes tipos de crime na região, permitindo visualizar padrões de crescimento ou redução ao longo dos anos.</p>
+                      </TooltipContent>
+                    </UITooltip>
+                  </TooltipProvider>
+                </div>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <RLineChart data={barData}>
@@ -305,6 +358,19 @@ const RegionDetails: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="pie">
+                <div className="flex items-center mb-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Distribuição por Tipo</h3>
+                  <TooltipProvider>
+                    <UITooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
+                      </TooltipTrigger>
+                      <TooltipContent className="p-3 max-w-xs">
+                        <p>Proporção relativa de cada tipo de crime no total de ocorrências da região. Visualiza como cada crime contribui para o panorama geral de segurança.</p>
+                      </TooltipContent>
+                    </UITooltip>
+                  </TooltipProvider>
+                </div>
                 <div className="h-[300px] flex justify-center items-center">
                   <ResponsiveContainer width="60%" height="100%">
                     <RCPieChart>
@@ -329,14 +395,25 @@ const RegionDetails: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="cities">
+                <div className="flex items-center mb-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Cidades da Região</h3>
+                  <TooltipProvider>
+                    <UITooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
+                      </TooltipTrigger>
+                      <TooltipContent className="p-3 max-w-xs">
+                        <p>Lista de cidades pertencentes à região com suas respectivas informações demográficas e estatísticas de ocorrências.</p>
+                      </TooltipContent>
+                    </UITooltip>
+                  </TooltipProvider>
+                </div>
                 <ScrollArea className="h-[300px] pr-4">
                   <div className="space-y-4">
                     {regionCities.map((city, index) => (
-                      <button
-                        type="button"
+                      <div
                         key={index}
-                        className="w-full text-left p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-lg hover:bg-gray-50 transition-all duration-300 outline-none focus:ring-2 focus:ring-primary dark:from-gray-800 dark:to-gray-900 dark:hover:bg-gray-800 dark:border-gray-700"
-                        onClick={() => navigate(`/cidade/${encodeURIComponent(city.name)}`)}
+                        className="w-full text-left p-4 border rounded-lg bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 dark:border-gray-700"
                       >
                         <div className="flex items-center gap-2">
                           <MapPin className="h-5 w-5 text-primary" />
@@ -365,7 +442,7 @@ const RegionDetails: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                      </button>
+                      </div>
                     ))}
                   </div>
                 </ScrollArea>

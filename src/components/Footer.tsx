@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
             aria-label="Site da Secretaria de Segurança Pública do Estado de São Paulo"
           >
             <img 
-              src="/lovable-uploads/0945e93e-596a-4140-be57-53889fe7ecce.png" 
+              src="/lovable-uploads/5cd52671-40fe-4a7d-81de-0196a97a84c6.png" 
               alt="Logo da Secretaria de Segurança Pública" 
               className={`${isMobile ? 'w-48' : 'w-56'} h-auto`}
             />

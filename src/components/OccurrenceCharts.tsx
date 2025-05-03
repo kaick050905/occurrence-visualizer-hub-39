@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -26,6 +25,7 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Sample data for the top 10 cities with most occurrences by year
 const topCitiesByYear = {
@@ -509,14 +509,22 @@ const crimeTypeColors = {
 const OccurrenceCharts: React.FC = () => {
   const [crimeType, setCrimeType] = useState<string>("furto");
   const [timePeriod, setTimePeriod] = useState<string>("semanal");
-  const [selectedYear, setSelectedYear] = useState<string>("2024");
   const [topCitiesYear, setTopCitiesYear] = useState<string>("2024");
+  const isMobile = useIsMobile();
   
-  // Use proper type casting for accessing the data
-  const selectedYearNumber = parseInt(selectedYear);
-  const currentYearData = crimeYearlyDataByYear[selectedYearNumber as keyof typeof crimeYearlyDataByYear];
-  const currentCrimeData = currentYearData ? currentYearData[crimeType as keyof typeof currentYearData] : [];
-  const colorForCrime = crimeTypeColors[crimeType as keyof typeof crimeTypeColors];
+  // Prepare data for crime evolution over years (2020-2025)
+  const crimeEvolutionData = Object.keys(crimeYearlyDataByYear).map(year => {
+    const yearData = crimeYearlyDataByYear[year as keyof typeof crimeYearlyDataByYear];
+    const crimeData = yearData[crimeType as keyof typeof yearData];
+    
+    // Calculate total for the year (sum of all months with data)
+    const totalForYear = crimeData.reduce((sum, item) => sum + (item.count || 0), 0);
+    
+    return {
+      year: year,
+      count: totalForYear
+    };
+  });
   
   // Get the correct top cities data based on the selected year
   const topCitiesData = topCitiesByYear[topCitiesYear as keyof typeof topCitiesByYear] || topCitiesByYear["2024"];
@@ -595,19 +603,22 @@ const OccurrenceCharts: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={isMobile ? 500 : 400}>
                 <BarChart 
                   data={topCitiesData} 
                   layout="vertical" 
-                  margin={{ top: 20, right: 30, left: 120, bottom: 5 }}
+                  margin={isMobile ? 
+                    { top: 20, right: 30, left: 90, bottom: 5 } : 
+                    { top: 20, right: 30, left: 120, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" />
                   <YAxis 
                     type="category" 
                     dataKey="city" 
-                    tick={{ fill: 'currentColor' }}
-                    width={110}
+                    tick={{ fill: 'currentColor', fontSize: isMobile ? 11 : 12 }}
+                    width={isMobile ? 80 : 110}
+                    tickMargin={isMobile ? 5 : 0}
                   />
                   <Tooltip content={<CustomBarTooltip />} />
                   <Legend />
@@ -646,29 +657,12 @@ const OccurrenceCharts: React.FC = () => {
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>Tendência mensal de ocorrências por tipo de crime. Selecione o tipo de crime para visualizar diferentes categorias.</p>
+                    <p>Evolução anual das ocorrências por tipo de crime. Selecione o tipo de crime para visualizar a tendência ao longo dos anos.</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
             </div>
             <div className="flex items-center gap-2">
-              <Select 
-                value={selectedYear} 
-                onValueChange={(value) => setSelectedYear(value)}
-              >
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue placeholder="Ano" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2020">2020</SelectItem>
-                  <SelectItem value="2021">2021</SelectItem>
-                  <SelectItem value="2022">2022</SelectItem>
-                  <SelectItem value="2023">2023</SelectItem>
-                  <SelectItem value="2024">2024</SelectItem>
-                  <SelectItem value="2025">2025</SelectItem>
-                </SelectContent>
-              </Select>
-              
               <Select 
                 value={crimeType} 
                 onValueChange={(value) => setCrimeType(value)}
@@ -689,21 +683,20 @@ const OccurrenceCharts: React.FC = () => {
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart
-                  data={currentCrimeData}
+                  data={crimeEvolutionData}
                   margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
-                    dataKey="year" 
+                    dataKey="year"
                     padding={{ left: 20, right: 20 }}
                     height={60}
                     tick={{ 
-                      textAnchor: 'end',
+                      textAnchor: 'middle',
                       fill: 'currentColor',
                       dy: 8
                     }}
                     tickSize={8}
-                    angle={-45}
                   />
                   <YAxis />
                   <Tooltip content={<CustomChartTooltip />} />
@@ -712,7 +705,7 @@ const OccurrenceCharts: React.FC = () => {
                     type="monotone"
                     dataKey="count"
                     name={`Total de ${crimeType}`}
-                    stroke={colorForCrime}
+                    stroke={crimeTypeColors[crimeType as keyof typeof crimeTypeColors]}
                     strokeWidth={3}
                     dot={{ r: 6, strokeWidth: 2 }}
                     activeDot={{ r: 8, strokeWidth: 2 }}

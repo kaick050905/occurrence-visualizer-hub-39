@@ -16,13 +16,13 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for cities and regions
 const citiesData = {
-  dangerous: { name: "São Paulo - Centro", count: 1245, trend: 12 },
-  safe: { name: "Florianópolis - Lagoa", count: 120, trend: -23 }
+  dangerous: { name: "Peruíbe", count: 1245, trend: 12 },
+  safe: { name: "Valinhos", count: 120, trend: -23 }
 };
 
 const regionsData = {
-  dangerous: { name: "Zona Norte - SP", count: 2245, trend: 14 },
-  safe: { name: "Zona Sul - Florianópolis", count: 320, trend: -18 }
+  dangerous: { name: "Capital", count: 2245, trend: 14 },
+  safe: { name: "Campinas", count: 320, trend: -18 }
 };
 
 // Crime statistics data

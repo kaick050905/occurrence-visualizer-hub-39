@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp } from "lucide-react";
@@ -13,6 +12,7 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useTheme } from "next-themes";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -131,6 +131,7 @@ const SafetyCardsCarousel: React.FC = () => {
   );
 
   const [api, setApi] = useState<any>(null);
+  const isMobile = useIsMobile();
 
   // Set up embla carousel with autoplay plugin
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -149,7 +150,7 @@ const SafetyCardsCarousel: React.FC = () => {
   }, [emblaApi]);
 
   return (
-    <div className="mt-6">
+    <div className="mt-4 md:mt-6">
       <Carousel 
         opts={{ 
           align: "start", 
@@ -159,7 +160,7 @@ const SafetyCardsCarousel: React.FC = () => {
         setApi={setApi}
       >
         <CarouselContent className="-ml-2 md:-ml-4">
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <SingleCityRegionCard 
               title="Cidade Mais Perigosa" 
               data={citiesData.dangerous} 
@@ -167,7 +168,7 @@ const SafetyCardsCarousel: React.FC = () => {
               colorClass="border-l-red-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <SingleCityRegionCard 
               title="Cidade Mais Segura" 
               data={citiesData.safe} 
@@ -175,7 +176,7 @@ const SafetyCardsCarousel: React.FC = () => {
               colorClass="border-l-green-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <SingleCityRegionCard 
               title="Região Mais Perigosa" 
               data={regionsData.dangerous} 
@@ -183,7 +184,7 @@ const SafetyCardsCarousel: React.FC = () => {
               colorClass="border-l-red-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <SingleCityRegionCard 
               title="Região Mais Segura" 
               data={regionsData.safe} 
@@ -191,10 +192,10 @@ const SafetyCardsCarousel: React.FC = () => {
               colorClass="border-l-green-500"
             />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <CrimeStatCard data={crimeStats[0]} />
           </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
             <CrimeStatCard data={crimeStats[1]} />
           </CarouselItem>
         </CarouselContent>

@@ -101,8 +101,14 @@
   min-height: 250px;
 }
 
+@media (max-width: 768px) {
+  .chart-container {
+    min-height: 200px;
+  }
+}
+
 .recharts-default-tooltip {
-  background-color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
   border: 1px solid #ddd !important;
   border-radius: 4px !important;
   padding: 8px 12px !important;
@@ -110,7 +116,7 @@
 }
 
 .dark .recharts-default-tooltip {
-  background-color: rgba(38, 38, 38, 0.9) !important;
+  background-color: rgba(38, 38, 38, 0.95) !important;
   border: 1px solid #444 !important;
   color: #e5e5e5 !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
@@ -119,6 +125,12 @@
 .recharts-tooltip-label {
   font-weight: 600 !important;
   margin-bottom: 4px !important;
+  font-size: 0.9rem !important;
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-value {
+  font-size: 0.85rem !important;
 }
 
 .zoom-in-out {
@@ -203,4 +215,19 @@
 
 .pulse-animation {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .recharts-text.recharts-label {
+    font-size: 10px !important;
+  }
+  
+  .recharts-text.recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+  
+  .recharts-legend-item-text {
+    font-size: 10px !important;
+  }
 }

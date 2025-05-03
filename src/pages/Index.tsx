@@ -6,6 +6,7 @@ import RecentOccurrences from "@/components/RecentOccurrences";
 import GeographicDistribution from "@/components/GeographicDistribution";
 import LocalityData from "@/components/LocalityData";
 import SafetyCardsCarousel from "@/components/SafetyCards";
+import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,12 +14,12 @@ import { motion } from "framer-motion";
 const Index = () => {
   return (
     <motion.div 
-      className="min-h-screen bg-background"
+      className="min-h-screen bg-background flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container py-4 px-4 md:px-6 lg:px-8">
+      <div className="container py-4 px-4 md:px-6 lg:px-8 flex-grow">
         <DashboardHeader />
         
         <Tabs defaultValue="dashboard" className="mb-6">
@@ -41,11 +42,12 @@ const Index = () => {
               <SafetyCardsCarousel />
             </motion.div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+                className="col-span-1 md:col-span-1"
               >
                 <GeographicDistribution />
               </motion.div>
@@ -70,6 +72,7 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
+      <Footer />
     </motion.div>
   );
 };

@@ -514,7 +514,8 @@ const OccurrenceCharts: React.FC = () => {
   
   // Prepare data for crime evolution over years (2020-2025)
   const crimeEvolutionData = Object.keys(crimeYearlyDataByYear).map(year => {
-    const yearData = crimeYearlyDataByYear[year as keyof typeof crimeYearlyDataByYear];
+    const numYear = Number(year) as keyof typeof crimeYearlyDataByYear;
+    const yearData = crimeYearlyDataByYear[numYear];
     const crimeData = yearData[crimeType as keyof typeof yearData];
     
     // Calculate total for the year (sum of all months with data)
@@ -549,10 +550,10 @@ const OccurrenceCharts: React.FC = () => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
-          <p className="font-medium text-gray-900 dark:text-gray-100">{`${label}`}</p>
+          <p className="font-medium text-gray-900 dark:text-gray-100">{`${label || ''}`}</p>
           {payload.map((entry: any, index: number) => (
             <p key={`item-${index}`} className="text-gray-700 dark:text-gray-300" style={{ color: entry.color }}>
-              {`${entry.name}: ${entry.value}`}
+              {`${entry.name || ''}: ${entry.value || 0}`}
             </p>
           ))}
         </div>
@@ -562,7 +563,7 @@ const OccurrenceCharts: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
       <motion.div 
         className="col-span-1 md:col-span-2"
         initial={{ opacity: 0, y: 20 }}
@@ -572,7 +573,7 @@ const OccurrenceCharts: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle>Top 10 Cidades com Mais Ocorrências</CardTitle>
+              <CardTitle className="text-base sm:text-lg md:text-xl">Top 10 Cidades com Mais Ocorrências</CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
@@ -588,7 +589,7 @@ const OccurrenceCharts: React.FC = () => {
               value={topCitiesYear} 
               onValueChange={(value) => setTopCitiesYear(value)}
             >
-              <SelectTrigger className="w-[100px]">
+              <SelectTrigger className="w-[80px] sm:w-[100px]">
                 <SelectValue placeholder="Ano" />
               </SelectTrigger>
               <SelectContent>
@@ -603,12 +604,12 @@ const OccurrenceCharts: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={isMobile ? 500 : 400}>
+              <ResponsiveContainer width="100%" height={isMobile ? 550 : 400}>
                 <BarChart 
                   data={topCitiesData} 
                   layout="vertical" 
                   margin={isMobile ? 
-                    { top: 20, right: 30, left: 90, bottom: 5 } : 
+                    { top: 20, right: 30, left: 75, bottom: 5 } : 
                     { top: 20, right: 30, left: 120, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
@@ -616,8 +617,8 @@ const OccurrenceCharts: React.FC = () => {
                   <YAxis 
                     type="category" 
                     dataKey="city" 
-                    tick={{ fill: 'currentColor', fontSize: isMobile ? 11 : 12 }}
-                    width={isMobile ? 80 : 110}
+                    tick={{ fill: 'currentColor', fontSize: isMobile ? 10 : 12 }}
+                    width={isMobile ? 70 : 110}
                     tickMargin={isMobile ? 5 : 0}
                   />
                   <Tooltip content={<CustomBarTooltip />} />
@@ -650,7 +651,7 @@ const OccurrenceCharts: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle>Evolução de Crimes por Ano</CardTitle>
+              <CardTitle className="text-base sm:text-lg md:text-xl">Evolução de Crimes por Ano</CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
@@ -667,7 +668,7 @@ const OccurrenceCharts: React.FC = () => {
                 value={crimeType} 
                 onValueChange={(value) => setCrimeType(value)}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[120px] sm:w-[180px]">
                   <SelectValue placeholder="Tipo de Crime" />
                 </SelectTrigger>
                 <SelectContent>
@@ -681,10 +682,12 @@ const OccurrenceCharts: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
                 <LineChart
                   data={crimeEvolutionData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                  margin={isMobile ? 
+                    { top: 20, right: 20, left: 20, bottom: 20 } : 
+                    { top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
@@ -694,7 +697,8 @@ const OccurrenceCharts: React.FC = () => {
                     tick={{ 
                       textAnchor: 'middle',
                       fill: 'currentColor',
-                      dy: 8
+                      dy: 8,
+                      fontSize: isMobile ? 11 : 12
                     }}
                     tickSize={8}
                   />
@@ -721,11 +725,12 @@ const OccurrenceCharts: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
+        className="col-span-1"
       >
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <CardTitle>Total de Ocorrências dos Últimos Anos</CardTitle>
+              <CardTitle className="text-base sm:text-lg">Total de Ocorrências dos Últimos Anos</CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
@@ -741,11 +746,11 @@ const OccurrenceCharts: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={isMobile ? 220 : 250}>
                 <BarChart data={yearlyData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis dataKey="name" tick={{ fontSize: isMobile ? 11 : 12 }} />
+                  <YAxis tick={{ fontSize: isMobile ? 11 : 12 }} />
                   <Tooltip content={<CustomChartTooltip />} />
                   <Bar 
                     dataKey="total" 
@@ -772,12 +777,13 @@ const OccurrenceCharts: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
+        className="col-span-1"
       >
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CardTitle>Distribuição</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Distribuição</CardTitle>
                 <TooltipProvider>
                   <UITooltip>
                     <TooltipTrigger asChild>
@@ -793,21 +799,22 @@ const OccurrenceCharts: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={isMobile ? 220 : 250}>
                 <PieChart>
                   <Pie
                     data={priorityData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
+                    innerRadius={isMobile ? 50 : 60}
+                    outerRadius={isMobile ? 70 : 80}
                     paddingAngle={5}
                     dataKey="value"
-                    label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    nameKey="name"
+                    label={({name, percent}) => `${name || ''} ${(percent * 100).toFixed(0)}%`}
                     className="transition-transform duration-300 hover:scale-105"
                   >
                     {priorityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell key={`cell-${index}`} name={entry.name} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip content={<CustomChartTooltip />} />

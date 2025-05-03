@@ -6,7 +6,6 @@ import RecentOccurrences from "@/components/RecentOccurrences";
 import GeographicDistribution from "@/components/GeographicDistribution";
 import LocalityData from "@/components/LocalityData";
 import SafetyCardsCarousel from "@/components/SafetyCards";
-import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -72,7 +71,6 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <Footer />
     </motion.div>
   );
 };

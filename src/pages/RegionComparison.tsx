@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import DashboardHeader from "@/components/DashboardHeader";
+import DashboardHeaderWithLang from "@/components/DashboardHeaderWithLang";
 import { 
   Select, 
   SelectContent, 
@@ -10,20 +9,34 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, BarChart2, PieChart, TrendingUp, MapPin } from "lucide-react";
+import { Plus, MapPin, BarChart2, PieChart, TrendingUp, Radar } from "lucide-react";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   Legend,
   ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar as RadarComponent
 } from "recharts";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
+import { useGlobal, Language } from "@/contexts/GlobalContext";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Dados simulados para as regiões
 const regionsData = [
@@ -33,10 +46,11 @@ const regionsData = [
     hdi: 0.765,
     occurrences2024: 3820,
     occurrencesPerCapita: 0.0049,
+    severity: "Baixa",
     crimeDistribution: {
       furto: 1540,
       roubo: 980,
-      estupro: 85,
+      agressao: 85,
       homicidio: 32
     }
   },
@@ -46,10 +60,11 @@ const regionsData = [
     hdi: 0.771,
     occurrences2024: 5240,
     occurrencesPerCapita: 0.0055,
+    severity: "Baixa",
     crimeDistribution: {
       furto: 2350,
       roubo: 1310,
-      estupro: 95,
+      agressao: 95,
       homicidio: 42
     }
   },
@@ -59,10 +74,11 @@ const regionsData = [
     hdi: 0.805,
     occurrences2024: 8760,
     occurrencesPerCapita: 0.0027,
+    severity: "Média",
     crimeDistribution: {
       furto: 4120,
       roubo: 2540,
-      estupro: 150,
+      agressao: 150,
       homicidio: 65
     }
   },
@@ -72,10 +88,11 @@ const regionsData = [
     hdi: 0.805,
     occurrences2024: 21080,
     occurrencesPerCapita: 0.0017,
+    severity: "Crítica",
     crimeDistribution: {
       furto: 10450,
       roubo: 7230,
-      estupro: 320,
+      agressao: 320,
       homicidio: 180
     }
   },
@@ -85,10 +102,11 @@ const regionsData = [
     hdi: 0.783,
     occurrences2024: 13050,
     occurrencesPerCapita: 0.0016,
+    severity: "Alta",
     crimeDistribution: {
       furto: 6320,
       roubo: 4150,
-      estupro: 190,
+      agressao: 190,
       homicidio: 95
     }
   },
@@ -98,10 +116,11 @@ const regionsData = [
     hdi: 0.767,
     occurrences2024: 4230,
     occurrencesPerCapita: 0.0038,
+    severity: "Média",
     crimeDistribution: {
       furto: 1950,
       roubo: 1210,
-      estupro: 75,
+      agressao: 75,
       homicidio: 38
     }
   },
@@ -111,10 +130,11 @@ const regionsData = [
     hdi: 0.751,
     occurrences2024: 2940,
     occurrencesPerCapita: 0.0047,
+    severity: "Baixa",
     crimeDistribution: {
       furto: 1380,
       roubo: 820,
-      estupro: 60,
+      agressao: 60,
       homicidio: 25
     }
   },
@@ -124,10 +144,11 @@ const regionsData = [
     hdi: 0.797,
     occurrences2024: 6080,
     occurrencesPerCapita: 0.0034,
+    severity: "Alta",
     crimeDistribution: {
       furto: 2840,
       roubo: 1750,
-      estupro: 110,
+      agressao: 110,
       homicidio: 48
     }
   },
@@ -137,10 +158,11 @@ const regionsData = [
     hdi: 0.821,
     occurrences2024: 5560,
     occurrencesPerCapita: 0.0037,
+    severity: "Média",
     crimeDistribution: {
       furto: 2650,
       roubo: 1490,
-      estupro: 85,
+      agressao: 85,
       homicidio: 40
     }
   },
@@ -150,10 +172,11 @@ const regionsData = [
     hdi: 0.773,
     occurrences2024: 3450,
     occurrencesPerCapita: 0.0041,
+    severity: "Média",
     crimeDistribution: {
       furto: 1620,
       roubo: 920,
-      estupro: 70,
+      agressao: 70,
       homicidio: 30
     }
   },
@@ -163,10 +186,11 @@ const regionsData = [
     hdi: 0.801,
     occurrences2024: 6540,
     occurrencesPerCapita: 0.0038,
+    severity: "Alta",
     crimeDistribution: {
       furto: 3050,
       roubo: 1980,
-      estupro: 125,
+      agressao: 125,
       homicidio: 55
     }
   },
@@ -176,348 +200,331 @@ const regionsData = [
     hdi: 0.779,
     occurrences2024: 4150,
     occurrencesPerCapita: 0.0030,
+    severity: "Baixa",
     crimeDistribution: {
       furto: 1950,
       roubo: 1210,
-      estupro: 78,
+      agressao: 78,
       homicidio: 36
     }
   },
 ];
+
+// Severidade cores
+const severityColors = {
+  "Crítica": "#7F1D1D",
+  "Alta": "#EF4444",
+  "Média": "#F59E0B",
+  "Baixa": "#10B981"
+};
+
+// Cores para o gráfico
+const chartColors = ["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"];
 
 // Função para encontrar região pelo nome
 const getRegionByName = (name: string) => {
   return regionsData.find(region => region.name === name);
 };
 
-const RegionComparison = () => {
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [compareMode, setCompareMode] = useState<"total" | "perCapita">("total");
-  const [activeMetric, setActiveMetric] = useState<"occurrences" | "crimeDistribution">("occurrences");
+// Type for crime distribution data
+type CrimeDistributionType = {
+  furto: number;
+  roubo: number;
+  agressao: number;
+  homicidio: number;
+};
+
+const RegionComparison: React.FC = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("bar");
+  const { currentLanguage, compareRegions, toggleRegionComparison, translations } = useGlobal();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
-  // Adicionar região à comparação
-  const addRegion = (regionName: string) => {
-    if (regionName && !selectedRegions.includes(regionName) && selectedRegions.length < 4) {
-      setSelectedRegions([...selectedRegions, regionName]);
-    }
+  // Function to translate severity
+  const translateSeverity = (severity: string): string => {
+    const severityMap: Record<string, string> = {
+      'Crítica': translations.critical[currentLanguage],
+      'Alta': translations.high[currentLanguage],
+      'Média': translations.medium[currentLanguage],
+      'Baixa': translations.low[currentLanguage]
+    };
+    return severityMap[severity] || severity;
   };
 
-  // Remover região da comparação
-  const removeRegion = (regionName: string) => {
-    setSelectedRegions(selectedRegions.filter(name => name !== regionName));
-  };
-
-  // Preparar dados para gráficos
-  const prepareComparisonData = () => {
-    if (activeMetric === "occurrences") {
-      return selectedRegions.map(regionName => {
+  // Prepare crime distribution data for charts
+  const prepareCrimeDistributionData = () => {
+    const crimeTypes = ['furto', 'roubo', 'agressao', 'homicidio'];
+    const crimeTypeLabels: Record<string, string> = {
+      'furto': translations.theft[currentLanguage],
+      'roubo': translations.robbery[currentLanguage],
+      'agressao': translations.assault[currentLanguage],
+      'homicidio': translations.homicide[currentLanguage]
+    };
+    
+    return crimeTypes.map(type => {
+      const dataPoint: Record<string, any> = { 
+        name: crimeTypeLabels[type] 
+      };
+      
+      compareRegions.forEach(regionName => {
         const region = getRegionByName(regionName);
         if (region) {
-          return {
-            name: regionName,
-            value: compareMode === "total" ? region.occurrences2024 : region.occurrencesPerCapita * 1000 // por 1000 habitantes
-          };
+          dataPoint[regionName] = region.crimeDistribution[type as keyof CrimeDistributionType];
         }
-        return { name: regionName, value: 0 };
       });
-    } else {
-      // Crime distribution data
-      const crimeTypes = ["furto", "roubo", "estupro", "homicidio"];
-      return crimeTypes.map(type => {
-        const dataPoint: any = { name: type };
-        selectedRegions.forEach(regionName => {
-          const region = getRegionByName(regionName);
-          if (region) {
-            const value = region.crimeDistribution[type as keyof typeof region.crimeDistribution];
-            dataPoint[regionName] = compareMode === "total" 
-              ? value 
-              : (value / parseInt(region.population.replace(/[^\d]/g, "")) * 1000000); // por milhão
-          }
-        });
-        return dataPoint;
-      });
-    }
+      
+      return dataPoint;
+    });
   };
 
-  const comparisonData = prepareComparisonData();
-  
-  // Cores para o gráfico
-  const chartColors = ["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6"];
+  const crimeDistributionData = prepareCrimeDistributionData();
+
+  // Format number for display based on language
+  const formatNumber = (value: number): string => {
+    return value.toLocaleString(currentLanguage);
+  };
+
+  // Custom tooltip formatter for charts
+  const tooltipFormatter = (value: number | string): [string, string] => {
+    if (typeof value === 'number') {
+      return [formatNumber(value), ""];
+    }
+    return [String(value), ""];
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="container py-4 px-4 md:px-6 lg:px-8 flex-grow">
-        <DashboardHeader />
+        <DashboardHeaderWithLang />
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="mt-6"
         >
-          <Card className="mt-6">
+          <Card>
             <CardHeader>
-              <div className="flex justify-between items-center flex-wrap gap-4">
-                <div>
-                  <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
-                    <BarChart2 className="h-6 w-6 text-primary" />
-                    Comparativo Entre Regiões
-                  </CardTitle>
-                  <CardDescription className="mt-2">
-                    Compare estatísticas de ocorrências entre diferentes regiões do estado
-                  </CardDescription>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => setCompareMode("total")}
-                    className={compareMode === "total" ? "bg-primary text-primary-foreground" : ""}
-                  >
-                    Total
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => setCompareMode("perCapita")}
-                    className={compareMode === "perCapita" ? "bg-primary text-primary-foreground" : ""}
-                  >
-                    Per Capita
-                  </Button>
-                </div>
-              </div>
+              <CardTitle className="text-xl md:text-2xl flex items-center gap-2">
+                <BarChart2 className="h-6 w-6 text-primary" />
+                {translations.regionComparison[currentLanguage]}
+              </CardTitle>
+              <CardDescription>
+                {translations.selectRegions[currentLanguage]}
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 gap-6">
-                {/* Seletor de regiões */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Selecione as Regiões para Comparar</CardTitle>
-                    <CardDescription>Escolha até 4 regiões para comparação</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-4 items-center">
-                      <Select onValueChange={addRegion}>
-                        <SelectTrigger className="w-[200px]">
-                          <SelectValue placeholder="Escolher região" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {regionsData
-                            .filter(region => !selectedRegions.includes(region.name))
-                            .map(region => (
-                              <SelectItem key={region.name} value={region.name}>
-                                {region.name}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                      
-                      <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
-                        {selectedRegions.map(region => (
-                          <div 
-                            key={region} 
-                            className="flex items-center gap-2 bg-secondary/20 px-3 py-1 rounded-full"
-                          >
-                            <MapPin className="h-4 w-4 text-primary" />
-                            <span>{region}</span>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-5 w-5 rounded-full"
-                              onClick={() => removeRegion(region)}
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        ))}
+              <div className="mb-4 flex justify-end">
+                <Button 
+                  onClick={() => setDialogOpen(true)}
+                  disabled={compareRegions.length === 0}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                >
+                  <BarChart2 className="h-4 w-4" />
+                  {translations.compareNow[currentLanguage]}
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {regionsData.map(region => (
+                  <Card key={region.name} className="overflow-hidden">
+                    <CardHeader className="p-4 pb-2">
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-lg">{region.name}</CardTitle>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toggleRegionComparison(region.name)}
+                          disabled={compareRegions.length >= 3 && !compareRegions.includes(region.name)}
+                          className={compareRegions.includes(region.name) ? "bg-primary text-primary-foreground" : ""}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          {translations.addToComparison[currentLanguage]}
+                        </Button>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                {/* Gráficos de comparação */}
-                {selectedRegions.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="flex flex-col md:flex-row gap-4">
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setActiveMetric("occurrences")}
-                        className={`flex-1 ${activeMetric === "occurrences" ? "bg-primary text-primary-foreground" : ""}`}
-                      >
-                        <BarChart2 className="mr-2 h-4 w-4" />
-                        Total de Ocorrências
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setActiveMetric("crimeDistribution")}
-                        className={`flex-1 ${activeMetric === "crimeDistribution" ? "bg-primary text-primary-foreground" : ""}`}
-                      >
-                        <PieChart className="mr-2 h-4 w-4" />
-                        Distribuição por Tipo de Crime
-                      </Button>
-                    </div>
-                    
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>
-                          {activeMetric === "occurrences" ? "Comparativo de Ocorrências" : "Distribuição por Tipo de Crime"}
-                        </CardTitle>
-                        <CardDescription>
-                          {compareMode === "total" 
-                            ? "Valores absolutos" 
-                            : activeMetric === "occurrences" 
-                              ? "Ocorrências por 1000 habitantes" 
-                              : "Ocorrências por milhão de habitantes"}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="w-full" style={{ height: isMobile ? "300px" : "400px" }}>
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart
-                              data={comparisonData}
-                              margin={{
-                                top: 20,
-                                right: 30,
-                                left: activeMetric === "occurrences" ? 20 : 40,
-                                bottom: 50,
-                              }}
-                              layout={activeMetric === "occurrences" ? "vertical" : "horizontal"}
+                    </CardHeader>
+                    <CardContent className="p-4 pt-2">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground">{translations.population[currentLanguage]}</p>
+                          <p className="font-medium">{region.population}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">2024</p>
+                          <p className="font-medium flex items-center justify-between">
+                            {formatNumber(region.occurrences2024)}
+                            <span 
+                              className="text-xs px-2 py-0.5 rounded-full text-white ml-2"
+                              style={{ backgroundColor: severityColors[region.severity as keyof typeof severityColors] }}
                             >
-                              <CartesianGrid strokeDasharray="3 3" />
-                              {activeMetric === "occurrences" ? (
-                                <>
-                                  <XAxis type="number" />
-                                  <YAxis 
-                                    dataKey="name" 
-                                    type="category" 
-                                    width={120} 
-                                    tick={{ fontSize: 12 }} 
-                                  />
-                                  <Tooltip 
-                                    formatter={(value) => [
-                                      compareMode === "total" 
-                                        ? value.toLocaleString('pt-BR') 
-                                        : value.toFixed(2),
-                                      "Ocorrências"
-                                    ]}
-                                  />
-                                  <Bar
-                                    dataKey="value"
-                                    name={compareMode === "total" ? "Total de Ocorrências" : "Ocorrências por 1000 habitantes"}
-                                    fill="#3B82F6"
-                                    radius={[0, 4, 4, 0]}
-                                  />
-                                </>
-                              ) : (
-                                <>
-                                  <XAxis
-                                    dataKey="name"
-                                    tick={{ fontSize: 12 }}
-                                    tickFormatter={(value) => {
-                                      const labels = {
-                                        furto: "Furto",
-                                        roubo: "Roubo",
-                                        estupro: "Estupro",
-                                        homicidio: "Homicídio"
-                                      };
-                                      return labels[value as keyof typeof labels] || value;
-                                    }}
-                                  />
-                                  <YAxis />
-                                  <Tooltip />
-                                  <Legend />
-                                  {selectedRegions.map((region, index) => (
-                                    <Bar
-                                      key={region}
-                                      dataKey={region}
-                                      name={region}
-                                      fill={chartColors[index % chartColors.length]}
-                                      radius={[4, 4, 0, 0]}
-                                    />
-                                  ))}
-                                </>
-                              )}
-                            </BarChart>
-                          </ResponsiveContainer>
+                              {translateSeverity(region.severity)}
+                            </span>
+                          </p>
                         </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Tabela de comparação */}
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Dados Detalhados</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="border-b">
-                                <th className="py-2 px-3 text-left">Região</th>
-                                <th className="py-2 px-3 text-left">População</th>
-                                <th className="py-2 px-3 text-left">IDH</th>
-                                <th className="py-2 px-3 text-left">Ocorrências (2024)</th>
-                                <th className="py-2 px-3 text-left">Per 1000 hab.</th>
-                                <th className="py-2 px-3 text-left">Mais detalhes</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {selectedRegions.map(regionName => {
-                                const region = getRegionByName(regionName);
-                                if (!region) return null;
-                                
-                                return (
-                                  <tr key={regionName} className="border-b hover:bg-muted/50">
-                                    <td className="py-2 px-3">{regionName}</td>
-                                    <td className="py-2 px-3">{region.population}</td>
-                                    <td className="py-2 px-3">{region.hdi}</td>
-                                    <td className="py-2 px-3">{region.occurrences2024.toLocaleString('pt-BR')}</td>
-                                    <td className="py-2 px-3">{(region.occurrencesPerCapita * 1000).toFixed(2)}</td>
-                                    <td className="py-2 px-3">
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => navigate(`/regiao/${regionName}`)}
-                                      >
-                                        <TrendingUp className="mr-1 h-3 w-3" />
-                                        Ver
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-                
-                {selectedRegions.length === 0 && (
-                  <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-lg bg-muted/20">
-                    <BarChart className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Nenhuma região selecionada</h3>
-                    <p className="text-muted-foreground text-center max-w-md mb-6">
-                      Escolha pelo menos uma região para visualizar os dados comparativos de ocorrências.
-                    </p>
-                    <Select onValueChange={addRegion}>
-                      <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Escolher região" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {regionsData.map(region => (
-                          <SelectItem key={region.name} value={region.name}>
-                            {region.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
         </motion.div>
+        
+        {/* Dialog for comparison */}
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle className="text-xl flex items-center gap-2">
+                <BarChart2 className="h-5 w-5 text-primary" />
+                {translations.regionComparison[currentLanguage]}
+              </DialogTitle>
+              <DialogDescription>
+                {compareRegions.map((name, index) => (
+                  <span key={name}>
+                    {index > 0 && " • "}
+                    {name}
+                  </span>
+                ))}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <Tabs defaultValue="bar" value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="w-full grid grid-cols-2">
+                <TabsTrigger value="bar" className="flex items-center gap-2">
+                  <BarChart2 className="h-4 w-4" />
+                  {translations.barChart[currentLanguage]}
+                </TabsTrigger>
+                <TabsTrigger value="radar" className="flex items-center gap-2">
+                  <Radar className="h-4 w-4" />
+                  {translations.radarChart[currentLanguage]}
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="bar" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{translations.crimeDistribution[currentLanguage]}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div style={{ width: '100%', height: isMobile ? 300 : 400 }}>
+                      <ResponsiveContainer>
+                        <BarChart
+                          data={crimeDistributionData}
+                          layout={isMobile ? "vertical" : "horizontal"}
+                          margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          {isMobile ? (
+                            <>
+                              <XAxis type="number" />
+                              <YAxis dataKey="name" type="category" width={100} />
+                            </>
+                          ) : (
+                            <>
+                              <XAxis dataKey="name" />
+                              <YAxis />
+                            </>
+                          )}
+                          <RechartsTooltip formatter={tooltipFormatter} />
+                          <Legend />
+                          {compareRegions.map((region, index) => (
+                            <Bar 
+                              key={region} 
+                              dataKey={region} 
+                              fill={chartColors[index % chartColors.length]}
+                            />
+                          ))}
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="radar" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{translations.crimeDistribution[currentLanguage]}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div style={{ width: '100%', height: isMobile ? 300 : 400 }}>
+                      <ResponsiveContainer>
+                        <RadarChart outerRadius={isMobile ? 100 : 150} data={crimeDistributionData}>
+                          <PolarGrid />
+                          <PolarAngleAxis dataKey="name" />
+                          <PolarRadiusAxis />
+                          {compareRegions.map((region, index) => (
+                            <RadarComponent
+                              key={region}
+                              name={region}
+                              dataKey={region}
+                              stroke={chartColors[index % chartColors.length]}
+                              fill={chartColors[index % chartColors.length]}
+                              fillOpacity={0.3}
+                            />
+                          ))}
+                          <RechartsTooltip formatter={tooltipFormatter} />
+                          <Legend />
+                        </RadarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              {compareRegions.map(regionName => {
+                const region = getRegionByName(regionName);
+                if (!region) return null;
+                
+                return (
+                  <Card key={regionName}>
+                    <CardHeader className="p-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        {regionName}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 pt-0">
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">{translations.population[currentLanguage]}:</span>
+                          <span>{region.population}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">{translations.hdi[currentLanguage]}:</span>
+                          <span>{region.hdi}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">{translations.occurrences[currentLanguage]} (2024):</span>
+                          <span>{formatNumber(region.occurrences2024)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">{translations.perThousand[currentLanguage]}:</span>
+                          <span>{(region.occurrencesPerCapita * 1000).toFixed(2)}</span>
+                        </div>
+                        <div className="mt-3">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => navigate(`/regiao/${regionName}`)}
+                          >
+                            <TrendingUp className="h-3 w-3 mr-1" />
+                            {translations.moreDetails[currentLanguage]}
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

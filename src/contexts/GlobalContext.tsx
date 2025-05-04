@@ -143,6 +143,47 @@ const translations = {
     'en': 'Radar Chart',
     'es': 'Gráfico de Radar',
   },
+  // Novas traduções para componentes adicionais
+  overview: {
+    'pt-BR': 'Visão Geral',
+    'en': 'Overview',
+    'es': 'Visión General',
+  },
+  reports: {
+    'pt-BR': 'Relatórios',
+    'en': 'Reports',
+    'es': 'Informes',
+  },
+  dashboard: {
+    'pt-BR': 'Dashboard',
+    'en': 'Dashboard',
+    'es': 'Panel de Control',
+  },
+  recentOccurrences: {
+    'pt-BR': 'Ocorrências Recentes',
+    'en': 'Recent Occurrences',
+    'es': 'Incidencias Recientes',
+  },
+  safetyIndex: {
+    'pt-BR': 'Índice de Segurança',
+    'en': 'Safety Index',
+    'es': 'Índice de Seguridad',
+  },
+  geographicDistribution: {
+    'pt-BR': 'Distribuição Geográfica',
+    'en': 'Geographic Distribution',
+    'es': 'Distribución Geográfica',
+  },
+  compareRegionsBtn: {
+    'pt-BR': 'Comparar Regiões',
+    'en': 'Compare Regions',
+    'es': 'Comparar Regiones',
+  },
+  aboutTheProject: {
+    'pt-BR': 'Sobre o projeto',
+    'en': 'About the project',
+    'es': 'Sobre el proyecto',
+  },
 };
 
 interface GlobalProviderProps {

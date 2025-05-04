@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Reports from "./pages/Reports";
 import RegionalData from "./pages/RegionalData";
 import RegionDetails from "./pages/RegionDetails";
+import RegionComparison from "./pages/RegionComparison";
 import NotFound from "./pages/NotFound";
 import CityDetails from "./pages/CityDetails";
 import About from "./pages/About";
@@ -36,6 +37,7 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/relatorios" element={<Reports />} />
                   <Route path="/dados-por-regiao" element={<RegionalData />} />
+                  <Route path="/comparar-regioes" element={<RegionComparison />} />
                   <Route path="/cidade/:name" element={<CityDetails />} />
                   <Route path="/regiao/:name" element={<RegionDetails />} />
                   <Route path="/sobre" element={<About />} />

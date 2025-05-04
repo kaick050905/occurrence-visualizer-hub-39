@@ -7,8 +7,10 @@ import GeographicDistribution from "@/components/GeographicDistribution";
 import LocalityData from "@/components/LocalityData";
 import SafetyCardsCarousel from "@/components/SafetyCards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { BarChart2 } from "lucide-react";
 
 const Index = () => {
   return (
@@ -22,10 +24,13 @@ const Index = () => {
         <DashboardHeader />
         
         <Tabs defaultValue="dashboard" className="mb-6">
-          <TabsList className="grid w-full grid-cols-3 md:w-auto">
+          <TabsList className="grid w-full grid-cols-4 md:w-auto">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="relatorios" asChild>
               <Link to="/relatorios">Relatórios</Link>
+            </TabsTrigger>
+            <TabsTrigger value="comparacao" asChild>
+              <Link to="/comparar-regioes">Comparar Regiões</Link>
             </TabsTrigger>
             <TabsTrigger value="sobre" asChild>
               <Link to="/sobre">Sobre o projeto</Link>
@@ -38,6 +43,16 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Visão Geral</h2>
+                <Button variant="outline" asChild>
+                  <Link to="/comparar-regioes" className="flex items-center gap-2">
+                    <BarChart2 className="h-4 w-4" />
+                    Comparar Regiões
+                  </Link>
+                </Button>
+              </div>
+              
               <SafetyCardsCarousel />
             </motion.div>
             

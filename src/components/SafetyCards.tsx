@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp, HelpCircle } from "lucide-react";
+import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
   Carousel,
@@ -14,12 +13,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useTheme } from "next-themes";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger 
-} from "@/components/ui/tooltip";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -39,26 +32,16 @@ const crimeStats = [
     count: 12567, 
     yearGrowth: 7.5,
     icon: <TrendingUp className="h-6 w-6 text-orange-500" />,
-    color: "border-l-orange-500",
-    description: "Registros de furtos ocorridos no estado. Um furto é caracterizado pela subtração de um bem sem o uso de violência ou ameaça."
+    color: "border-l-orange-500"
   },
   { 
     type: "Roubo", 
     count: 8932, 
     yearGrowth: 5.2,
     icon: <TrendingDown className="h-6 w-6 text-red-600" />,
-    color: "border-l-red-600",
-    description: "Registros de roubos ocorridos no estado. Um roubo é caracterizado pela subtração de um bem mediante violência ou grave ameaça."
+    color: "border-l-red-600"
   }
 ];
-
-// Tooltip descriptions
-const tooltipDescriptions = {
-  dangerousCity: "A cidade com maior número de ocorrências por habitante, considerando todos os tipos de crimes registrados nos últimos 12 meses.",
-  safeCity: "A cidade com menor número de ocorrências por habitante, considerando todos os tipos de crimes registrados nos últimos 12 meses.",
-  dangerousRegion: "A região administrativa com maior número de ocorrências por habitante no estado.",
-  safeRegion: "A região administrativa com menor número de ocorrências por habitante no estado."
-};
 
 interface SingleCityRegionCardProps {
   title: string;
@@ -69,29 +52,16 @@ interface SingleCityRegionCardProps {
   };
   icon: React.ReactNode;
   colorClass: string;
-  tooltipDescription: string;
 }
 
 // Component for city or region safety card with a single item
-const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass, tooltipDescription }) => {
+const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass }) => {
   const { theme } = useTheme();
   
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", colorClass)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-md font-medium">{title}</CardTitle>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
-                <p>{tooltipDescription}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <CardTitle className="text-md font-medium">{title}</CardTitle>
         {icon}
       </CardHeader>
       <CardContent>
@@ -127,19 +97,7 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", data.color)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-md font-medium">Número de {data.type}</CardTitle>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
-                <p>{data.description}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <CardTitle className="text-md font-medium">Número de {data.type}</CardTitle>
         {data.icon}
       </CardHeader>
       <CardContent>
@@ -208,7 +166,6 @@ const SafetyCardsCarousel: React.FC = () => {
               data={citiesData.dangerous} 
               icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
               colorClass="border-l-red-500"
-              tooltipDescription={tooltipDescriptions.dangerousCity}
             />
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
@@ -217,7 +174,6 @@ const SafetyCardsCarousel: React.FC = () => {
               data={citiesData.safe} 
               icon={<Shield className="h-5 w-5 text-green-500" />}
               colorClass="border-l-green-500"
-              tooltipDescription={tooltipDescriptions.safeCity}
             />
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
@@ -226,7 +182,6 @@ const SafetyCardsCarousel: React.FC = () => {
               data={regionsData.dangerous} 
               icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
               colorClass="border-l-red-500"
-              tooltipDescription={tooltipDescriptions.dangerousRegion}
             />
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
@@ -235,7 +190,6 @@ const SafetyCardsCarousel: React.FC = () => {
               data={regionsData.safe} 
               icon={<Shield className="h-5 w-5 text-green-500" />}
               colorClass="border-l-green-500"
-              tooltipDescription={tooltipDescriptions.safeRegion}
             />
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">

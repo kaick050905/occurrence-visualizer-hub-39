@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -588,4 +589,226 @@ const OccurrenceCharts: React.FC = () => {
                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>{chartDescriptions.topCities
+                    <p>{chartDescriptions.topCities}</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+
+            <Select value={topCitiesYear} onValueChange={setTopCitiesYear}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Ano" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2020">2020</SelectItem>
+                <SelectItem value="2021">2021</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+                <SelectItem value="2025">2025</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardHeader>
+
+          <CardContent>
+            <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+              <BarChart
+                data={topCitiesData}
+                layout="vertical"
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: isMobile ? 80 : 100,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis 
+                  type="category" 
+                  dataKey="city" 
+                  tick={{ fontSize: isMobile ? 10 : 12 }}
+                  width={isMobile ? 80 : 100}
+                />
+                <Tooltip content={<CustomBarTooltip />} />
+                <Bar dataKey="count" nameKey="city" fill="#8884d8">
+                  {topCitiesData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={severityColors[entry.severity as keyof typeof severityColors]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-base sm:text-lg md:text-xl">Evolução das Ocorrências</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>{chartDescriptions.crimeEvolution}</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+
+            <Select value={crimeType} onValueChange={setCrimeType}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="furto">Furto</SelectItem>
+                <SelectItem value="roubo">Roubo</SelectItem>
+                <SelectItem value="estupro">Estupro</SelectItem>
+                <SelectItem value="homicidio">Homicídio</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart
+                data={crimeEvolutionData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" />
+                <YAxis />
+                <Tooltip content={<CustomChartTooltip />} />
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  name={crimeType.charAt(0).toUpperCase() + crimeType.slice(1)}
+                  stroke={crimeTypeColors[crimeType as keyof typeof crimeTypeColors]}
+                  activeDot={{ r: 8 }}
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-base sm:text-lg md:text-xl">Total Anual</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>{chartDescriptions.yearlyTotal}</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart
+                data={yearlyData}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip content={<CustomChartTooltip />} />
+                <Bar 
+                  dataKey="total" 
+                  fill="#8884d8"
+                  name="Total de Ocorrências"
+                >
+                  {yearlyData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.emProgresso ? "#94A3B8" : "#3B82F6"} 
+                      opacity={entry.emProgresso ? 0.7 : 1}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-base sm:text-lg md:text-xl">Distribuição por Prioridade</CardTitle>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="p-3 max-w-xs">
+                    <p>{chartDescriptions.distribution}</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie
+                    data={priorityData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    nameKey="name"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {priorityData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomChartTooltip />} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  );
+};
+
+export default OccurrenceCharts;

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -577,7 +578,7 @@ const OccurrenceCharts: React.FC = () => {
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
                     <p>As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante. Barras mais longas indicam mais ocorrências.</p>
@@ -655,7 +656,7 @@ const OccurrenceCharts: React.FC = () => {
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
                     <p>Evolução anual das ocorrências por tipo de crime. Selecione o tipo de crime para visualizar a tendência ao longo dos anos.</p>
@@ -734,7 +735,7 @@ const OccurrenceCharts: React.FC = () => {
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
                     <p>Comparativo anual do total de ocorrências registradas. Barras em tons mais claros representam anos em andamento com dados parciais.</p>
@@ -787,7 +788,7 @@ const OccurrenceCharts: React.FC = () => {
                 <TooltipProvider>
                   <UITooltip>
                     <TooltipTrigger asChild>
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="p-3 max-w-xs">
                       <p>Distribuição percentual das ocorrências por nível de prioridade. Cada segmento representa uma proporção das ocorrências totais conforme sua classificação de gravidade.</p>

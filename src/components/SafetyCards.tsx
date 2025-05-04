@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowDown, ArrowUp, MapPin, Shield, AlertTriangle, TrendingDown, TrendingUp, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
   Carousel,
@@ -13,6 +14,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useTheme } from "next-themes";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -32,16 +39,26 @@ const crimeStats = [
     count: 12567, 
     yearGrowth: 7.5,
     icon: <TrendingUp className="h-6 w-6 text-orange-500" />,
-    color: "border-l-orange-500"
+    color: "border-l-orange-500",
+    description: "Estatísticas de ocorrências de furto nos últimos 12 meses, com percentual de crescimento anual."
   },
   { 
     type: "Roubo", 
     count: 8932, 
     yearGrowth: 5.2,
     icon: <TrendingDown className="h-6 w-6 text-red-600" />,
-    color: "border-l-red-600"
+    color: "border-l-red-600",
+    description: "Estatísticas de ocorrências de roubo nos últimos 12 meses, com percentual de crescimento anual."
   }
 ];
+
+// Tooltips for cards
+const tooltipDescriptions = {
+  dangerousCity: "Cidade com maior número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
+  safeCity: "Cidade com menor número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
+  dangerousRegion: "Região com maior número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
+  safeRegion: "Região com menor número de ocorrências por 100 mil habitantes nos últimos 12 meses."
+};
 
 interface SingleCityRegionCardProps {
   title: string;
@@ -52,16 +69,27 @@ interface SingleCityRegionCardProps {
   };
   icon: React.ReactNode;
   colorClass: string;
+  tooltipDescription: string;
 }
 
 // Component for city or region safety card with a single item
-const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass }) => {
+const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass, tooltipDescription }) => {
   const { theme } = useTheme();
   
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", colorClass)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-md font-medium">{title}</CardTitle>
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-md font-medium">{title}</CardTitle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent className="p-2 max-w-xs">
+              <p>{tooltipDescription}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
         {icon}
       </CardHeader>
       <CardContent>
@@ -97,7 +125,17 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", data.color)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-md font-medium">Número de {data.type}</CardTitle>
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-md font-medium">Número de {data.type}</CardTitle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent className="p-2 max-w-xs">
+              <p>{data.description}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
         {data.icon}
       </CardHeader>
       <CardContent>
@@ -151,59 +189,65 @@ const SafetyCardsCarousel: React.FC = () => {
 
   return (
     <div className="mt-4 md:mt-6">
-      <Carousel 
-        opts={{ 
-          align: "start", 
-          loop: true 
-        }}
-        plugins={[autoplayPlugin]}
-        setApi={setApi}
-      >
-        <CarouselContent className="-ml-2 md:-ml-4">
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <SingleCityRegionCard 
-              title="Cidade Mais Perigosa" 
-              data={citiesData.dangerous} 
-              icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
-              colorClass="border-l-red-500"
-            />
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <SingleCityRegionCard 
-              title="Cidade Mais Segura" 
-              data={citiesData.safe} 
-              icon={<Shield className="h-5 w-5 text-green-500" />}
-              colorClass="border-l-green-500"
-            />
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <SingleCityRegionCard 
-              title="Região Mais Perigosa" 
-              data={regionsData.dangerous} 
-              icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
-              colorClass="border-l-red-500"
-            />
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <SingleCityRegionCard 
-              title="Região Mais Segura" 
-              data={regionsData.safe} 
-              icon={<Shield className="h-5 w-5 text-green-500" />}
-              colorClass="border-l-green-500"
-            />
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <CrimeStatCard data={crimeStats[0]} />
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-            <CrimeStatCard data={crimeStats[1]} />
-          </CarouselItem>
-        </CarouselContent>
-        <div className="flex justify-center mt-4">
-          <CarouselPrevious className="static transform-none mr-2" />
-          <CarouselNext className="static transform-none" />
-        </div>
-      </Carousel>
+      <TooltipProvider>
+        <Carousel 
+          opts={{ 
+            align: "start", 
+            loop: true 
+          }}
+          plugins={[autoplayPlugin]}
+          setApi={setApi}
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <SingleCityRegionCard 
+                title="Cidade Mais Perigosa" 
+                data={citiesData.dangerous} 
+                icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
+                colorClass="border-l-red-500"
+                tooltipDescription={tooltipDescriptions.dangerousCity}
+              />
+            </CarouselItem>
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <SingleCityRegionCard 
+                title="Cidade Mais Segura" 
+                data={citiesData.safe} 
+                icon={<Shield className="h-5 w-5 text-green-500" />}
+                colorClass="border-l-green-500"
+                tooltipDescription={tooltipDescriptions.safeCity}
+              />
+            </CarouselItem>
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <SingleCityRegionCard 
+                title="Região Mais Perigosa" 
+                data={regionsData.dangerous} 
+                icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
+                colorClass="border-l-red-500"
+                tooltipDescription={tooltipDescriptions.dangerousRegion}
+              />
+            </CarouselItem>
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <SingleCityRegionCard 
+                title="Região Mais Segura" 
+                data={regionsData.safe} 
+                icon={<Shield className="h-5 w-5 text-green-500" />}
+                colorClass="border-l-green-500"
+                tooltipDescription={tooltipDescriptions.safeRegion}
+              />
+            </CarouselItem>
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <CrimeStatCard data={crimeStats[0]} />
+            </CarouselItem>
+            <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+              <CrimeStatCard data={crimeStats[1]} />
+            </CarouselItem>
+          </CarouselContent>
+          <div className="flex justify-center mt-4">
+            <CarouselPrevious className="static transform-none mr-2" />
+            <CarouselNext className="static transform-none" />
+          </div>
+        </Carousel>
+      </TooltipProvider>
     </div>
   );
 };

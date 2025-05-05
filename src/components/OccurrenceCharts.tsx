@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Sample data for the top 10 cities with most occurrences by year
 const topCitiesByYear = {
@@ -512,6 +513,7 @@ const OccurrenceCharts: React.FC = () => {
   const [timePeriod, setTimePeriod] = useState<string>("semanal");
   const [topCitiesYear, setTopCitiesYear] = useState<string>("2024");
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
   
   // Prepare data for crime evolution over years (2020-2025)
   const crimeEvolutionData = Object.keys(crimeYearlyDataByYear).map(year => {
@@ -538,8 +540,8 @@ const OccurrenceCharts: React.FC = () => {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
           <p className="font-medium text-gray-900 dark:text-gray-100">{data.city}</p>
-          <p className="text-gray-700 dark:text-gray-300">Total: {data.count}</p>
-          <p className="text-gray-700 dark:text-gray-300">Severidade: {data.severity}</p>
+          <p className="text-gray-700 dark:text-gray-300">{t('totalOccurrences')}: {data.count}</p>
+          <p className="text-gray-700 dark:text-gray-300">{t('level')}: {t(data.severity.toLowerCase())}</p>
         </div>
       );
     }
@@ -563,6 +565,17 @@ const OccurrenceCharts: React.FC = () => {
     return null;
   };
 
+  // Traduções para os tipos de crime
+  const getCrimeTypeTranslation = (type: string) => {
+    switch(type) {
+      case "furto": return t('theft');
+      case "roubo": return t('robbery');
+      case "estupro": return "Estupro";
+      case "homicidio": return "Homicídio";
+      default: return type;
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
       <motion.div 
@@ -574,14 +587,16 @@ const OccurrenceCharts: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base sm:text-lg md:text-xl">Top 10 Cidades com Mais Ocorrências</CardTitle>
+              <CardTitle className="text-base sm:text-lg md:text-xl">
+                {t('top10Cities')}
+              </CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante. Barras mais longas indicam mais ocorrências.</p>
+                    <p>{t('top10CitiesTooltip')}</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -591,7 +606,7 @@ const OccurrenceCharts: React.FC = () => {
               onValueChange={(value) => setTopCitiesYear(value)}
             >
               <SelectTrigger className="w-[80px] sm:w-[100px]">
-                <SelectValue placeholder="Ano" />
+                <SelectValue placeholder={t('year')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="2020">2020</SelectItem>
@@ -626,7 +641,7 @@ const OccurrenceCharts: React.FC = () => {
                   <Legend />
                   <Bar 
                     dataKey="count" 
-                    name="Total de Ocorrências" 
+                    name={t('totalOccurrences')}
                     radius={[0, 4, 4, 0]}
                   >
                     {topCitiesData.map((entry, index) => (
@@ -652,14 +667,16 @@ const OccurrenceCharts: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base sm:text-lg md:text-xl">Evolução de Crimes por Ano</CardTitle>
+              <CardTitle className="text-base sm:text-lg md:text-xl">
+                {t('crimeEvolutionByYear')}
+              </CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>Evolução anual das ocorrências por tipo de crime. Selecione o tipo de crime para visualizar a tendência ao longo dos anos.</p>
+                    <p>{t('crimeEvolutionTooltip')}</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -670,11 +687,11 @@ const OccurrenceCharts: React.FC = () => {
                 onValueChange={(value) => setCrimeType(value)}
               >
                 <SelectTrigger className="w-[120px] sm:w-[180px]">
-                  <SelectValue placeholder="Tipo de Crime" />
+                  <SelectValue placeholder={t('crimeType')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="furto">Furto</SelectItem>
-                  <SelectItem value="roubo">Roubo</SelectItem>
+                  <SelectItem value="furto">{t('theft')}</SelectItem>
+                  <SelectItem value="roubo">{t('robbery')}</SelectItem>
                   <SelectItem value="estupro">Estupro</SelectItem>
                   <SelectItem value="homicidio">Homicídio</SelectItem>
                 </SelectContent>
@@ -709,7 +726,7 @@ const OccurrenceCharts: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="count"
-                    name={`Total de ${crimeType}`}
+                    name={`${t('totalOf')} ${getCrimeTypeTranslation(crimeType)}`}
                     stroke={crimeTypeColors[crimeType as keyof typeof crimeTypeColors]}
                     strokeWidth={3}
                     dot={{ r: 6, strokeWidth: 2 }}
@@ -731,19 +748,21 @@ const OccurrenceCharts: React.FC = () => {
         <Card className="h-full">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base sm:text-lg">Total de Ocorrências dos Últimos Anos</CardTitle>
+              <CardTitle className="text-base sm:text-lg">
+                {t('totalOccurrencesLastYears')}
+              </CardTitle>
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="p-3 max-w-xs">
-                    <p>Comparativo anual do total de ocorrências registradas. Barras em tons mais claros representam anos em andamento com dados parciais.</p>
+                    <p>{t('totalOccurrencesTooltip')}</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <CardDescription>Registros anuais de 2022 a 2025</CardDescription>
+            <CardDescription>{t('yearlyRecords')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="chart-container">
@@ -757,7 +776,7 @@ const OccurrenceCharts: React.FC = () => {
                     dataKey="total" 
                     fill="#3B82F6"
                     radius={[4, 4, 0, 0]}
-                    name="Total de Ocorrências"
+                    name={t('totalOccurrences')}
                     className="transition-all duration-300"
                   >
                     {yearlyData.map((entry, index) => (
@@ -784,14 +803,14 @@ const OccurrenceCharts: React.FC = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CardTitle className="text-base sm:text-lg">Distribuição</CardTitle>
+                <CardTitle className="text-base sm:text-lg">{t('distribution')}</CardTitle>
                 <TooltipProvider>
                   <UITooltip>
                     <TooltipTrigger asChild>
                       <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="p-3 max-w-xs">
-                      <p>Distribuição percentual das ocorrências por nível de prioridade. Cada segmento representa uma proporção das ocorrências totais conforme sua classificação de gravidade.</p>
+                      <p>{t('distributionTooltip')}</p>
                     </TooltipContent>
                   </UITooltip>
                 </TooltipProvider>
@@ -803,7 +822,10 @@ const OccurrenceCharts: React.FC = () => {
               <ResponsiveContainer width="100%" height={isMobile ? 220 : 250}>
                 <PieChart>
                   <Pie
-                    data={priorityData}
+                    data={priorityData.map(item => ({
+                      ...item,
+                      name: t(item.name.toLowerCase())
+                    }))}
                     cx="50%"
                     cy="50%"
                     innerRadius={isMobile ? 50 : 60}
@@ -815,7 +837,7 @@ const OccurrenceCharts: React.FC = () => {
                     className="transition-transform duration-300 hover:scale-105"
                   >
                     {priorityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} name={entry.name} fill={entry.color} />
+                      <Cell key={`cell-${index}`} name={t(entry.name.toLowerCase())} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip content={<CustomChartTooltip />} />

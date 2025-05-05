@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Users, Activity, BarChart, Search } from "lucide-react";
@@ -6,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Updated region data model with more details
 const regionsData = [
@@ -210,6 +212,7 @@ const LocalityData: React.FC = () => {
   const [expandedRegion, setExpandedRegion] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("cidades");
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const filteredCities = citiesData.filter(city => 
     (city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -245,14 +248,14 @@ const LocalityData: React.FC = () => {
   return (
     <Card className="mt-6">
       <CardHeader>
-        <CardTitle>Dados da Localidade</CardTitle>
-        <CardDescription>Informações sobre cidades, população, IDH e ocorrências</CardDescription>
+        <CardTitle>{t('localityData')}</CardTitle>
+        <CardDescription>{t('localityDataDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="relative mb-4">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Pesquisar cidade ou região..."
+            placeholder={t('searchCityRegion')}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -261,8 +264,8 @@ const LocalityData: React.FC = () => {
         
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4 w-full">
-            <TabsTrigger value="cidades" className="flex-1">Por Cidade</TabsTrigger>
-            <TabsTrigger value="regiao" className="flex-1">Por Região</TabsTrigger>
+            <TabsTrigger value="cidades" className="flex-1">{t('byCity')}</TabsTrigger>
+            <TabsTrigger value="regiao" className="flex-1">{t('byRegion')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="cidades">
@@ -282,7 +285,7 @@ const LocalityData: React.FC = () => {
                           <span className="font-semibold text-lg">{city.name}</span>
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          Região: {city.region}
+                          {t('region')}: {city.region}
                         </div>
                       </div>
                       
@@ -290,7 +293,7 @@ const LocalityData: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4 text-blue-500" />
                           <div>
-                            <div className="text-sm text-muted-foreground">População</div>
+                            <div className="text-sm text-muted-foreground">{t('population')}</div>
                             <div className="font-medium">{city.population}</div>
                           </div>
                         </div>
@@ -306,7 +309,7 @@ const LocalityData: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <BarChart className="h-4 w-4 text-red-500" />
                           <div>
-                            <div className="text-sm text-muted-foreground">Ocorrências em 2024</div>
+                            <div className="text-sm text-muted-foreground">{t('occurrencesIn2024')}</div>
                             <div className="font-medium">{formatNumber(city.occurrences2024)}</div>
                           </div>
                         </div>
@@ -315,7 +318,7 @@ const LocalityData: React.FC = () => {
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center py-8">
-                    <p className="text-muted-foreground">Nenhuma cidade encontrada</p>
+                    <p className="text-muted-foreground">{t('noCityFound')}</p>
                   </div>
                 )}
               </div>
@@ -344,7 +347,7 @@ const LocalityData: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Users className="h-4 w-4 text-blue-500" />
                             <div>
-                              <div className="text-sm text-muted-foreground">População</div>
+                              <div className="text-sm text-muted-foreground">{t('population')}</div>
                               <div className="font-medium">{region.population}</div>
                             </div>
                           </div>
@@ -360,7 +363,7 @@ const LocalityData: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <BarChart className="h-4 w-4 text-red-500" />
                             <div>
-                              <div className="text-sm text-muted-foreground">Ocorrências em 2024</div>
+                              <div className="text-sm text-muted-foreground">{t('occurrencesIn2024')}</div>
                               <div className="font-medium">{formatNumber(region.occurrences2024)}</div>
                             </div>
                           </div>
@@ -370,20 +373,20 @@ const LocalityData: React.FC = () => {
                       {expandedRegion === region.name && (
                         <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-medium">Detalhes da Região</h4>
+                            <h4 className="font-medium">{t('regionDetails')}</h4>
                             <span className={`px-2 py-1 text-xs rounded-full ${
                               region.status === "Crítica" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" :
                               region.status === "Alta" ? "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400" :
                               region.status === "Média" ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400" :
                               "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
                             }`}>
-                              {region.status}
+                              {t(region.status.toLowerCase())}
                             </span>
                           </div>
                           
                           <div className="mt-2">
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-sm text-muted-foreground">Distribuição de ocorrências</span>
+                              <span className="text-sm text-muted-foreground">{t('occurrenceDistribution')}</span>
                               <span className="text-sm font-medium">{region.percentage}%</span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
@@ -401,15 +404,15 @@ const LocalityData: React.FC = () => {
                           
                           <div className="mt-4 text-sm text-muted-foreground">
                             <p>
-                              A região de {region.name} representa {region.percentage}% das ocorrências totais no estado,
-                              com um total de {formatNumber(region.occurrences2024)} registros em 2024.
+                              {t('regionRepresents')} {region.name} {t('representsPercentage')} {region.percentage}% {t('ofTotalOccurrences')},
+                              {t('withTotal')} {formatNumber(region.occurrences2024)} {t('recordsIn2024')}.
                             </p>
                             <div className="mt-4 flex justify-center">
                               <Button 
                                 variant="outline"
                                 onClick={(e) => handleViewRegionDetails(region.name, e)}
                               >
-                                Ver detalhes da região
+                                {t('viewRegionDetails')}
                               </Button>
                             </div>
                           </div>
@@ -419,7 +422,7 @@ const LocalityData: React.FC = () => {
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center py-8">
-                    <p className="text-muted-foreground">Nenhuma região encontrada</p>
+                    <p className="text-muted-foreground">{t('noRegionFound')}</p>
                   </div>
                 )}
               </div>

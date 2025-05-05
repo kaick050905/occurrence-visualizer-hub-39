@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define os idiomas suportados
@@ -569,7 +568,7 @@ export const translations: Translations = {
   },
   semester: {
     pt: 'Semestre',
-    en: 'Semester',
+    en: 'Semestre',
     es: 'Semestre'
   },
   semesterValue: {
@@ -656,6 +655,153 @@ export const translations: Translations = {
     pt: 'em 2024',
     en: 'in 2024',
     es: 'en 2024'
+  },
+  // OccurrenceCharts
+  top10Cities: {
+    pt: 'Top 10 Cidades com Mais Ocorrências',
+    en: 'Top 10 Cities with Most Occurrences',
+    es: 'Top 10 Ciudades con Más Ocurrencias'
+  },
+  top10CitiesTooltip: {
+    pt: 'As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante. Barras mais longas indicam mais ocorrências.',
+    en: 'The 10 cities with the highest number of occurrences, colored by predominant severity level. Longer bars indicate more occurrences.',
+    es: 'Las 10 ciudades con mayor número de ocurrencias, coloreadas por nivel de severidad predominante. Barras más largas indican más ocurrencias.'
+  },
+  year: {
+    pt: 'Ano',
+    en: 'Year',
+    es: 'Año'
+  },
+  crimeEvolutionByYear: {
+    pt: 'Evolução de Crimes por Ano',
+    en: 'Crime Evolution by Year',
+    es: 'Evolución de Crímenes por Año'
+  },
+  crimeEvolutionTooltip: {
+    pt: 'Evolução anual das ocorrências por tipo de crime. Selecione o tipo de crime para visualizar a tendência ao longo dos anos.',
+    en: 'Annual evolution of occurrences by crime type. Select the crime type to visualize the trend over the years.',
+    es: 'Evolución anual de las ocurrencias por tipo de crimen. Seleccione el tipo de crimen para visualizar la tendencia a lo largo de los años.'
+  },
+  crimeType: {
+    pt: 'Tipo de Crime',
+    en: 'Crime Type',
+    es: 'Tipo de Crimen'
+  },
+  totalOf: {
+    pt: 'Total de',
+    en: 'Total of',
+    es: 'Total de'
+  },
+  totalOccurrencesLastYears: {
+    pt: 'Total de Ocorrências dos Últimos Anos',
+    en: 'Total Occurrences of Recent Years',
+    es: 'Total de Ocurrencias de los Últimos Años'
+  },
+  totalOccurrencesTooltip: {
+    pt: 'Comparativo anual do total de ocorrências registradas. Barras em tons mais claros representam anos em andamento com dados parciais.',
+    en: 'Annual comparison of total recorded occurrences. Bars in lighter shades represent years in progress with partial data.',
+    es: 'Comparación anual del total de ocurrencias registradas. Las barras en tonos más claros representan años en curso con datos parciales.'
+  },
+  yearlyRecords: {
+    pt: 'Registros anuais de 2022 a 2025',
+    en: 'Annual records from 2022 to 2025',
+    es: 'Registros anuales de 2022 a 2025'
+  },
+  distributionTooltip: {
+    pt: 'Distribuição percentual das ocorrências por nível de prioridade. Cada segmento representa uma proporção das ocorrências totais conforme sua classificação de gravidade.',
+    en: 'Percentage distribution of occurrences by priority level. Each segment represents a proportion of total occurrences according to their severity classification.',
+    es: 'Distribución porcentual de las ocurrencias por nivel de prioridad. Cada segmento representa una proporción de las ocurrencias totales según su clasificación de gravedad.'
+  },
+  Críticas: {
+    pt: 'Críticas',
+    en: 'Critical',
+    es: 'Críticas'
+  },
+  Altas: {
+    pt: 'Altas',
+    en: 'High',
+    es: 'Altas'
+  },
+  Médias: {
+    pt: 'Médias',
+    en: 'Medium',
+    es: 'Medias'
+  },
+  Baixas: {
+    pt: 'Baixas',
+    en: 'Low',
+    es: 'Bajas'
+  },
+  // LocalityData
+  localityDataDescription: {
+    pt: 'Informações sobre cidades, população, IDH e ocorrências',
+    en: 'Information about cities, population, HDI and occurrences',
+    es: 'Información sobre ciudades, población, IDH y ocurrencias'
+  },
+  searchCityRegion: {
+    pt: 'Pesquisar cidade ou região...',
+    en: 'Search city or region...',
+    es: 'Buscar ciudad o región...'
+  },
+  byCity: {
+    pt: 'Por Cidade',
+    en: 'By City',
+    es: 'Por Ciudad'
+  },
+  byRegion: {
+    pt: 'Por Região',
+    en: 'By Region',
+    es: 'Por Región'
+  },
+  region: {
+    pt: 'Região',
+    en: 'Region',
+    es: 'Región'
+  },
+  noCityFound: {
+    pt: 'Nenhuma cidade encontrada',
+    en: 'No city found',
+    es: 'Ninguna ciudad encontrada'
+  },
+  noRegionFound: {
+    pt: 'Nenhuma região encontrada',
+    en: 'No region found',
+    es: 'Ninguna región encontrada'
+  },
+  occurrenceDistribution: {
+    pt: 'Distribuição de ocorrências',
+    en: 'Occurrence distribution',
+    es: 'Distribución de ocurrencias'
+  },
+  regionRepresents: {
+    pt: 'A região de',
+    en: 'The region of',
+    es: 'La región de'
+  },
+  representsPercentage: {
+    pt: 'representa',
+    en: 'represents',
+    es: 'representa'
+  },
+  ofTotalOccurrences: {
+    pt: 'das ocorrências totais no estado',
+    en: 'of total occurrences in the state',
+    es: 'de las ocurrencias totales en el estado'
+  },
+  withTotal: {
+    pt: 'com um total de',
+    en: 'with a total of',
+    es: 'con un total de'
+  },
+  recordsIn2024: {
+    pt: 'registros em 2024',
+    en: 'records in 2024',
+    es: 'registros en 2024'
+  },
+  viewRegionDetails: {
+    pt: 'Ver detalhes da região',
+    en: 'View region details',
+    es: 'Ver detalles de la región'
   }
 };
 

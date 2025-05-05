@@ -5,8 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const About: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <motion.div 
       className="min-h-screen bg-background"
@@ -20,12 +23,12 @@ const About: React.FC = () => {
         <Tabs defaultValue="sobre" className="mb-6">
           <TabsList className="grid w-full grid-cols-3 md:w-auto">
             <TabsTrigger value="dashboard" asChild>
-              <Link to="/">Dashboard</Link>
+              <Link to="/">{t('dashboard')}</Link>
             </TabsTrigger>
             <TabsTrigger value="relatorios" asChild>
-              <Link to="/relatorios">Relatórios</Link>
+              <Link to="/relatorios">{t('reports')}</Link>
             </TabsTrigger>
-            <TabsTrigger value="sobre">Sobre o projeto</TabsTrigger>
+            <TabsTrigger value="sobre">{t('about')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sobre" className="mt-4 space-y-4">
@@ -38,79 +41,75 @@ const About: React.FC = () => {
               <Card className="p-6 border-t-4 border-t-primary shadow-lg">
                 <CardContent className="pt-4 space-y-8">
                   <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold mb-4 text-primary">🔍 Projeto INFOSP</h1>
+                    <h1 className="text-4xl font-bold mb-4 text-primary">{t('projectInfoSP')}</h1>
                     <div className="h-1 w-24 bg-primary mx-auto mb-6 rounded-full"></div>
                     <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                      Mapeamento e Análise Preditiva de Ocorrências Criminais no Estado de São Paulo
+                      {t('mappingAndAnalysis')}
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="bg-secondary/20 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
                       <h2 className="text-2xl font-bold mb-4 flex items-center text-primary">
-                        <span className="mr-2 text-3xl">🎯</span> Objetivo Geral
+                        <span className="mr-2 text-3xl">🎯</span> {t('generalObjective')}
                       </h2>
                       <p className="text-muted-foreground">
-                        Desenvolver uma plataforma interativa que reúna, organize e exiba dados públicos sobre ocorrências criminais 
-                        no Estado de São Paulo. A plataforma utiliza recursos visuais, como mapas, gráficos e dashboards, além de 
-                        ferramentas de análise preditiva que ajudam a identificar padrões e tendências criminais.
+                        {t('generalObjectiveDesc')}
                       </p>
                     </div>
 
                     <div className="bg-secondary/20 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
                       <h2 className="text-2xl font-bold mb-4 flex items-center text-primary">
-                        <span className="mr-2 text-3xl">🧠</span> Tecnologias e Funcionalidades
+                        <span className="mr-2 text-3xl">🧠</span> {t('technologiesAndFeatures')}
                       </h2>
                       <ul className="list-none space-y-2 text-muted-foreground">
-                        <li className="flex items-center"><span className="mr-2 font-bold">🗺️</span> Geolocalização e mapas de calor com base em ocorrências registradas</li>
-                        <li className="flex items-center"><span className="mr-2 font-bold">📊</span> Dashboards interativos com gráficos atualizados</li>
-                        <li className="flex items-center"><span className="mr-2 font-bold">⏱️</span> Análise temporal para identificação de sazonalidades</li>
-                        <li className="flex items-center"><span className="mr-2 font-bold">🧮</span> Algoritmos preditivos para análise de risco</li>
-                        <li className="flex items-center"><span className="mr-2 font-bold">📱</span> Design responsivo em qualquer dispositivo</li>
+                        <li className="flex items-center"><span className="mr-2 font-bold">🗺️</span> {t('geolocation')}</li>
+                        <li className="flex items-center"><span className="mr-2 font-bold">📊</span> {t('interactiveDashboards')}</li>
+                        <li className="flex items-center"><span className="mr-2 font-bold">⏱️</span> {t('temporalAnalysis')}</li>
+                        <li className="flex items-center"><span className="mr-2 font-bold">🧮</span> {t('predictiveAlgorithms')}</li>
+                        <li className="flex items-center"><span className="mr-2 font-bold">📱</span> {t('responsiveDesign')}</li>
                       </ul>
                     </div>
                   </div>
 
                   <div className="bg-primary/5 p-6 rounded-lg shadow-sm">
                     <h2 className="text-2xl font-bold mb-4 flex items-center text-primary">
-                      <span className="mr-2 text-3xl">📌</span> Objetivos Específicos
+                      <span className="mr-2 text-3xl">📌</span> {t('specificObjectives')}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-primary">
-                        <p className="text-muted-foreground">Coletar e organizar dados públicos de segurança, com base em fontes como o dados.gov.br</p>
+                        <p className="text-muted-foreground">{t('collectData')}</p>
                       </div>
                       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-primary">
-                        <p className="text-muted-foreground">Construir uma interface gráfica responsiva e intuitiva, acessível em diversos dispositivos</p>
+                        <p className="text-muted-foreground">{t('buildInterface')}</p>
                       </div>
                       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-primary">
-                        <p className="text-muted-foreground">Implementar filtros por tipo de ocorrência, período, localização e outros critérios relevantes</p>
+                        <p className="text-muted-foreground">{t('implementFilters')}</p>
                       </div>
                       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-primary">
-                        <p className="text-muted-foreground">Aplicar ferramentas de visualização de dados como dashboards, gráficos dinâmicos e mapas interativos</p>
+                        <p className="text-muted-foreground">{t('applyVisualization')}</p>
                       </div>
                       <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-primary">
-                        <p className="text-muted-foreground">Utilizar técnicas de análise preditiva para antecipar possíveis focos de criminalidade</p>
+                        <p className="text-muted-foreground">{t('usePredictive')}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-6 rounded-lg">
                     <h2 className="text-2xl font-bold mb-4 flex items-center text-primary">
-                      <span className="mr-2 text-3xl">👥</span> Equipe do Projeto
+                      <span className="mr-2 text-3xl">👥</span> {t('projectTeam')}
                     </h2>
                     <div className="mb-4">
                       <p className="text-muted-foreground">
-                        Este projeto é uma iniciativa dos alunos do curso de Análise e Desenvolvimento 
-                        de Sistemas do Centro Universitário FACENS, desenvolvido como parte da disciplina 
-                        UPX2 - Usina de Projetos Experimentais II.
+                        {t('teamDescription')}
                       </p>
                     </div>
                     
                     <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
-                      <p className="font-medium mb-1">Orientador:</p>
+                      <p className="font-medium mb-1">{t('advisor')}:</p>
                       <p className="text-muted-foreground mb-4">Prof. Evandro Klengenfuss Veronez</p>
                       
-                      <p className="font-medium mb-1">Equipe de Desenvolvimento:</p>
+                      <p className="font-medium mb-1">{t('developmentTeam')}:</p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                         <div className="bg-secondary/20 p-2 rounded text-center text-muted-foreground">André Vitor</div>
                         <div className="bg-secondary/20 p-2 rounded text-center text-muted-foreground">João Iauch</div>
@@ -120,18 +119,16 @@ const About: React.FC = () => {
                         <div className="bg-secondary/20 p-2 rounded text-center text-muted-foreground">Philippe Georges</div>
                       </div>
                       
-                      <p className="text-muted-foreground mt-4">Semestre: 2º Semestre – 2025</p>
+                      <p className="text-muted-foreground mt-4">{t('semester')}: {t('semesterValue')}</p>
                     </div>
                   </div>
 
                   <div className="bg-primary/5 p-6 rounded-lg shadow-sm border border-primary/20">
                     <h2 className="text-2xl font-bold mb-4 flex items-center text-primary">
-                      <span className="mr-2 text-3xl">📢</span> Conclusão
+                      <span className="mr-2 text-3xl">📢</span> {t('conclusion')}
                     </h2>
                     <p className="text-muted-foreground">
-                      O INFOSP reforça o papel da tecnologia como aliada na busca por uma sociedade mais segura. 
-                      Ao oferecer uma ferramenta de análise de dados aberta e acessível, o projeto contribui com a 
-                      construção de políticas públicas mais eficientes, baseadas em evidências concretas e na participação ativa da população.
+                      {t('conclusionText')}
                     </p>
                   </div>
                 </CardContent>

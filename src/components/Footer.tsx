@@ -2,9 +2,11 @@
 import React from "react";
 import { ExternalLink } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer: React.FC = () => {
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
   
   return (
     <footer className="py-6 px-4 border-t bg-background/80 backdrop-blur-sm mt-8">
@@ -15,11 +17,11 @@ const Footer: React.FC = () => {
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-            aria-label="Site da Secretaria de Segurança Pública do Estado de São Paulo"
+            aria-label={t('securityDepartment')}
           >
             <img 
               src="/lovable-uploads/5cd52671-40fe-4a7d-81de-0196a97a84c6.png" 
-              alt="Logo da Secretaria de Segurança Pública" 
+              alt={t('securityDepartment')} 
               className={`${isMobile ? 'w-48' : 'w-56'} h-auto`}
             />
             <ExternalLink size={16} className="text-muted-foreground" />
@@ -28,18 +30,18 @@ const Footer: React.FC = () => {
         
         <div className="flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">
-            Todos os dados foram retirados da {' '}
+            {t('allDataFrom')}{' '}
             <a 
               href="https://www.ssp.sp.gov.br/estatistica" 
               target="_blank" 
               rel="noopener noreferrer"
               className="underline hover:text-primary transition-colors"
             >
-              Secretaria de Segurança Pública do Estado de São Paulo
+              {t('securityDepartment')}
             </a>
           </p>
           <p className="text-xs text-muted-foreground mt-2">
-            © 2025 InfoSP - Sistema de Visualização de Ocorrências
+            {t('copyright')}
           </p>
         </div>
       </div>

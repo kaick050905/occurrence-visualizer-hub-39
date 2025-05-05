@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import OccurrenceDetails from "./OccurrenceDetails";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Sample data for most recurring occurrences
 const recurringOccurrencesData = [
@@ -67,6 +68,15 @@ const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
   const [selectedOccurrence, setSelectedOccurrence] = useState<typeof recurringOccurrencesData[0] | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const getStatus = (status: string) => {
+    if (status === "Crítica") return t('critical');
+    if (status === "Alta") return t('high');
+    if (status === "Média") return t('medium');
+    if (status === "Baixa") return t('low');
+    return status;
+  };
 
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
@@ -94,25 +104,25 @@ const RecentOccurrences: React.FC = () => {
       <Card className="mt-6">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
-            <CardTitle>Ocorrências Mais Recorrentes</CardTitle>
+            <CardTitle>{t('mostRecurringOccurrences')}</CardTitle>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <HelpCircle className="h-4 w-4 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Tipos de ocorrências com maior frequência no sistema</p>
+                  <p>{t('mostFrequentTypes')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <CardDescription>Tipos de ocorrências mais frequentes no sistema</CardDescription>
+            <CardDescription>{t('mostFrequentTypes')}</CardDescription>
           </div>
           <div className="flex gap-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm" className="h-8 gap-1">
                   <Filter className="h-3.5 w-3.5" />
-                  <span>Filtrar</span>
+                  <span>{t('filter')}</span>
                   {statusFilter.length > 0 && (
                     <Badge variant="secondary" className="ml-1 rounded-full px-1">
                       {statusFilter.length}
@@ -122,7 +132,7 @@ const RecentOccurrences: React.FC = () => {
               </PopoverTrigger>
               <PopoverContent className="w-48 p-3">
                 <div className="space-y-2">
-                  <h4 className="font-medium text-sm">Filtrar por nível</h4>
+                  <h4 className="font-medium text-sm">{t('filterByLevel')}</h4>
                   <div className="space-y-2">
                     {["Crítica", "Alta", "Média", "Baixa"].map((status) => (
                       <div key={status} className="flex items-center space-x-2">
@@ -132,7 +142,7 @@ const RecentOccurrences: React.FC = () => {
                           onCheckedChange={() => toggleStatusFilter(status)}
                         />
                         <Label htmlFor={`status-${status}`} className="flex items-center space-x-1 text-sm">
-                          <span>{status}</span>
+                          <span>{getStatus(status)}</span>
                         </Label>
                       </div>
                     ))}
@@ -147,10 +157,10 @@ const RecentOccurrences: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID Tipo</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Nível</TableHead>
-                  <TableHead>Total Ocorrências</TableHead>
+                  <TableHead>{t('typeId')}</TableHead>
+                  <TableHead>{t('description')}</TableHead>
+                  <TableHead>{t('level')}</TableHead>
+                  <TableHead>{t('totalOccurrences')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -174,19 +184,19 @@ const RecentOccurrences: React.FC = () => {
                             <div>
                               <h4 className="text-sm font-semibold">{occurrence.description}</h4>
                               <p className="text-sm text-muted-foreground">
-                                Código de referência: {occurrence.id}
+                                {t('referenceCode')}: {occurrence.id}
                               </p>
                             </div>
                           </div>
                           <div className="mt-2">
-                            <p className="text-xs">Este tipo de ocorrência representa {Math.round((occurrence.count / 955) * 100)}% do total registrado.</p>
+                            <p className="text-xs">{t('occurrencePercentage')} {Math.round((occurrence.count / 955) * 100)}% {t('ofTotalRecorded')}.</p>
                           </div>
                         </HoverCardContent>
                       </HoverCard>
                     </TableCell>
                     <TableCell>
                       <Badge className={cn(statusStyle[occurrence.status as keyof typeof statusStyle])}>
-                        {occurrence.status}
+                        {getStatus(occurrence.status)}
                       </Badge>
                     </TableCell>
                     <TableCell className="font-medium">{occurrence.count}</TableCell>
@@ -198,10 +208,10 @@ const RecentOccurrences: React.FC = () => {
         </CardContent>
         <CardFooter className="flex justify-between border-t p-4">
           <div className="text-xs text-muted-foreground">
-            Mostrando {filteredOccurrences.length} de {recurringOccurrencesData.length} ocorrências
+            {t('showingOf')} {filteredOccurrences.length} {t('of')} {recurringOccurrencesData.length} {t('occurrences')}
           </div>
           <Button variant="outline" size="sm" className="gap-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-            <span>Ver Todas</span>
+            <span>{t('viewAll')}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </CardFooter>

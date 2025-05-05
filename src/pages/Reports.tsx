@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const reportsData = [
   { 
@@ -22,8 +23,10 @@ const reportsData = [
 ];
 
 const Reports: React.FC = () => {
+  const { t } = useLanguage();
+  
   const handleDownloadReport = () => {
-    toast.success("Download da planilha iniciado");
+    toast.success(t('downloadStarted'));
   };
 
   return (
@@ -39,11 +42,11 @@ const Reports: React.FC = () => {
         <Tabs defaultValue="relatorios" className="mb-6">
           <TabsList className="grid w-full grid-cols-3 md:w-auto">
             <TabsTrigger value="dashboard" asChild>
-              <Link to="/">Dashboard</Link>
+              <Link to="/">{t('dashboard')}</Link>
             </TabsTrigger>
-            <TabsTrigger value="relatorios">Relatórios</TabsTrigger>
+            <TabsTrigger value="relatorios">{t('reports')}</TabsTrigger>
             <TabsTrigger value="sobre" asChild>
-              <Link to="/sobre">Sobre o projeto</Link>
+              <Link to="/sobre">{t('about')}</Link>
             </TabsTrigger>
           </TabsList>
           
@@ -56,9 +59,9 @@ const Reports: React.FC = () => {
               <div className="my-6">
                 <div className="flex justify-between items-center flex-wrap gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Relatórios</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('reports')}</h1>
                     <p className="text-muted-foreground mt-2">
-                      Acesse e exporte relatórios de segurança e ocorrências.
+                      {t('accessAndExport')}
                     </p>
                   </div>
                   <Button 
@@ -66,39 +69,39 @@ const Reports: React.FC = () => {
                     className="flex items-center gap-2"
                   >
                     <Download className="h-4 w-4" />
-                    <span>Baixar Planilha</span>
+                    <span>{t('downloadSpreadsheet')}</span>
                   </Button>
                 </div>
               </div>
               
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle>Relatórios Disponíveis</CardTitle>
-                  <CardDescription>Acesse os relatórios do sistema</CardDescription>
+                  <CardTitle>{t('availableReports')}</CardTitle>
+                  <CardDescription>{t('accessSystemReports')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-auto">
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>ID</TableHead>
-                          <TableHead>Título</TableHead>
-                          <TableHead className="hidden md:table-cell">Data</TableHead>
-                          <TableHead className="hidden md:table-cell">Tipo</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Ação</TableHead>
+                          <TableHead>{t('reportID')}</TableHead>
+                          <TableHead>{t('reportTitle')}</TableHead>
+                          <TableHead className="hidden md:table-cell">{t('reportDate')}</TableHead>
+                          <TableHead className="hidden md:table-cell">{t('reportType')}</TableHead>
+                          <TableHead>{t('reportStatus')}</TableHead>
+                          <TableHead>{t('reportAction')}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {reportsData.map((report) => (
                           <TableRow key={report.id}>
                             <TableCell className="font-medium">{report.id}</TableCell>
-                            <TableCell>{report.title}</TableCell>
+                            <TableCell>{t('monthlyAnalysis')}</TableCell>
                             <TableCell className="hidden md:table-cell">{report.date}</TableCell>
-                            <TableCell className="hidden md:table-cell">{report.type}</TableCell>
+                            <TableCell className="hidden md:table-cell">{t('monthly')}</TableCell>
                             <TableCell>
                               <Badge className="bg-green-500 text-white">
-                                {report.status}
+                                {t('available')}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -109,7 +112,7 @@ const Reports: React.FC = () => {
                                 onClick={handleDownloadReport}
                               >
                                 <Download className="h-3.5 w-3.5" />
-                                <span className="hidden sm:inline">Baixar</span>
+                                <span className="hidden sm:inline">{t('download')}</span>
                               </Button>
                             </TableCell>
                           </TableRow>

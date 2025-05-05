@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart as RLineChart, Line, PieChart as RCPieChart, Pie, Cell } from "recharts";
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Simular dados de crimes por cidade
 const crimesDataByCity: Record<string, { [crime: string]: number[] }> = {
@@ -110,6 +111,7 @@ const CityDetails: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const unescapedName = name ? decodeURIComponent(name) : undefined;
   const cityCrimes = unescapedName ? crimesDataByCity[unescapedName] : undefined;
@@ -119,13 +121,13 @@ const CityDetails: React.FC = () => {
       <div className="min-h-screen flex flex-col justify-center items-center bg-background">
         <Card className="max-w-lg">
           <CardHeader>
-            <CardTitle><BarChart2 className="inline mr-2" />Cidade não encontrada</CardTitle>
+            <CardTitle><BarChart2 className="inline mr-2" />{t('cityNotFound')}</CardTitle>
             <CardDescription>
-              Não existem dados disponíveis para essa cidade.
+              {t('noDataAvailableCity')}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => navigate(-1)}><ArrowRight className="mr-2" /> Voltar</Button>
+            <Button onClick={() => navigate(-1)}><ArrowRight className="mr-2 rotate-180" /> {t('back')}</Button>
           </CardContent>
         </Card>
       </div>
@@ -135,16 +137,16 @@ const CityDetails: React.FC = () => {
   // Prepare data for charts
   const barData = years.map((year, i) => ({
     year,
-    "Furto": cityCrimes.Furto[i],
-    "Roubo": cityCrimes.Roubo[i],
+    [t('theft')]: cityCrimes.Furto[i],
+    [t('robbery')]: cityCrimes.Roubo[i],
     "Estupro": cityCrimes.Estupro[i],
     "Homicídio": cityCrimes["Homicídio"][i],
   }));
 
   const lastYearIndex = cityCrimes.Furto.length - 1;
   const pieData = [
-    { name: "Furto", value: cityCrimes.Furto[lastYearIndex] },
-    { name: "Roubo", value: cityCrimes.Roubo[lastYearIndex] },
+    { name: t('theft'), value: cityCrimes.Furto[lastYearIndex] },
+    { name: t('robbery'), value: cityCrimes.Roubo[lastYearIndex] },
     { name: "Estupro", value: cityCrimes.Estupro[lastYearIndex] },
     { name: "Homicídio", value: cityCrimes["Homicídio"][lastYearIndex] },
   ];
@@ -153,23 +155,23 @@ const CityDetails: React.FC = () => {
     <div className="min-h-screen bg-background px-2 py-8">
       <div className="max-w-4xl mx-auto">
         <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
-          <ArrowRight className="rotate-180 mr-2" /> Voltar
+          <ArrowRight className="rotate-180 mr-2" /> {t('back')}
         </Button>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart2 className="text-primary" /> Detalhes da Cidade: <span>{cityHumanNames[unescapedName || ""]}</span>
+              <BarChart2 className="text-primary" /> {t('cityDetails')}: <span>{cityHumanNames[unescapedName || ""]}</span>
             </CardTitle>
             <CardDescription>
-              Números de crimes registrados e gráficos detalhados dos últimos anos
+              {t('recordedCrimes')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="bar">
               <TabsList className="mb-4">
-                <TabsTrigger value="bar"><BarChart2 className="mr-1" size={16} />Barras</TabsTrigger>
-                <TabsTrigger value="line"><LineChart className="mr-1" size={16} />Linhas</TabsTrigger>
-                <TabsTrigger value="pie"><PieChart className="mr-1" size={16} />Pizza</TabsTrigger>
+                <TabsTrigger value="bar"><BarChart2 className="mr-1" size={16} />{t('bars')}</TabsTrigger>
+                <TabsTrigger value="line"><LineChart className="mr-1" size={16} />{t('lines')}</TabsTrigger>
+                <TabsTrigger value="pie"><PieChart className="mr-1" size={16} />{t('pie')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="bar">
@@ -180,8 +182,8 @@ const CityDetails: React.FC = () => {
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
-                      <Bar dataKey="Furto" fill="#3B82F6" />
-                      <Bar dataKey="Roubo" fill="#EF4444" />
+                      <Bar dataKey={t('theft')} fill="#3B82F6" />
+                      <Bar dataKey={t('robbery')} fill="#EF4444" />
                       <Bar dataKey="Estupro" fill="#F59E0B" />
                       <Bar dataKey="Homicídio" fill="#10B981" />
                     </BarChart>
@@ -197,8 +199,8 @@ const CityDetails: React.FC = () => {
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
-                      <Line type="monotone" dataKey="Furto" stroke="#3B82F6" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Roubo" stroke="#EF4444" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('theft')} stroke="#3B82F6" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('robbery')} stroke="#EF4444" strokeWidth={2} />
                       <Line type="monotone" dataKey="Estupro" stroke="#F59E0B" strokeWidth={2} />
                       <Line type="monotone" dataKey="Homicídio" stroke="#10B981" strokeWidth={2} />
                     </RLineChart>
@@ -235,7 +237,7 @@ const CityDetails: React.FC = () => {
                 <div key={crime.name} className="bg-muted border rounded-lg p-4 flex flex-col items-center">
                   <span className="text-lg font-medium">{crime.name}</span>
                   <span className="text-2xl font-bold">{crime.value}</span>
-                  <span className="text-sm text-muted-foreground">em 2024</span>
+                  <span className="text-sm text-muted-foreground">{t('in2024')}</span>
                 </div>
               ))}
             </div>

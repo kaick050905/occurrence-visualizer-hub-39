@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Regiões listadas pelo usuário, valores fictícios para demonstração
 const regionsData = [
@@ -56,17 +57,26 @@ const statusColors = {
 };
 
 const GeographicDistribution: React.FC = () => {
+  const { t } = useLanguage();
+  const getStatus = (status: string) => {
+    if (status === "Crítica") return t('critical');
+    if (status === "Alta") return t('high');
+    if (status === "Média") return t('medium');
+    if (status === "Baixa") return t('low');
+    return status;
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Distribuição</CardTitle>
-        <CardDescription>Por região e tipo de ocorrência</CardDescription>
+        <CardTitle>{t('distribution')}</CardTitle>
+        <CardDescription>{t('byRegion')} {t('byType').toLowerCase()}</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="regiao">
           <TabsList className="mb-4 w-full flex">
-            <TabsTrigger value="regiao" className="flex-1">Por Região</TabsTrigger>
-            <TabsTrigger value="tipo" className="flex-1">Por Tipo</TabsTrigger>
+            <TabsTrigger value="regiao" className="flex-1">{t('byRegion')}</TabsTrigger>
+            <TabsTrigger value="tipo" className="flex-1">{t('byType')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="regiao">
@@ -75,7 +85,7 @@ const GeographicDistribution: React.FC = () => {
                 <div key={region.name} className="border p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1">
                     <div className="font-medium">{region.name}</div>
-                    <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
+                    <div className="text-sm text-muted-foreground">{region.count} {t('occurrences')}</div>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                     <Progress 
@@ -96,7 +106,7 @@ const GeographicDistribution: React.FC = () => {
                 <div key={type.name}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="font-medium">{type.name}</div>
-                    <div className="text-sm text-muted-foreground">{type.count} ocorrências</div>
+                    <div className="text-sm text-muted-foreground">{type.count} {t('occurrences')}</div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Progress 

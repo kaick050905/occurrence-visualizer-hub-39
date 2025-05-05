@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Region data with status
 const regionsData = [
@@ -56,6 +57,15 @@ const statusColors = {
 const RegionalData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const { t } = useLanguage();
+
+  const getStatus = (status: string) => {
+    if (status === "Crítica") return t('critical');
+    if (status === "Alta") return t('high');
+    if (status === "Média") return t('medium');
+    if (status === "Baixa") return t('low');
+    return status;
+  };
   
   const filteredDistricts = districtsData.filter(district => {
     const matchesSearch = district.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -74,9 +84,9 @@ const RegionalData: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold tracking-tight">Dados por Região</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('regionalData')}</h1>
           <p className="text-muted-foreground mt-2">
-            Análise detalhada de ocorrências por região e bairro
+            {t('detailedAnalysis')}
           </p>
         </motion.div>
         
@@ -88,8 +98,8 @@ const RegionalData: React.FC = () => {
           >
             <Card className="md:col-span-1 h-[400px]">
               <CardHeader>
-                <CardTitle>Regiões</CardTitle>
-                <CardDescription>Distribuição de ocorrências por região</CardDescription>
+                <CardTitle>{t('regions')}</CardTitle>
+                <CardDescription>{t('occurrencesByRegion')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
@@ -104,7 +114,7 @@ const RegionalData: React.FC = () => {
                     >
                       <div className="flex items-center justify-between mb-1">
                         <div className="font-medium">{region.name}</div>
-                        <div className="text-sm text-muted-foreground">{region.count} ocorrências</div>
+                        <div className="text-sm text-muted-foreground">{region.count} {t('occurrences')}</div>
                       </div>
                       <div className="flex items-center gap-2">
                         <Progress 
@@ -130,11 +140,11 @@ const RegionalData: React.FC = () => {
             <Card className="h-[400px]">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>Bairros</CardTitle>
+                  <CardTitle>{t('neighborhoods')}</CardTitle>
                   <CardDescription>
                     {selectedRegion 
-                      ? `Ocorrências em bairros da ${selectedRegion}` 
-                      : "Ocorrências por bairro em todas as regiões"}
+                      ? `${t('occurrencesInNeighborhoods')} ${selectedRegion}` 
+                      : t('occurrencesByNeighborhood')}
                   </CardDescription>
                 </div>
                 {selectedRegion && (
@@ -144,7 +154,7 @@ const RegionalData: React.FC = () => {
                     onClick={() => setSelectedRegion(null)}
                     className="h-8"
                   >
-                    Limpar Filtro
+                    {t('clearFilter')}
                   </Button>
                 )}
               </CardHeader>
@@ -152,7 +162,7 @@ const RegionalData: React.FC = () => {
                 <div className="relative mb-4">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Pesquisar bairro..."
+                    placeholder={t('searchNeighborhood')}
                     className="pl-8"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,7 +191,7 @@ const RegionalData: React.FC = () => {
                         
                         <div className="mt-2">
                           <div className="flex items-center justify-between mb-1">
-                            <div className="text-sm text-muted-foreground">{district.count} ocorrências</div>
+                            <div className="text-sm text-muted-foreground">{district.count} {t('occurrences')}</div>
                             <div className="text-sm font-medium">{district.percentage}%</div>
                           </div>
                           <Progress 
@@ -195,7 +205,7 @@ const RegionalData: React.FC = () => {
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full py-8">
                       <Map className="h-12 w-12 text-muted-foreground opacity-30" />
-                      <p className="text-muted-foreground mt-4">Nenhum bairro encontrado</p>
+                      <p className="text-muted-foreground mt-4">{t('noNeighborhood')}</p>
                     </div>
                   )}
                 </div>
@@ -211,16 +221,15 @@ const RegionalData: React.FC = () => {
         >
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Mapa de Calor</CardTitle>
-              <CardDescription>Visualização geográfica das ocorrências por região</CardDescription>
+              <CardTitle>{t('heatMap')}</CardTitle>
+              <CardDescription>{t('geographicVisualization')}</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-center p-6 min-h-[400px]">
               <div className="text-center space-y-3">
                 <Map className="mx-auto h-16 w-16 text-muted-foreground opacity-30" />
-                <h3 className="text-xl font-medium">Mapa em desenvolvimento</h3>
+                <h3 className="text-xl font-medium">{t('mapInDevelopment')}</h3>
                 <p className="text-muted-foreground max-w-md">
-                  O mapa de calor com visualização geográfica das ocorrências estará disponível
-                  em breve.
+                  {t('heatMapSoon')}
                 </p>
               </div>
             </CardContent>

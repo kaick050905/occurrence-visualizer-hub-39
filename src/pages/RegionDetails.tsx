@@ -15,7 +15,7 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Simular dados de crimes por região
 const crimesDataByRegion: Record<string, { [crime: string]: number[] }> = {
@@ -213,6 +213,7 @@ const RegionDetails: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const unescapedName = name ? decodeURIComponent(name) : undefined;
   const regionCrimes = unescapedName ? crimesDataByRegion[unescapedName] : undefined;
@@ -223,13 +224,13 @@ const RegionDetails: React.FC = () => {
       <div className="min-h-screen flex flex-col justify-center items-center bg-background">
         <Card className="max-w-lg">
           <CardHeader>
-            <CardTitle><BarChart2 className="inline mr-2" />Região não encontrada</CardTitle>
+            <CardTitle><BarChart2 className="inline mr-2" />{t('regionNotFound')}</CardTitle>
             <CardDescription>
-              Não existem dados disponíveis para essa região.
+              {t('noDataAvailable')}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => navigate(-1)}><ArrowRight className="mr-2 rotate-180" /> Voltar</Button>
+            <Button onClick={() => navigate(-1)}><ArrowRight className="mr-2 rotate-180" /> {t('back')}</Button>
           </CardContent>
         </Card>
       </div>
@@ -239,16 +240,16 @@ const RegionDetails: React.FC = () => {
   // Prepare data for charts
   const barData = years.map((year, i) => ({
     year,
-    "Furto": regionCrimes.Furto[i],
-    "Roubo": regionCrimes.Roubo[i],
+    [t('theft')]: regionCrimes.Furto[i],
+    [t('robbery')]: regionCrimes.Roubo[i],
     "Estupro": regionCrimes.Estupro[i],
     "Homicídio": regionCrimes["Homicídio"][i],
   }));
 
   const lastYearIndex = regionCrimes.Furto.length - 1;
   const pieData = [
-    { name: "Furto", value: regionCrimes.Furto[lastYearIndex] },
-    { name: "Roubo", value: regionCrimes.Roubo[lastYearIndex] },
+    { name: t('theft'), value: regionCrimes.Furto[lastYearIndex] },
+    { name: t('robbery'), value: regionCrimes.Roubo[lastYearIndex] },
     { name: "Estupro", value: regionCrimes.Estupro[lastYearIndex] },
     { name: "Homicídio", value: regionCrimes["Homicídio"][lastYearIndex] },
   ];
@@ -257,15 +258,15 @@ const RegionDetails: React.FC = () => {
     <div className="min-h-screen bg-background px-2 py-8">
       <div className="max-w-4xl mx-auto">
         <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
-          <ArrowRight className="rotate-180 mr-2" /> Voltar
+          <ArrowRight className="rotate-180 mr-2" /> {t('back')}
         </Button>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart2 className="text-primary" /> Detalhes da Região: <span>{regionHumanNames[unescapedName || ""]}</span>
+              <BarChart2 className="text-primary" /> {t('regionDetails')}: <span>{regionHumanNames[unescapedName || ""]}</span>
             </CardTitle>
             <CardDescription>
-              Números de crimes registrados, gráficos detalhados e cidades da região
+              {t('recordedCrimes')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -274,39 +275,39 @@ const RegionDetails: React.FC = () => {
                 <TabsTrigger value="bar">
                   <div className="flex items-center gap-1">
                     <BarChart2 size={16} />
-                    <span className="hidden sm:inline">Barras</span>
+                    <span className="hidden sm:inline">{t('bars')}</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger value="line">
                   <div className="flex items-center gap-1">
                     <LineChart size={16} />
-                    <span className="hidden sm:inline">Linhas</span>
+                    <span className="hidden sm:inline">{t('lines')}</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger value="pie">
                   <div className="flex items-center gap-1">
                     <PieChart size={16} />
-                    <span className="hidden sm:inline">Pizza</span>
+                    <span className="hidden sm:inline">{t('pie')}</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger value="cities">
                   <div className="flex items-center gap-1">
                     <MapPin size={16} />
-                    <span className="hidden sm:inline">Cidades</span>
+                    <span className="hidden sm:inline">{t('cities')}</span>
                   </div>
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="bar">
                 <div className="flex items-center mb-2">
-                  <h3 className="text-sm font-medium text-muted-foreground">Crimes por Ano</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('crimesByYear')}</h3>
                   <TooltipProvider>
                     <UITooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
                       </TooltipTrigger>
                       <TooltipContent className="p-3 max-w-xs">
-                        <p>Distribuição anual de crimes por tipo na região. Cada barra representa o número de ocorrências para cada categoria de crime.</p>
+                        <p>{t('crimesByYearTooltip')}</p>
                       </TooltipContent>
                     </UITooltip>
                   </TooltipProvider>
@@ -318,8 +319,8 @@ const RegionDetails: React.FC = () => {
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
-                      <Bar dataKey="Furto" fill="#3B82F6" />
-                      <Bar dataKey="Roubo" fill="#EF4444" />
+                      <Bar dataKey={t('theft')} fill="#3B82F6" />
+                      <Bar dataKey={t('robbery')} fill="#EF4444" />
                       <Bar dataKey="Estupro" fill="#F59E0B" />
                       <Bar dataKey="Homicídio" fill="#10B981" />
                     </BarChart>
@@ -329,14 +330,14 @@ const RegionDetails: React.FC = () => {
 
               <TabsContent value="line">
                 <div className="flex items-center mb-2">
-                  <h3 className="text-sm font-medium text-muted-foreground">Evolução Temporal</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('temporalEvolution')}</h3>
                   <TooltipProvider>
                     <UITooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
                       </TooltipTrigger>
                       <TooltipContent className="p-3 max-w-xs">
-                        <p>Tendência temporal dos diferentes tipos de crime na região, permitindo visualizar padrões de crescimento ou redução ao longo dos anos.</p>
+                        <p>{t('temporalEvolutionTooltip')}</p>
                       </TooltipContent>
                     </UITooltip>
                   </TooltipProvider>
@@ -348,8 +349,8 @@ const RegionDetails: React.FC = () => {
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <Tooltip content={<CustomTooltip theme={theme} />} />
                       <Legend />
-                      <Line type="monotone" dataKey="Furto" stroke="#3B82F6" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Roubo" stroke="#EF4444" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('theft')} stroke="#3B82F6" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('robbery')} stroke="#EF4444" strokeWidth={2} />
                       <Line type="monotone" dataKey="Estupro" stroke="#F59E0B" strokeWidth={2} />
                       <Line type="monotone" dataKey="Homicídio" stroke="#10B981" strokeWidth={2} />
                     </RLineChart>
@@ -359,14 +360,14 @@ const RegionDetails: React.FC = () => {
 
               <TabsContent value="pie">
                 <div className="flex items-center mb-2">
-                  <h3 className="text-sm font-medium text-muted-foreground">Distribuição por Tipo</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('distributionByType')}</h3>
                   <TooltipProvider>
                     <UITooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
                       </TooltipTrigger>
                       <TooltipContent className="p-3 max-w-xs">
-                        <p>Proporção relativa de cada tipo de crime no total de ocorrências da região. Visualiza como cada crime contribui para o panorama geral de segurança.</p>
+                        <p>{t('distributionByTypeTooltip')}</p>
                       </TooltipContent>
                     </UITooltip>
                   </TooltipProvider>
@@ -396,14 +397,14 @@ const RegionDetails: React.FC = () => {
 
               <TabsContent value="cities">
                 <div className="flex items-center mb-2">
-                  <h3 className="text-sm font-medium text-muted-foreground">Cidades da Região</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t('citiesOfRegion')}</h3>
                   <TooltipProvider>
                     <UITooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-4 w-4 text-muted-foreground ml-2" />
                       </TooltipTrigger>
                       <TooltipContent className="p-3 max-w-xs">
-                        <p>Lista de cidades pertencentes à região com suas respectivas informações demográficas e estatísticas de ocorrências.</p>
+                        <p>{t('citiesOfRegionTooltip')}</p>
                       </TooltipContent>
                     </UITooltip>
                   </TooltipProvider>
@@ -423,7 +424,7 @@ const RegionDetails: React.FC = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
                           <div className="flex items-center gap-2">
                             <div>
-                              <div className="text-sm text-muted-foreground">População</div>
+                              <div className="text-sm text-muted-foreground">{t('population')}</div>
                               <div className="font-medium">{city.population}</div>
                             </div>
                           </div>
@@ -437,7 +438,7 @@ const RegionDetails: React.FC = () => {
                           
                           <div className="flex items-center gap-2">
                             <div>
-                              <div className="text-sm text-muted-foreground">Ocorrências em 2024</div>
+                              <div className="text-sm text-muted-foreground">{t('occurrencesIn2024')}</div>
                               <div className="font-medium">{city.occurrences2024}</div>
                             </div>
                           </div>
@@ -454,7 +455,7 @@ const RegionDetails: React.FC = () => {
                 <div key={crime.name} className="bg-muted border rounded-lg p-4 flex flex-col items-center">
                   <span className="text-lg font-medium">{crime.name}</span>
                   <span className="text-2xl font-bold">{crime.value}</span>
-                  <span className="text-sm text-muted-foreground">em 2024</span>
+                  <span className="text-sm text-muted-foreground">{t('in2024')}</span>
                 </div>
               ))}
             </div>

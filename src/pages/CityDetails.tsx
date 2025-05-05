@@ -184,8 +184,8 @@ const CityDetails: React.FC = () => {
                       <Legend />
                       <Bar dataKey={t('theft')} fill="#3B82F6" />
                       <Bar dataKey={t('robbery')} fill="#EF4444" />
-                      <Bar dataKey="Estupro" fill="#F59E0B" />
-                      <Bar dataKey="Homicídio" fill="#10B981" />
+                      <Bar dataKey={t('rape')} fill="#F59E0B" />
+                      <Bar dataKey={t('homicide')} fill="#10B981" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -201,8 +201,8 @@ const CityDetails: React.FC = () => {
                       <Legend />
                       <Line type="monotone" dataKey={t('theft')} stroke="#3B82F6" strokeWidth={2} />
                       <Line type="monotone" dataKey={t('robbery')} stroke="#EF4444" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Estupro" stroke="#F59E0B" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Homicídio" stroke="#10B981" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('rape')} stroke="#F59E0B" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('homicide')} stroke="#10B981" strokeWidth={2} />
                     </RLineChart>
                   </ResponsiveContainer>
                 </div>

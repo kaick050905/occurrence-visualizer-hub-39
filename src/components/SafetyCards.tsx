@@ -122,7 +122,7 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <CardTitle className="text-md font-medium">
-            {t('numberOf' + data.type.charAt(0).toUpperCase() + data.type.slice(1))}
+            {t('numberOf' + data.type.charAt(0).toUpperCase() + data.type.slice(1) + 's')}
           </CardTitle>
           <Tooltip>
             <TooltipTrigger asChild>

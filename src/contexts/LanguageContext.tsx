@@ -52,6 +52,16 @@ export const translations: Translations = {
     en: 'Theft',
     es: 'Hurto'
   },
+  rape: {
+    pt: 'Estupro',
+    en: 'Rape',
+    es: 'Violación'
+  },
+  homicide: {
+    pt: 'Homicídio',
+    en: 'Homicide',
+    es: 'Asesinato'
+  },
   robbery: {
     pt: 'Roubo',
     en: 'Robbery',

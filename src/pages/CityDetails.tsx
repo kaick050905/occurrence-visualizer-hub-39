@@ -147,8 +147,8 @@ const CityDetails: React.FC = () => {
   const pieData = [
     { name: t('theft'), value: cityCrimes.Furto[lastYearIndex] },
     { name: t('robbery'), value: cityCrimes.Roubo[lastYearIndex] },
-    { name: "Estupro", value: cityCrimes.Estupro[lastYearIndex] },
-    { name: "Homicídio", value: cityCrimes["Homicídio"][lastYearIndex] },
+    { name: t('rape'), value: cityCrimes.Estupro[lastYearIndex] },
+    { name: t('homicide'), value: cityCrimes["Homicídio"][lastYearIndex] },
   ];
 
   return (

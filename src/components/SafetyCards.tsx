@@ -117,12 +117,15 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
   const { theme } = useTheme();
   const { t } = useLanguage();
   
+  // Fix the translation key to use the right property
+  const translationKey = data.type === 'theft' ? 'numberOfThefts' : 'numberOfRobberies';
+  
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", data.color)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
           <CardTitle className="text-md font-medium">
-            {t('numberOf' + data.type.charAt(0).toUpperCase() + data.type.slice(1) + 's')}
+            {t(translationKey)}
           </CardTitle>
           <Tooltip>
             <TooltipTrigger asChild>

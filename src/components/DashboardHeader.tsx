@@ -3,19 +3,30 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const DashboardHeader: React.FC = () => {
   const today = new Date();
   const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   
-  const formattedDate = today.toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const formattedDate = today.toLocaleDateString(
+    language === 'pt' ? 'pt-BR' : language === 'es' ? 'es' : 'en-US', 
+    {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+  );
 
   // Capitalize the first letter
   const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
@@ -45,18 +56,47 @@ const DashboardHeader: React.FC = () => {
           </motion.p>
         </div>
         
-        <Button
-          variant="outline"
-          size="icon"
-          className="transition-all duration-300 hover:rotate-12"
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        >
-          {theme === "dark" ? (
-            <Sun className="h-[1.2rem] w-[1.2rem]" />
-          ) : (
-            <Moon className="h-[1.2rem] w-[1.2rem]" />
-          )}
-        </Button>
+        <div className="flex items-center gap-2">
+          {/* Seletor de idioma */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="transition-all duration-300 hover:rotate-12"
+                aria-label={t('language')}
+              >
+                <Globe className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setLanguage('pt')}>
+                {t('portuguese')}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')}>
+                {t('english')}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('es')}>
+                {t('spanish')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Seletor de tema */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="transition-all duration-300 hover:rotate-12"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            aria-label={theme === "light" ? t('darkMode') : t('lightMode')}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )}
+          </Button>
+        </div>
       </Card>
     </motion.div>
   );

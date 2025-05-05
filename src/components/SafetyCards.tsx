@@ -20,6 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger 
 } from "@/components/ui/tooltip";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Mock data for cities and regions
 const citiesData = {
@@ -35,30 +36,22 @@ const regionsData = {
 // Crime statistics data
 const crimeStats = [
   { 
-    type: "Furto", 
+    type: "theft", 
     count: 12567, 
     yearGrowth: 7.5,
     icon: <TrendingUp className="h-6 w-6 text-orange-500" />,
     color: "border-l-orange-500",
-    description: "Estatísticas de ocorrências de furto nos últimos 12 meses, com percentual de crescimento anual."
+    description: "theft"
   },
   { 
-    type: "Roubo", 
+    type: "robbery", 
     count: 8932, 
     yearGrowth: 5.2,
     icon: <TrendingDown className="h-6 w-6 text-red-600" />,
     color: "border-l-red-600",
-    description: "Estatísticas de ocorrências de roubo nos últimos 12 meses, com percentual de crescimento anual."
+    description: "robbery"
   }
 ];
-
-// Tooltips for cards
-const tooltipDescriptions = {
-  dangerousCity: "Cidade com maior número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
-  safeCity: "Cidade com menor número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
-  dangerousRegion: "Região com maior número de ocorrências por 100 mil habitantes nos últimos 12 meses.",
-  safeRegion: "Região com menor número de ocorrências por 100 mil habitantes nos últimos 12 meses."
-};
 
 interface SingleCityRegionCardProps {
   title: string;
@@ -75,6 +68,7 @@ interface SingleCityRegionCardProps {
 // Component for city or region safety card with a single item
 const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data, icon, colorClass, tooltipDescription }) => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", colorClass)}>
@@ -121,18 +115,21 @@ const SingleCityRegionCard: React.FC<SingleCityRegionCardProps> = ({ title, data
 // Component for crime statistics card
 const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   
   return (
     <Card className={cn("border-l-4 h-full transition-all duration-300", data.color)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-md font-medium">Número de {data.type}</CardTitle>
+          <CardTitle className="text-md font-medium">
+            {t('numberOf' + data.type.charAt(0).toUpperCase() + data.type.slice(1))}
+          </CardTitle>
           <Tooltip>
             <TooltipTrigger asChild>
               <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
             </TooltipTrigger>
             <TooltipContent className="p-2 max-w-xs">
-              <p>{data.description}</p>
+              <p>{t(data.description)}</p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -150,7 +147,7 @@ const CrimeStatCard: React.FC<{ data: typeof crimeStats[0] }> = ({ data }) => {
             {data.yearGrowth > 0 ? "+" : ""}
             {data.yearGrowth}%
           </span>
-          <span className="ml-1 text-muted-foreground">crescimento anual</span>
+          <span className="ml-1 text-muted-foreground">{t('annualGrowth')}</span>
         </div>
       </CardContent>
     </Card>
@@ -170,6 +167,7 @@ const SafetyCardsCarousel: React.FC = () => {
 
   const [api, setApi] = useState<any>(null);
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
 
   // Set up embla carousel with autoplay plugin
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -187,6 +185,14 @@ const SafetyCardsCarousel: React.FC = () => {
     }
   }, [emblaApi]);
 
+  // Traduções para tooltips
+  const tooltipDescriptions = {
+    dangerousCity: t('dangerousCity'),
+    safeCity: t('safeCity'),
+    dangerousRegion: t('dangerousRegion'),
+    safeRegion: t('safeRegion')
+  };
+
   return (
     <div className="mt-4 md:mt-6">
       <TooltipProvider>
@@ -201,7 +207,7 @@ const SafetyCardsCarousel: React.FC = () => {
           <CarouselContent className="-ml-2 md:-ml-4">
             <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
               <SingleCityRegionCard 
-                title="Cidade Mais Perigosa" 
+                title={t('dangerousCity')} 
                 data={citiesData.dangerous} 
                 icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
                 colorClass="border-l-red-500"
@@ -210,7 +216,7 @@ const SafetyCardsCarousel: React.FC = () => {
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
               <SingleCityRegionCard 
-                title="Cidade Mais Segura" 
+                title={t('safeCity')} 
                 data={citiesData.safe} 
                 icon={<Shield className="h-5 w-5 text-green-500" />}
                 colorClass="border-l-green-500"
@@ -219,7 +225,7 @@ const SafetyCardsCarousel: React.FC = () => {
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
               <SingleCityRegionCard 
-                title="Região Mais Perigosa" 
+                title={t('dangerousRegion')}
                 data={regionsData.dangerous} 
                 icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
                 colorClass="border-l-red-500"
@@ -228,7 +234,7 @@ const SafetyCardsCarousel: React.FC = () => {
             </CarouselItem>
             <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
               <SingleCityRegionCard 
-                title="Região Mais Segura" 
+                title={t('safeRegion')} 
                 data={regionsData.safe} 
                 icon={<Shield className="h-5 w-5 text-green-500" />}
                 colorClass="border-l-green-500"

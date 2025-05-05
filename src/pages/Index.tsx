@@ -10,8 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
+  const { t } = useLanguage();
+  
   return (
     <motion.div 
       className="min-h-screen bg-background flex flex-col"
@@ -25,12 +28,12 @@ const Index = () => {
           
           <Tabs defaultValue="dashboard" className="mb-6">
             <TabsList className="grid w-full grid-cols-3 md:w-auto">
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+              <TabsTrigger value="dashboard">{t('dashboard')}</TabsTrigger>
               <TabsTrigger value="relatorios" asChild>
-                <Link to="/relatorios">Relatórios</Link>
+                <Link to="/relatorios">{t('reports')}</Link>
               </TabsTrigger>
               <TabsTrigger value="sobre" asChild>
-                <Link to="/sobre">Sobre o projeto</Link>
+                <Link to="/sobre">{t('about')}</Link>
               </TabsTrigger>
             </TabsList>
             

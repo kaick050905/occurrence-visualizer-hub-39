@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define os idiomas suportados
@@ -814,7 +813,7 @@ export const translations: Translations = {
     en: 'View region details',
     es: 'Ver detalles de la región'
   },
-  // Novas traduções para OccurrenceDetails
+  // OccurrenceDetails
   completeDetails: {
     pt: 'Detalhes completos sobre esta ocorrência',
     en: 'Complete details about this occurrence',

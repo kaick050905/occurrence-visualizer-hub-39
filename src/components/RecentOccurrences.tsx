@@ -24,31 +24,31 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const recurringOccurrencesData = [
   {
     id: "TP-001",
-    description: "Furto de Veículo",
+    description: "vehicleTheft",
     status: "Crítica",
     count: 245,
   },
   {
     id: "TP-002",
-    description: "Falta de iluminação pública",
+    description: "streetLightingIssue",
     status: "Alta",
     count: 210,
   },
   {
     id: "TP-003",
-    description: "Acidente de Trânsito",
+    description: "trafficAccident",
     status: "Média",
     count: 180,
   },
   {
     id: "TP-004",
-    description: "Invasão de Propriedade",
+    description: "propertyInvasion",
     status: "Alta",
     count: 165,
   },
   {
     id: "TP-005",
-    description: "Vandalismo em Prédio Público",
+    description: "publicPropertyVandalism",
     status: "Alta",
     count: 155,
   }
@@ -66,7 +66,7 @@ const statusStyle = {
 
 const RecentOccurrences: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [selectedOccurrence, setSelectedOccurrence] = useState<typeof recurringOccurrencesData[0] | null>(null);
+  const [selectedOccurrence, setSelectedOccurrence] = useState<(typeof recurringOccurrencesData[0] & { translatedDesc?: string }) | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { t } = useLanguage();
 
@@ -87,7 +87,11 @@ const RecentOccurrences: React.FC = () => {
   };
 
   const handleOccurrenceClick = (occurrence: typeof recurringOccurrencesData[0]) => {
-    setSelectedOccurrence(occurrence);
+    const translatedDesc = t(occurrence.description);
+    setSelectedOccurrence({ 
+      ...occurrence, 
+      translatedDesc 
+    });
     setIsDialogOpen(true);
   };
 
@@ -177,12 +181,12 @@ const RecentOccurrences: React.FC = () => {
                     <TableCell>
                       <HoverCard>
                         <HoverCardTrigger asChild>
-                          <span className="cursor-help">{occurrence.description}</span>
+                          <span className="cursor-help">{t(occurrence.description)}</span>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-80">
                           <div className="flex justify-between">
                             <div>
-                              <h4 className="text-sm font-semibold">{occurrence.description}</h4>
+                              <h4 className="text-sm font-semibold">{t(occurrence.description)}</h4>
                               <p className="text-sm text-muted-foreground">
                                 {t('referenceCode')}: {occurrence.id}
                               </p>
@@ -221,7 +225,10 @@ const RecentOccurrences: React.FC = () => {
       <OccurrenceDetails 
         open={isDialogOpen} 
         onOpenChange={setIsDialogOpen} 
-        occurrence={selectedOccurrence} 
+        occurrence={selectedOccurrence ? {
+          ...selectedOccurrence,
+          description: selectedOccurrence.translatedDesc || t(selectedOccurrence.description)
+        } : null} 
       />
     </motion.div>
   );

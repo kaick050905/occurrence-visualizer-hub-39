@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 // Regiões listadas pelo usuário, valores fictícios para demonstração
 const regionsData = [
-  { name: "Araçatuba", count: 38, percentage: 6, status: "Baixa" },
+  { name: "Araçatuba", count: 38, percentage: 6, status: "Crítica" },
   { name: "Bauru", count: 52, percentage: 8, status: "Baixa" },
   { name: "Campinas", count: 87, percentage: 12, status: "Média" },
   { name: "Capital", count: 210, percentage: 28, status: "Crítica" },
@@ -58,6 +58,7 @@ const statusColors = {
 
 const GeographicDistribution: React.FC = () => {
   const { t } = useLanguage();
+  
   const getStatus = (status: string) => {
     if (status === "Crítica") return t('critical');
     if (status === "Alta") return t('high');
@@ -65,6 +66,17 @@ const GeographicDistribution: React.FC = () => {
     if (status === "Baixa") return t('low');
     return status;
   };
+  
+  // Tradução dos dados para exibição conforme o idioma
+  const translatedRegionsData = regionsData.map(region => ({
+    ...region,
+    statusTrans: getStatus(region.status)
+  }));
+  
+  const translatedOccurrencesData = occurrenceTypesData.map(type => ({
+    ...type,
+    statusTrans: getStatus(type.status)
+  }));
 
   return (
     <Card>
@@ -81,7 +93,7 @@ const GeographicDistribution: React.FC = () => {
           
           <TabsContent value="regiao">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              {regionsData.map((region) => (
+              {translatedRegionsData.map((region) => (
                 <div key={region.name} className="border p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1">
                     <div className="font-medium">{region.name}</div>
@@ -102,7 +114,7 @@ const GeographicDistribution: React.FC = () => {
           
           <TabsContent value="tipo">
             <div className="space-y-4">
-              {occurrenceTypesData.slice(0, 10).map((type) => (
+              {translatedOccurrencesData.slice(0, 10).map((type) => (
                 <div key={type.name}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="font-medium">{type.name}</div>

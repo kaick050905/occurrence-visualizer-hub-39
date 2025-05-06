@@ -3,10 +3,12 @@ import React from "react";
 import { ExternalLink } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from 'next-themes';
 
 const Footer: React.FC = () => {
   const isMobile = useIsMobile();
   const { t } = useLanguage();
+  const { theme } = useTheme();
   
   return (
     <footer className="py-6 px-4 border-t bg-background/80 backdrop-blur-sm mt-8">
@@ -19,11 +21,19 @@ const Footer: React.FC = () => {
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             aria-label={t('securityDepartment')}
           >
-            <img 
-              src="/lovable-uploads/5cd52671-40fe-4a7d-81de-0196a97a84c6.png" 
-              alt={t('securityDepartment')} 
-              className={`${isMobile ? 'w-48' : 'w-56'} h-auto`}
-            />
+            {theme === 'dark' ? (
+              <img 
+                src="/lovable-uploads/75a9ae91-6d83-4a1f-a42c-704de28c652d.png" 
+                alt={t('securityDepartment')} 
+                className={`${isMobile ? 'w-48' : 'w-56'} h-auto`}
+              />
+            ) : (
+              <img 
+                src="/lovable-uploads/5cd52671-40fe-4a7d-81de-0196a97a84c6.png" 
+                alt={t('securityDepartment')} 
+                className={`${isMobile ? 'w-48' : 'w-56'} h-auto`}
+              />
+            )}
             <ExternalLink size={16} className="text-muted-foreground" />
           </a>
         </div>

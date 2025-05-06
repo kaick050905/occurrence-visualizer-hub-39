@@ -22,6 +22,7 @@ import {
   Cell
 } from "recharts";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Interface for occurrence details
 interface OccurrenceDetailsProps {
@@ -65,6 +66,8 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
   onOpenChange,
   occurrence
 }) => {
+  const { t } = useLanguage();
+  
   if (!occurrence) return null;
 
   // Calculate growth percentage from 2023 to 2024
@@ -84,7 +87,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
-          <p className="font-medium text-gray-900 dark:text-gray-100">{`Ano: ${label}`}</p>
+          <p className="font-medium text-gray-900 dark:text-gray-100">{`${t('year')}: ${label}`}</p>
           <p className="text-gray-700 dark:text-gray-300">{`${payload[0].name}: ${payload[0].value}`}</p>
         </div>
       );
@@ -100,14 +103,14 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
             <span className="text-primary">{occurrence.id}</span> - {occurrence.description}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground dark:text-gray-300">
-            Detalhes completos sobre esta ocorrência
+            {t('completeDetails')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Total Registrado</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">{t('totalRecorded')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">{occurrence.count}</p>
@@ -116,7 +119,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Total em 2024</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">{t('totalIn2024')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">{growthData.find(item => item.year === 2024)?.count || 0}</p>
@@ -125,7 +128,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">Crescimento (2023-2024)</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground dark:text-gray-300">{t('growthBetweenYears')}</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center">
               <p className="text-2xl font-bold">
@@ -142,14 +145,14 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           {/* Top 5 cities */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Top 5 Cidades</CardTitle>
+              <CardTitle className="text-lg">{t('top5Cities')}</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Cidade</TableHead>
-                    <TableHead className="text-right">Ocorrências</TableHead>
+                    <TableHead>{t('city')}</TableHead>
+                    <TableHead className="text-right">{t('occurrences')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -173,7 +176,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
           {/* Growth chart */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Crescimento por Ano</CardTitle>
+              <CardTitle className="text-lg">{t('growthByYear')}</CardTitle>
             </CardHeader>
             <CardContent className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -185,7 +188,7 @@ const OccurrenceDetails: React.FC<OccurrenceDetailsProps> = ({
                   <XAxis dataKey="year" stroke="currentColor" />
                   <YAxis stroke="currentColor" />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="count" name="Total de Ocorrências">
+                  <Bar dataKey="count" name={t('totalOccurrences')}>
                     {growthData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}

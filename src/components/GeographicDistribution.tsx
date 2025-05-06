@@ -58,6 +58,8 @@ const statusColors = {
 
 const GeographicDistribution: React.FC = () => {
   const { t } = useLanguage();
+
+  // Function to get translated status
   const getStatus = (status: string) => {
     if (status === "Crítica") return t('critical');
     if (status === "Alta") return t('high');

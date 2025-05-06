@@ -24,29 +24,29 @@ const regionsData = [
 
 // Tipos de ocorrência (mantidos como estavam)
 const occurrenceTypesData = [
-  { name: "Furto", count: 245, percentage: 15, status: "Crítica" },
-  { name: "Roubo", count: 210, percentage: 13, status: "Crítica" },
-  { name: "Acidente de Trânsito", count: 180, percentage: 11, status: "Alta" },
-  { name: "Invasão", count: 165, percentage: 10, status: "Alta" },
-  { name: "Vandalismo", count: 155, percentage: 9, status: "Alta" },
-  { name: "Incêndio", count: 90, percentage: 5, status: "Média" },
-  { name: "Alagamento", count: 85, percentage: 5, status: "Média" },
-  { name: "Queda de Energia", count: 80, percentage: 5, status: "Média" },
-  { name: "Perturbação do Sossego", count: 75, percentage: 4, status: "Média" },
-  { name: "Desabamento", count: 70, percentage: 4, status: "Média" },
-  { name: "Poluição", count: 65, percentage: 4, status: "Baixa" },
-  { name: "Deslizamento", count: 60, percentage: 3, status: "Baixa" },
-  { name: "Poda Irregular", count: 50, percentage: 3, status: "Baixa" },
-  { name: "Descarte Irregular", count: 45, percentage: 2, status: "Baixa" },
-  { name: "Obstrução de Via", count: 40, percentage: 2, status: "Baixa" },
-  { name: "Construção Irregular", count: 35, percentage: 2, status: "Baixa" },
-  { name: "Abandono de Veículo", count: 30, percentage: 1, status: "Baixa" },
-  { name: "Pichação", count: 25, percentage: 1, status: "Baixa" },
-  { name: "Maus-tratos a Animais", count: 20, percentage: 1, status: "Baixa" },
-  { name: "Ambulantes Irregulares", count: 15, percentage: 1, status: "Baixa" },
-  { name: "Vazamento de Gás", count: 10, percentage: 0.5, status: "Baixa" },
-  { name: "Esgoto a Céu Aberto", count: 8, percentage: 0.5, status: "Baixa" },
-  { name: "Cabeamento Rompido", count: 5, percentage: 0.3, status: "Baixa" },
+  { name: "Homicídio Doloso", count: 50, percentage: 5, status: "Crítica" },
+  { name: "Vítimas Homicídio Doloso", count: 50, percentage: 5, status: "Crítica" },
+  { name: "Homicídio Doloso Trânsito", count: 30, percentage: 3, status: "Alta" },
+  { name: "Vítimas Homicídio Doloso Trânsito", count: 30, percentage: 3, status: "Alta" },
+  { name: "Homicídio Culposo Trânsito", count: 35, percentage: 3, status: "Alta" },
+  { name: "Homicídio Culposo Outros", count: 25, percentage: 2, status: "Média" },
+  { name: "Tentativa de Homicídio", count: 40, percentage: 4, status: "Alta" },
+  { name: "Lesão Corporal c/ Morte", count: 20, percentage: 2, status: "Alta" },
+  { name: "Lesão Corporal Dolosa", count: 60, percentage: 5, status: "Alta" },
+  { name: "Lesão Culposa Trânsito", count: 45, percentage: 4, status: "Média" },
+  { name: "Lesão Culposa Outros", count: 30, percentage: 3, status: "Média" },
+  { name: "Latrocínio", count: 25, percentage: 2, status: "Crítica" },
+  { name: "Vítimas Latrocínio", count: 25, percentage: 2, status: "Crítica" },
+  { name: "Total Estupro", count: 50, percentage: 5, status: "Crítica" },
+  { name: "Estupro", count: 30, percentage: 3, status: "Crítica" },
+  { name: "Estupro Vulnerável", count: 20, percentage: 2, status: "Crítica" },
+  { name: "Total Roubo", count: 60, percentage: 6, status: "Crítica" },
+  { name: "Roubo Outros", count: 30, percentage: 3, status: "Crítica" },
+  { name: "Roubo Veículo", count: 20, percentage: 2, status: "Alta" },
+  { name: "Roubo Banco", count: 5, percentage: 0.5, status: "Crítica" },
+  { name: "Roubo Carga", count: 5, percentage: 0.5, status: "Alta" },
+  { name: "Furto Outros", count: 60, percentage: 6, status: "Alta" },
+  { name: "Furto Veículo", count: 50, percentage: 5, status: "Alta" }
 ];
 
 const statusColors = {
@@ -68,16 +68,39 @@ const GeographicDistribution: React.FC = () => {
   };
   
   // Função para traduzir nome de ocorrências
-  const translateOccurrenceName = (name: string) => {
-    switch(name) {
-      case "Furto": return t('theft');
-      case "Roubo": return t('robbery');
-      case "Acidente de Trânsito": return t('trafficAccident');
-      case "Invasão": return t('propertyInvasion');
-      case "Vandalismo": return t('publicPropertyVandalism');
-      default: return name;
-    }
-  };
+const translateOccurrenceName = (name: string) => {
+  switch (name) {
+    case "Furto": return t('theft');
+    case "Roubo": return t('robbery');
+    case "Acidente de Trânsito": return t('trafficAccident');
+    case "Invasão": return t('propertyInvasion');
+    case "Vandalismo": return t('publicPropertyVandalism');
+    case "Homicídio Doloso": return t('intentionalHomicide');
+    case "Vítimas Homicídio Doloso": return t('intentionalHomicideVictims');
+    case "Homicídio Doloso Trânsito": return t('trafficIntentionalHomicide');
+    case "Vítimas Homicídio Doloso Trânsito": return t('trafficIntentionalHomicideVictims');
+    case "Homicídio Culposo Trânsito": return t('trafficNegligentHomicide');
+    case "Homicídio Culposo Outros": return t('otherNegligentHomicide');
+    case "Tentativa de Homicídio": return t('attemptedHomicide');
+    case "Lesão Corporal c/ Morte": return t('bodilyInjuryWithDeath');
+    case "Lesão Corporal Dolosa": return t('intentionalBodilyInjury');
+    case "Lesão Culposa Trânsito": return t('trafficNegligentInjury');
+    case "Lesão Culposa Outros": return t('otherNegligentInjury');
+    case "Latrocínio": return t('robberyHomicide');
+    case "Vítimas Latrocínio": return t('robberyHomicideVictims');
+    case "Total Estupro": return t('totalRape');
+    case "Estupro": return t('rape');
+    case "Estupro Vulnerável": return t('childRape');
+    case "Total Roubo": return t('totalRobbery');
+    case "Roubo Outros": return t('otherRobbery');
+    case "Roubo Veículo": return t('vehicleRobbery');
+    case "Roubo Banco": return t('bankRobbery');
+    case "Roubo Carga": return t('cargoRobbery');
+    case "Furto Outros": return t('otherTheft');
+    case "Furto Veículo": return t('vehicleTheft');
+    default: return name;
+  }
+};
   
   // Tradução dos dados para exibição conforme o idioma
   const translatedRegionsData = regionsData.map(region => ({

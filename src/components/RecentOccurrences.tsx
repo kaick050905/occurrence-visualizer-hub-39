@@ -25,35 +25,30 @@ const recurringOccurrencesData = [
   {
     id: "TP-001",
     description: "Furto de Veículo",
-    descriptionKey: "vehicleTheft",
     status: "Crítica",
     count: 245,
   },
   {
     id: "TP-002",
     description: "Falta de iluminação pública",
-    descriptionKey: "lackOfPublicLighting",
     status: "Alta",
     count: 210,
   },
   {
     id: "TP-003",
     description: "Acidente de Trânsito",
-    descriptionKey: "trafficAccident",
     status: "Média",
     count: 180,
   },
   {
     id: "TP-004",
     description: "Invasão de Propriedade",
-    descriptionKey: "propertyInvasion",
     status: "Alta",
     count: 165,
   },
   {
     id: "TP-005",
     description: "Vandalismo em Prédio Público",
-    descriptionKey: "publicBuildingVandalism",
     status: "Alta",
     count: 155,
   }
@@ -83,13 +78,6 @@ const RecentOccurrences: React.FC = () => {
     return status;
   };
 
-  const getDescription = (occurrence: typeof recurringOccurrencesData[0]) => {
-    if (occurrence.descriptionKey) {
-      return t(occurrence.descriptionKey);
-    }
-    return occurrence.description;
-  };
-
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prevFilters => 
       prevFilters.includes(status)
@@ -99,10 +87,7 @@ const RecentOccurrences: React.FC = () => {
   };
 
   const handleOccurrenceClick = (occurrence: typeof recurringOccurrencesData[0]) => {
-    setSelectedOccurrence({
-      ...occurrence,
-      description: getDescription(occurrence)
-    });
+    setSelectedOccurrence(occurrence);
     setIsDialogOpen(true);
   };
 
@@ -192,12 +177,12 @@ const RecentOccurrences: React.FC = () => {
                     <TableCell>
                       <HoverCard>
                         <HoverCardTrigger asChild>
-                          <span className="cursor-help">{getDescription(occurrence)}</span>
+                          <span className="cursor-help">{occurrence.description}</span>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-80">
                           <div className="flex justify-between">
                             <div>
-                              <h4 className="text-sm font-semibold">{getDescription(occurrence)}</h4>
+                              <h4 className="text-sm font-semibold">{occurrence.description}</h4>
                               <p className="text-sm text-muted-foreground">
                                 {t('referenceCode')}: {occurrence.id}
                               </p>

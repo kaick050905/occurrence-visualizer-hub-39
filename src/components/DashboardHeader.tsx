@@ -40,10 +40,7 @@ const DashboardHeader: React.FC = () => {
       <Card className="mb-6 p-4 flex justify-between items-center bg-opacity-90 backdrop-blur-sm shadow-md">
         <div className="flex items-center gap-3">
           <motion.img 
-            src={theme === "dark" 
-              ? "/lovable-uploads/a5d7aa3e-eca6-421e-b508-7cbc0a559f2a.png" 
-              : "/lovable-uploads/fcf12f31-12c0-4ba3-9909-00dfc69ade2e.png"
-            } 
+            src="/lovable-uploads/fcf12f31-12c0-4ba3-9909-00dfc69ade2e.png" 
             alt="Info SP Logo" 
             className="h-12 md:h-14"
             whileHover={{ scale: 1.05 }}

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define os idiomas suportados
@@ -813,68 +812,6 @@ export const translations: Translations = {
     pt: 'Ver detalhes da região',
     en: 'View region details',
     es: 'Ver detalles de la región'
-  },
-  // Occurrence types translations
-  vehicleTheft: {
-    pt: 'Furto de Veículo',
-    en: 'Vehicle Theft',
-    es: 'Robo de Vehículo'
-  },
-  lackOfPublicLighting: {
-    pt: 'Falta de iluminação pública',
-    en: 'Lack of public lighting',
-    es: 'Falta de iluminación pública'
-  },
-  trafficAccident: {
-    pt: 'Acidente de Trânsito',
-    en: 'Traffic Accident',
-    es: 'Accidente de Tráfico'
-  },
-  propertyInvasion: {
-    pt: 'Invasão de Propriedade',
-    en: 'Property Invasion',
-    es: 'Invasión de Propiedad'
-  },
-  publicBuildingVandalism: {
-    pt: 'Vandalismo em Prédio Público',
-    en: 'Public Building Vandalism',
-    es: 'Vandalismo en Edificio Público'
-  },
-  // OccurrenceDetails translations
-  completeDetailsAbout: {
-    pt: 'Detalhes completos sobre esta ocorrência',
-    en: 'Complete details about this occurrence',
-    es: 'Detalles completos sobre esta ocurrencia'
-  },
-  totalRecorded: {
-    pt: 'Total Registrado',
-    en: 'Total Recorded',
-    es: 'Total Registrado'
-  },
-  totalIn2024: {
-    pt: 'Total em 2024',
-    en: 'Total in 2024',
-    es: 'Total en 2024'
-  },
-  growth20232024: {
-    pt: 'Crescimento (2023-2024)',
-    en: 'Growth (2023-2024)',
-    es: 'Crecimiento (2023-2024)'
-  },
-  top5Cities: {
-    pt: 'Top 5 Cidades',
-    en: 'Top 5 Cities',
-    es: 'Top 5 Ciudades'
-  },
-  city: {
-    pt: 'Cidade',
-    en: 'City',
-    es: 'Ciudad'
-  },
-  growthByYear: {
-    pt: 'Crescimento por Ano',
-    en: 'Growth by Year',
-    es: 'Crecimiento por Año'
   }
 };
 

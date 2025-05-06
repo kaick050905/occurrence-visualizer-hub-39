@@ -459,6 +459,8 @@ export const translations: Translations = {
     en: 'Occurrences in 2024',
     es: 'Ocurrencias en 2024'
   },
+
+  
   // NotFound page
   notFoundTitle: {
     pt: '404',
@@ -874,7 +876,122 @@ export const translations: Translations = {
     pt: 'Vandalismo em Prédio Público',
     en: 'Vandalism in Public Building',
     es: 'Vandalismo en Edificio Público'
-  }
+  },
+  intentionalHomicide: {
+  pt: 'Homicídio Doloso',
+  en: 'Intentional Homicide',
+  es: 'Homicidio Doloso'
+},
+intentionalHomicideVictims: {
+  pt: 'Vítimas Homicídio Doloso',
+  en: 'Intentional Homicide Victims',
+  es: 'Víctimas de Homicidio Doloso'
+},
+trafficIntentionalHomicide: {
+  pt: 'Homicídio Doloso Trânsito',
+  en: 'Traffic Intentional Homicide',
+  es: 'Homicidio Doloso en el Tránsito'
+},
+trafficIntentionalHomicideVictims: {
+  pt: 'Vítimas Homicídio Doloso Trânsito',
+  en: 'Traffic Intentional Homicide Victims',
+  es: 'Víctimas de Homicidio Doloso en el Tránsito'
+},
+trafficNegligentHomicide: {
+  pt: 'Homicídio Culposo Trânsito',
+  en: 'Traffic Negligent Homicide',
+  es: 'Homicidio Culposo en el Tránsito'
+},
+otherNegligentHomicide: {
+  pt: 'Homicídio Culposo Outros',
+  en: 'Other Negligent Homicide',
+  es: 'Otros Homicidios Culposos'
+},
+attemptedHomicide: {
+  pt: 'Tentativa de Homicídio',
+  en: 'Attempted Homicide',
+  es: 'Intento de Homicidio'
+},
+bodilyInjuryWithDeath: {
+  pt: 'Lesão Corporal c/ Morte',
+  en: 'Bodily Injury with Death',
+  es: 'Lesión Corporal con Muerte'
+},
+intentionalBodilyInjury: {
+  pt: 'Lesão Corporal Dolosa',
+  en: 'Intentional Bodily Injury',
+  es: 'Lesión Corporal Dolosa'
+},
+trafficNegligentInjury: {
+  pt: 'Lesão Culposa Trânsito',
+  en: 'Traffic Negligent Injury',
+  es: 'Lesión Culposa en el Tránsito'
+},
+otherNegligentInjury: {
+  pt: 'Lesão Culposa Outros',
+  en: 'Other Negligent Injury',
+  es: 'Otras Lesiones Culposas'
+},
+robberyHomicide: {
+  pt: 'Latrocínio',
+  en: 'Robbery Homicide',
+  es: 'Homicidio en Robo'
+},
+robberyHomicideVictims: {
+  pt: 'Vítimas Latrocínio',
+  en: 'Robbery Homicide Victims',
+  es: 'Víctimas de Homicidio en Robo'
+},
+totalRape: {
+  pt: 'Total Estupro',
+  en: 'Total Rape',
+  es: 'Total de Violaciones'
+},
+rape: {
+  pt: 'Estupro',
+  en: 'Rape',
+  es: 'Violación'
+},
+childRape: {
+  pt: 'Estupro Vulnerável',
+  en: 'Child Rape',
+  es: 'Violación de Menor'
+},
+totalRobbery: {
+  pt: 'Total Roubo',
+  en: 'Total Robbery',
+  es: 'Total de Robos'
+},
+otherRobbery: {
+  pt: 'Roubo Outros',
+  en: 'Other Robbery',
+  es: 'Otros Robos'
+},
+vehicleRobbery: {
+  pt: 'Roubo Veículo',
+  en: 'Vehicle Robbery',
+  es: 'Robo de Vehículo'
+},
+bankRobbery: {
+  pt: 'Roubo Banco',
+  en: 'Bank Robbery',
+  es: 'Robo a Banco'
+},
+cargoRobbery: {
+  pt: 'Roubo Carga',
+  en: 'Cargo Robbery',
+  es: 'Robo de Carga'
+},
+otherTheft: {
+  pt: 'Furto Outros',
+  en: 'Other Theft',
+  es: 'Otros Hurtos'
+},
+vehicleTheft: {
+  pt: 'Furto Veículo',
+  en: 'Vehicle Theft',
+  es: 'Hurto de Vehículo'
+}
 };
 
 interface LanguageContextProps {

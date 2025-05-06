@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
       // Dark theme logos
       switch (language) {
         case 'en':
-          return "/lovable-uploads/d600f854-bfa6-4afa-907c-b3886c0bb55f.png";
+          return "/lovable-uploads/437e2150-de75-46b9-9253-24be1f5a459f.png";
         case 'es':
           return "/lovable-uploads/e09f8826-ca9a-4ad5-8c5c-044da129304a.png"; // Nova imagem em espanhol para tema escuro
         case 'pt':

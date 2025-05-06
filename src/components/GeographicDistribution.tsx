@@ -67,6 +67,18 @@ const GeographicDistribution: React.FC = () => {
     return status;
   };
   
+  // Função para traduzir nome de ocorrências
+  const translateOccurrenceName = (name: string) => {
+    switch(name) {
+      case "Furto": return t('theft');
+      case "Roubo": return t('robbery');
+      case "Acidente de Trânsito": return t('trafficAccident');
+      case "Invasão": return t('propertyInvasion');
+      case "Vandalismo": return t('publicPropertyVandalism');
+      default: return name;
+    }
+  };
+  
   // Tradução dos dados para exibição conforme o idioma
   const translatedRegionsData = regionsData.map(region => ({
     ...region,
@@ -75,6 +87,7 @@ const GeographicDistribution: React.FC = () => {
   
   const translatedOccurrencesData = occurrenceTypesData.map(type => ({
     ...type,
+    nameTrans: translateOccurrenceName(type.name),
     statusTrans: getStatus(type.status)
   }));
 
@@ -117,7 +130,7 @@ const GeographicDistribution: React.FC = () => {
               {translatedOccurrencesData.slice(0, 10).map((type) => (
                 <div key={type.name}>
                   <div className="flex items-center justify-between mb-1">
-                    <div className="font-medium">{type.name}</div>
+                    <div className="font-medium">{type.nameTrans}</div>
                     <div className="text-sm text-muted-foreground">{type.count} {t('occurrences')}</div>
                   </div>
                   <div className="flex items-center gap-2">

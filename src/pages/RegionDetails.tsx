@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -185,6 +184,7 @@ const regionHumanNames: Record<string, string> = {
 const years = ["2019", "2020", "2021", "2022", "2023", "2024"];
 const pieColors = ["#3B82F6", "#EF4444", "#F59E0B", "#10B981"];
 
+// Função para obter cor do IDH
 const getHDIColor = (hdi: number): string => {
   if (hdi >= 0.8) return "text-green-600 dark:text-green-400";
   if (hdi >= 0.7) return "text-yellow-600 dark:text-yellow-400";
@@ -193,7 +193,7 @@ const getHDIColor = (hdi: number): string => {
 };
 
 // Custom chart tooltip for dark mode support
-const CustomTooltip = ({ active, payload, label, theme }: any) => {
+const CustomTooltip = ({ active, payload, label, theme, language, t }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className={`p-2 border rounded shadow-sm ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-gray-800'}`}>
@@ -213,7 +213,7 @@ const RegionDetails: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const unescapedName = name ? decodeURIComponent(name) : undefined;
   const regionCrimes = unescapedName ? crimesDataByRegion[unescapedName] : undefined;
@@ -242,16 +242,16 @@ const RegionDetails: React.FC = () => {
     year,
     [t('theft')]: regionCrimes.Furto[i],
     [t('robbery')]: regionCrimes.Roubo[i],
-    "Estupro": regionCrimes.Estupro[i],
-    "Homicídio": regionCrimes["Homicídio"][i],
+    [t('rape')]: regionCrimes.Estupro[i],
+    [t('homicide')]: regionCrimes["Homicídio"][i],
   }));
 
   const lastYearIndex = regionCrimes.Furto.length - 1;
   const pieData = [
     { name: t('theft'), value: regionCrimes.Furto[lastYearIndex] },
     { name: t('robbery'), value: regionCrimes.Roubo[lastYearIndex] },
-    { name: "Estupro", value: regionCrimes.Estupro[lastYearIndex] },
-    { name: "Homicídio", value: regionCrimes["Homicídio"][lastYearIndex] },
+    { name: t('rape'), value: regionCrimes.Estupro[lastYearIndex] },
+    { name: t('homicide'), value: regionCrimes["Homicídio"][lastYearIndex] },
   ];
 
   return (
@@ -317,12 +317,12 @@ const RegionDetails: React.FC = () => {
                     <BarChart data={barData}>
                       <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                       <Legend />
                       <Bar dataKey={t('theft')} fill="#3B82F6" />
                       <Bar dataKey={t('robbery')} fill="#EF4444" />
-                      <Bar dataKey="Estupro" fill="#F59E0B" />
-                      <Bar dataKey="Homicídio" fill="#10B981" />
+                      <Bar dataKey={t('rape')} fill="#F59E0B" />
+                      <Bar dataKey={t('homicide')} fill="#10B981" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -347,12 +347,12 @@ const RegionDetails: React.FC = () => {
                     <RLineChart data={barData}>
                       <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                       <Legend />
                       <Line type="monotone" dataKey={t('theft')} stroke="#3B82F6" strokeWidth={2} />
                       <Line type="monotone" dataKey={t('robbery')} stroke="#EF4444" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Estupro" stroke="#F59E0B" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Homicídio" stroke="#10B981" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('rape')} stroke="#F59E0B" strokeWidth={2} />
+                      <Line type="monotone" dataKey={t('homicide')} stroke="#10B981" strokeWidth={2} />
                     </RLineChart>
                   </ResponsiveContainer>
                 </div>
@@ -389,7 +389,7 @@ const RegionDetails: React.FC = () => {
                           <Cell key={`cell-${entry.name}`} fill={pieColors[i % pieColors.length]} />
                         ))}
                       </Pie>
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                     </RCPieChart>
                   </ResponsiveContainer>
                 </div>

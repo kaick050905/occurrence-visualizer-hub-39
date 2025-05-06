@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -91,7 +90,7 @@ const years = ["2019", "2020", "2021", "2022", "2023", "2024"];
 const pieColors = ["#3B82F6", "#EF4444", "#F59E0B", "#10B981"];
 
 // Custom chart tooltip for dark mode support
-const CustomTooltip = ({ active, payload, label, theme }: any) => {
+const CustomTooltip = ({ active, payload, label, theme, language, t }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className={`p-2 border rounded shadow-sm ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-gray-800'}`}>
@@ -111,7 +110,7 @@ const CityDetails: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const unescapedName = name ? decodeURIComponent(name) : undefined;
   const cityCrimes = unescapedName ? crimesDataByCity[unescapedName] : undefined;
@@ -139,8 +138,8 @@ const CityDetails: React.FC = () => {
     year,
     [t('theft')]: cityCrimes.Furto[i],
     [t('robbery')]: cityCrimes.Roubo[i],
-    "Estupro": cityCrimes.Estupro[i],
-    "Homicídio": cityCrimes["Homicídio"][i],
+    [t('rape')]: cityCrimes.Estupro[i],
+    [t('homicide')]: cityCrimes["Homicídio"][i],
   }));
 
   const lastYearIndex = cityCrimes.Furto.length - 1;
@@ -180,7 +179,7 @@ const CityDetails: React.FC = () => {
                     <BarChart data={barData}>
                       <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                       <Legend />
                       <Bar dataKey={t('theft')} fill="#3B82F6" />
                       <Bar dataKey={t('robbery')} fill="#EF4444" />
@@ -197,7 +196,7 @@ const CityDetails: React.FC = () => {
                     <RLineChart data={barData}>
                       <XAxis dataKey="year" stroke={theme === 'dark' ? '#aaa' : '#333'} />
                       <YAxis stroke={theme === 'dark' ? '#aaa' : '#333'} />
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                       <Legend />
                       <Line type="monotone" dataKey={t('theft')} stroke="#3B82F6" strokeWidth={2} />
                       <Line type="monotone" dataKey={t('robbery')} stroke="#EF4444" strokeWidth={2} />
@@ -226,7 +225,7 @@ const CityDetails: React.FC = () => {
                           <Cell key={`cell-${entry.name}`} fill={pieColors[i % pieColors.length]} />
                         ))}
                       </Pie>
-                      <Tooltip content={<CustomTooltip theme={theme} />} />
+                      <Tooltip content={<CustomTooltip theme={theme} language={language} t={t} />} />
                     </RCPieChart>
                   </ResponsiveContainer>
                 </div>

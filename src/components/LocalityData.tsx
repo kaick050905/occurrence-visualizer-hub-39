@@ -98,7 +98,7 @@ const regionsData = [
     percentage: 4.28,
     status: "Crítica",
     population: "2.18 milhões",
-    hdi: 0.72,
+    hdi: 0.720,
     occurrences2024: 55483
   },
   {

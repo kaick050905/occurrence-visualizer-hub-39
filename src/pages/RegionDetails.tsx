@@ -181,7 +181,7 @@ const regionHumanNames: Record<string, string> = {
   "Sorocaba": "Sorocaba"
 };
 
-const years = ["2022", "2023", "2024, "2025"];
+const years = ["2022", "2023", "2024", "2025"];
 const pieColors = ["#3B82F6", "#EF4444", "#F59E0B", "#10B981"];
 
 // Função para obter cor do IDH

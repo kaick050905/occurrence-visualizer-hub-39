@@ -36,7 +36,7 @@ const crimesDataByRegion: Record<string, { [crime: string]: number[] }> = {
     Estupro: [1057, 1233, 1159, 111],
     Homicídio: [252, 205, 178, 20],
   },
-  "São jose dos Campos": {
+  "São José dos Campos": {
     Furto: [25763, 25572, 23617, 2170],
     Roubo: [4601, 4406, 3630, 294],
     Estupro: [724, 793, 810, 80],

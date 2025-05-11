@@ -84,7 +84,7 @@ const crimesDataByRegion: Record<string, { [crime: string]: number[] }> = {
     Estupro: [1108, 1222, 1189, 97],
     Homicídio: [234, 226, 208, 12],
   },
-  "São José do Rio Preto ": {
+  "São José do Rio Preto": {
     Furto: [8723, 8601, 9036, 1415],
     Roubo: [1193, 1035, 904, 64],
     Estupro: [696, 762, 731, 51],

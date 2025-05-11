@@ -111,7 +111,7 @@ const regionsData = [
     occurrences2024: 21838
   },
   {
-    name: "São jose dos campos",
+    name: "São José dos Campos",
     count: 46782,
     percentage: 3.61,
     status: "Crítica",

@@ -1,4 +1,3 @@
-
 import React from "react";
 import DashboardHeader from "@/components/DashboardHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -26,6 +25,12 @@ const Reports: React.FC = () => {
   const { t } = useLanguage();
   
   const handleDownloadReport = () => {
+    const link = document.createElement('a');
+    link.href = '/lovable-uploads/Dados.xlsx';
+    link.download = 'Dados.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     toast.success(t('downloadStarted'));
   };
 

@@ -115,7 +115,19 @@ const translations = {
     ofTotalRecorded: "do total registrado",
     showingOf: "Mostrando",
     of: "de",
-    viewAll: "Ver Todos"
+    viewAll: "Ver Todos",
+    notFoundTitle: "Página Não Encontrada",
+    pageNotFound: "A página que você está procurando não existe.",
+    returnToHome: "Voltar ao Início",
+    securityDepartment: "Secretaria da Segurança Pública",
+    allDataFrom: "Todos os dados são provenientes da",
+    copyright: "© 2024 Info SP. Todos os direitos reservados.",
+    language: "Idioma",
+    portuguese: "Português",
+    english: "English",
+    spanish: "Español",
+    darkMode: "Modo Escuro",
+    lightMode: "Modo Claro"
   },
   en: {
     dashboard: "Dashboard",
@@ -222,7 +234,19 @@ const translations = {
     ofTotalRecorded: "of total recorded",
     showingOf: "Showing",
     of: "of",
-    viewAll: "View All"
+    viewAll: "View All",
+    notFoundTitle: "Page Not Found",
+    pageNotFound: "The page you are looking for does not exist.",
+    returnToHome: "Return to Home",
+    securityDepartment: "Department of Public Security",
+    allDataFrom: "All data is from the",
+    copyright: "© 2024 Info SP. All rights reserved.",
+    language: "Language",
+    portuguese: "Português",
+    english: "English",
+    spanish: "Español",
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode"
   },
   es: {
     dashboard: "Panel",
@@ -329,7 +353,19 @@ const translations = {
     ofTotalRecorded: "del total registrado",
     showingOf: "Mostrando",
     of: "de",
-    viewAll: "Ver Todos"
+    viewAll: "Ver Todos",
+    notFoundTitle: "Página No Encontrada",
+    pageNotFound: "La página que estás buscando no existe.",
+    returnToHome: "Volver al Inicio",
+    securityDepartment: "Secretaría de Seguridad Pública",
+    allDataFrom: "Todos los datos provienen de la",
+    copyright: "© 2024 Info SP. Todos los derechos reservados.",
+    language: "Idioma",
+    portuguese: "Português",
+    english: "English",
+    spanish: "Español",
+    darkMode: "Modo Oscuro",
+    lightMode: "Modo Claro"
   }
 };
 

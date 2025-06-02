@@ -1,594 +1,1043 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+// Define os idiomas suportados
+export type Language = 'pt' | 'en' | 'es';
 
-interface LanguageContextType {
-  language: string;
-  setLanguage: (lang: string) => void;
+// Interface para as traduções
+export interface Translations {
+  [key: string]: {
+    [key: string]: string;
+  };
+}
+
+// Traduções para os componentes da aplicação
+export const translations: Translations = {
+  dashboard: {
+    pt: 'Painel',
+    en: 'Dashboard',
+    es: 'Panel'
+  },
+  reports: {
+    pt: 'Relatórios',
+    en: 'Reports',
+    es: 'Informes'
+  },
+  about: {
+    pt: 'Sobre o projeto',
+    en: 'About the project',
+    es: 'Sobre el proyecto'
+  },
+  dangerousCity: {
+    pt: 'Cidade Mais Perigosa',
+    en: 'Most Dangerous City',
+    es: 'Ciudad Más Peligrosa'
+  },
+  safeCity: {
+    pt: 'Cidade Mais Segura',
+    en: 'Safest City',
+    es: 'Ciudad Más Segura'
+  },
+  dangerousRegion: {
+    pt: 'Região Mais Perigosa',
+    en: 'Most Dangerous Region',
+    es: 'Región Más Peligrosa'
+  },
+  safeRegion: {
+    pt: 'Região Mais Segura',
+    en: 'Safest Region',
+    es: 'Región Más Segura'
+  },
+  theft: {
+    pt: 'Furto',
+    en: 'Theft',
+    es: 'Hurto'
+  },
+  rape: {
+    pt: 'Estupro',
+    en: 'Rape',
+    es: 'Violación'
+  },
+  homicide: {
+    pt: 'Homicídio',
+    en: 'Homicide',
+    es: 'Asesinato'
+  },
+  robbery: {
+    pt: 'Roubo',
+    en: 'Robbery',
+    es: 'Robo'
+  },
+  numberOfThefts: {
+    pt: 'Número de Furtos',
+    en: 'Number of Thefts',
+    es: 'Número de Hurtos'
+  },
+  numberOfRobberies: {
+    pt: 'Número de Roubos',
+    en: 'Number of Robberies',
+    es: 'Número de Robos'
+  },
+  annualGrowth: {
+    pt: 'crescimento anual',
+    en: 'annual growth',
+    es: 'crecimiento anual'
+  },
+  geographicDistribution: {
+    pt: 'Distribuição Geográfica',
+    en: 'Geographic Distribution',
+    es: 'Distribución Geográfica'
+  },
+  localityData: {
+    pt: 'Dados por Localidade',
+    en: 'Locality Data',
+    es: 'Datos por Localidad'
+  },
+  recentOccurrences: {
+    pt: 'Ocorrências Recentes',
+    en: 'Recent Occurrences',
+    es: 'Ocurrencias Recientes'
+  },
+  occurrenceCharts: {
+    pt: 'Gráficos de Ocorrências',
+    en: 'Occurrence Charts',
+    es: 'Gráficos de Ocurrencias'
+  },
+  lightMode: {
+    pt: 'Modo claro',
+    en: 'Light mode',
+    es: 'Modo claro'
+  },
+  darkMode: {
+    pt: 'Modo escuro',
+    en: 'Dark mode',
+    es: 'Modo oscuro'
+  },
+  language: {
+    pt: 'Idioma',
+    en: 'Language',
+    es: 'Idioma'
+  },
+  portuguese: {
+    pt: 'Português',
+    en: 'Portuguese',
+    es: 'Portugués'
+  },
+  english: {
+    pt: 'Inglês',
+    en: 'English',
+    es: 'Inglés'
+  },
+  spanish: {
+    pt: 'Espanhol',
+    en: 'Spanish',
+    es: 'Español'
+  },
+  // Novas traduções para todas as páginas
+  // Reports page
+  availableReports: {
+    pt: 'Relatórios Disponíveis',
+    en: 'Available Reports',
+    es: 'Informes Disponibles'
+  },
+  accessSystemReports: {
+    pt: 'Acesse os relatórios do sistema',
+    en: 'Access system reports',
+    es: 'Acceder a los informes del sistema'
+  },
+  downloadSpreadsheet: {
+    pt: 'Baixar Planilha',
+    en: 'Download Spreadsheet',
+    es: 'Descargar Hoja de Cálculo'
+  },
+  accessAndExport: {
+    pt: 'Acesse e exporte relatórios de segurança e ocorrências',
+    en: 'Access and export security and occurrence reports',
+    es: 'Accede y exporta informes de seguridad y ocurrencias'
+  },
+  reportID: {
+    pt: 'ID',
+    en: 'ID',
+    es: 'ID'
+  },
+  reportTitle: {
+    pt: 'Título',
+    en: 'Title',
+    es: 'Título'
+  },
+  reportDate: {
+    pt: 'Data',
+    en: 'Date',
+    es: 'Fecha'
+  },
+  reportType: {
+    pt: 'Tipo',
+    en: 'Type',
+    es: 'Tipo'
+  },
+  reportStatus: {
+    pt: 'Status',
+    en: 'Status',
+    es: 'Estado'
+  },
+  reportAction: {
+    pt: 'Ação',
+    en: 'Action',
+    es: 'Acción'
+  },
+  download: {
+    pt: 'Baixar',
+    en: 'Download',
+    es: 'Descargar'
+  },
+  available: {
+    pt: 'Disponível',
+    en: 'Available',
+    es: 'Disponible'
+  },
+  monthly: {
+    pt: 'Mensal',
+    en: 'Monthly',
+    es: 'Mensual'
+  },
+  monthlyAnalysis: {
+    pt: 'Análise mensal de ocorrências',
+    en: 'Monthly occurrence analysis',
+    es: 'Análisis mensual de ocurrencias'
+  },
+  downloadStarted: {
+    pt: 'Download da planilha iniciado',
+    en: 'Spreadsheet download started',
+    es: 'Descarga de la hoja de cálculo iniciada'
+  },
+  // Geographic Distribution
+  distribution: {
+    pt: 'Distribuição',
+    en: 'Distribution',
+    es: 'Distribución'
+  },
+  byRegion: {
+    pt: 'Por Região',
+    en: 'By Region',
+    es: 'Por Región'
+  },
+  byType: {
+    pt: 'Por Tipo',
+    en: 'By Type',
+    es: 'Por Tipo'
+  },
+  occurrences: {
+    pt: 'ocorrências',
+    en: 'occurrences',
+    es: 'ocurrencias'
+  },
+  // Regional Data
+  regionalData: {
+    pt: 'Dados por Região',
+    en: 'Regional Data',
+    es: 'Datos Regionales'
+  },
+  detailedAnalysis: {
+    pt: 'Análise detalhada de ocorrências por região e bairro',
+    en: 'Detailed analysis of occurrences by region and neighborhood',
+    es: 'Análisis detallado de ocurrencias por región y barrio'
+  },
+  regions: {
+    pt: 'Regiões',
+    en: 'Regions',
+    es: 'Regiones'
+  },
+  occurrencesByRegion: {
+    pt: 'Distribuição de ocorrências por região',
+    en: 'Distribution of occurrences by region',
+    es: 'Distribución de ocurrencias por región'
+  },
+  neighborhoods: {
+    pt: 'Bairros',
+    en: 'Neighborhoods',
+    es: 'Barrios'
+  },
+  clearFilter: {
+    pt: 'Limpar Filtro',
+    en: 'Clear Filter',
+    es: 'Limpiar Filtro'
+  },
+  searchNeighborhood: {
+    pt: 'Pesquisar bairro...',
+    en: 'Search neighborhood...',
+    es: 'Buscar barrio...'
+  },
+  occurrencesInNeighborhoods: {
+    pt: 'Ocorrências em bairros da',
+    en: 'Occurrences in neighborhoods of',
+    es: 'Ocurrencias en barrios de'
+  },
+  occurrencesByNeighborhood: {
+    pt: 'Ocorrências por bairro em todas as regiões',
+    en: 'Occurrences by neighborhood in all regions',
+    es: 'Ocurrencias por barrio en todas las regiones'
+  },
+  noNeighborhood: {
+    pt: 'Nenhum bairro encontrado',
+    en: 'No neighborhood found',
+    es: 'No se encontró ningún barrio'
+  },
+  heatMap: {
+    pt: 'Mapa de Calor',
+    en: 'Heat Map',
+    es: 'Mapa de Calor'
+  },
+  geographicVisualization: {
+    pt: 'Visualização geográfica das ocorrências por região',
+    en: 'Geographic visualization of occurrences by region',
+    es: 'Visualización geográfica de ocurrencias por región'
+  },
+  mapInDevelopment: {
+    pt: 'Mapa em desenvolvimento',
+    en: 'Map in development',
+    es: 'Mapa en desarrollo'
+  },
+  heatMapSoon: {
+    pt: 'O mapa de calor com visualização geográfica das ocorrências estará disponível em breve.',
+    en: 'The heat map with geographic visualization of occurrences will be available soon.',
+    es: 'El mapa de calor con visualización geográfica de las ocurrencias estará disponible pronto.'
+  },
+  // Recent Occurrences
+  mostRecurringOccurrences: {
+    pt: 'Ocorrências Mais Recorrentes',
+    en: 'Most Recurring Occurrences',
+    es: 'Ocurrencias Más Recurrentes'
+  },
+  mostFrequentTypes: {
+    pt: 'Tipos de ocorrências mais frequentes no sistema',
+    en: 'Most frequent types of occurrences in the system',
+    es: 'Tipos de ocurrencias más frecuentes en el sistema'
+  },
+  filter: {
+    pt: 'Filtrar',
+    en: 'Filter',
+    es: 'Filtrar'
+  },
+  filterByLevel: {
+    pt: 'Filtrar por nível',
+    en: 'Filter by level',
+    es: 'Filtrar por nivel'
+  },
+  typeId: {
+    pt: 'ID Tipo',
+    en: 'Type ID',
+    es: 'ID Tipo'
+  },
+  description: {
+    pt: 'Descrição',
+    en: 'Description',
+    es: 'Descripción'
+  },
+  level: {
+    pt: 'Nível',
+    en: 'Level',
+    es: 'Nivel'
+  },
+  totalOccurrences: {
+    pt: 'Total Ocorrências',
+    en: 'Total Occurrences',
+    es: 'Total Ocurrencias'
+  },
+  showingOf: {
+    pt: 'Mostrando',
+    en: 'Showing',
+    es: 'Mostrando'
+  },
+  of: {
+    pt: 'de',
+    en: 'of',
+    es: 'de'
+  },
+  viewAll: {
+    pt: 'Ver Todas',
+    en: 'View All',
+    es: 'Ver Todas'
+  },
+  referenceCode: {
+    pt: 'Código de referência',
+    en: 'Reference code',
+    es: 'Código de referencia'
+  },
+  occurrencePercentage: {
+    pt: 'Este tipo de ocorrência representa',
+    en: 'This type of occurrence represents',
+    es: 'Este tipo de ocurrencia representa'
+  },
+  ofTotalRecorded: {
+    pt: 'do total registrado',
+    en: 'of the total recorded',
+    es: 'del total registrado'
+  },
+  // Critical, High, Medium, Low
+  critical: {
+    pt: 'Crítica',
+    en: 'Critical',
+    es: 'Crítica'
+  },
+  high: {
+    pt: 'Alta',
+    en: 'High',
+    es: 'Alta'
+  },
+  medium: {
+    pt: 'Média',
+    en: 'Medium',
+    es: 'Media'
+  },
+  low: {
+    pt: 'Baixa',
+    en: 'Low',
+    es: 'Baja'
+  },
+  // City and Region Details
+  cityDetails: {
+    pt: 'Detalhes da Cidade',
+    en: 'City Details',
+    es: 'Detalles de la Ciudad'
+  },
+  regionDetails: {
+    pt: 'Detalhes da Região',
+    en: 'Region Details',
+    es: 'Detalles de la Región'
+  },
+  recordedCrimes: {
+    pt: 'Números de crimes registrados e gráficos detalhados dos últimos anos',
+    en: 'Numbers of recorded crimes and detailed charts from recent years',
+    es: 'Números de delitos registrados y gráficos detallados de los últimos años'
+  },
+  bars: {
+    pt: 'Barras',
+    en: 'Bars',
+    es: 'Barras'
+  },
+  lines: {
+    pt: 'Linhas',
+    en: 'Lines',
+    es: 'Líneas'
+  },
+  pie: {
+    pt: 'Pizza',
+    en: 'Pie',
+    es: 'Circular'
+  },
+  cities: {
+    pt: 'Cidades',
+    en: 'Cities',
+    es: 'Ciudades'
+  },
+  crimesByYear: {
+    pt: 'Crimes por Ano',
+    en: 'Crimes by Year',
+    es: 'Crímenes por Año'
+  },
+  temporalEvolution: {
+    pt: 'Evolução Temporal',
+    en: 'Temporal Evolution',
+    es: 'Evolución Temporal'
+  },
+  distributionByType: {
+    pt: 'Distribuição por Tipo',
+    en: 'Distribution by Type',
+    es: 'Distribución por Tipo'
+  },
+  citiesOfRegion: {
+    pt: 'Cidades da Região',
+    en: 'Cities of the Region',
+    es: 'Ciudades de la Región'
+  },
+  population: {
+    pt: 'População',
+    en: 'Population',
+    es: 'Población'
+  },
+  occurrencesIn2024: {
+    pt: 'Ocorrências em 2024',
+    en: 'Occurrences in 2024',
+    es: 'Ocurrencias en 2024'
+  },
+
+  
+  // NotFound page
+  notFoundTitle: {
+    pt: '404',
+    en: '404',
+    es: '404'
+  },
+  pageNotFound: {
+    pt: 'Oops! Página não encontrada',
+    en: 'Oops! Page not found',
+    es: 'Oops! Página no encontrada'
+  },
+  returnToHome: {
+    pt: 'Retornar à Página Inicial',
+    en: 'Return to Home',
+    es: 'Volver al Inicio'
+  },
+  // About page
+  projectInfoSP: {
+    pt: '🔍 Projeto INFOSP',
+    en: '🔍 INFOSP Project',
+    es: '🔍 Proyecto INFOSP'
+  },
+  mappingAndAnalysis: {
+    pt: 'Mapeamento e Análise Preditiva de Ocorrências Criminais no Estado de São Paulo',
+    en: 'Mapping and Predictive Analysis of Criminal Occurrences in the State of São Paulo',
+    es: 'Mapeo y Análisis Predictivo de Ocurrencias Criminales en el Estado de São Paulo'
+  },
+  generalObjective: {
+    pt: 'Objetivo Geral',
+    en: 'General Objective',
+    es: 'Objetivo General'
+  },
+  generalObjectiveDesc: {
+    pt: 'Desenvolver uma plataforma interativa que reúna, organize e exiba dados públicos sobre ocorrências criminais no Estado de São Paulo. A plataforma utiliza recursos visuais, como mapas, gráficos e dashboards, além de ferramentas de análise preditiva que ajudam a identificar padrões e tendências criminais.',
+    en: 'Develop an interactive platform that collects, organizes, and displays public data on criminal occurrences in the State of São Paulo. The platform uses visual resources, such as maps, charts, and dashboards, as well as predictive analysis tools that help identify criminal patterns and trends.',
+    es: 'Desarrollar una plataforma interactiva que reúna, organice y muestre datos públicos sobre ocurrencias criminales en el Estado de São Paulo. La plataforma utiliza recursos visuales, como mapas, gráficos y paneles, además de herramientas de análisis predictivo que ayudan a identificar patrones y tendencias criminales.'
+  },
+  technologiesAndFeatures: {
+    pt: 'Tecnologias e Funcionalidades',
+    en: 'Technologies and Features',
+    es: 'Tecnologías y Funcionalidades'
+  },
+  geolocation: {
+    pt: 'Geolocalização e mapas de calor com base em ocorrências registradas',
+    en: 'Geolocation and heat maps based on registered occurrences',
+    es: 'Geolocalización y mapas de calor basados en ocurrencias registradas'
+  },
+  interactiveDashboards: {
+    pt: 'Dashboards interativos com gráficos atualizados',
+    en: 'Interactive dashboards with updated charts',
+    es: 'Paneles interactivos con gráficos actualizados'
+  },
+  temporalAnalysis: {
+    pt: 'Análise temporal para identificação de sazonalidades',
+    en: 'Temporal analysis for seasonality identification',
+    es: 'Análisis temporal para identificación de estacionalidades'
+  },
+  predictiveAlgorithms: {
+    pt: 'Algoritmos preditivos para análise de risco',
+    en: 'Predictive algorithms for risk analysis',
+    es: 'Algoritmos predictivos para análisis de riesgo'
+  },
+  responsiveDesign: {
+    pt: 'Design responsivo em qualquer dispositivo',
+    en: 'Responsive design on any device',
+    es: 'Diseño responsivo en cualquier dispositivo'
+  },
+  specificObjectives: {
+    pt: 'Objetivos Específicos',
+    en: 'Specific Objectives',
+    es: 'Objetivos Específicos'
+  },
+  collectData: {
+    pt: 'Coletar e organizar dados públicos de segurança, com base em fontes como o dados.gov.br',
+    en: 'Collect and organize public security data, based on sources such as dados.gov.br',
+    es: 'Recopilar y organizar datos públicos de seguridad, basados en fuentes como dados.gov.br'
+  },
+  buildInterface: {
+    pt: 'Construir uma interface gráfica responsiva e intuitiva, acessível em diversos dispositivos',
+    en: 'Build a responsive and intuitive graphical interface, accessible on various devices',
+    es: 'Construir una interfaz gráfica receptiva e intuitiva, accesible en varios dispositivos'
+  },
+  implementFilters: {
+    pt: 'Implementar filtros por tipo de ocorrência, período, localização e outros critérios relevantes',
+    en: 'Implement filters by type of occurrence, period, location, and other relevant criteria',
+    es: 'Implementar filtros por tipo de ocurrencia, período, ubicación y otros criterios relevantes'
+  },
+  applyVisualization: {
+    pt: 'Aplicar ferramentas de visualização de dados como dashboards, gráficos dinâmicos e mapas interativos',
+    en: 'Apply data visualization tools such as dashboards, dynamic charts, and interactive maps',
+    es: 'Aplicar herramientas de visualización de datos como paneles, gráficos dinámicos y mapas interactivos'
+  },
+  usePredictive: {
+    pt: 'Utilizar técnicas de análise preditiva para antecipar possíveis focos de criminalidade',
+    en: 'Use predictive analysis techniques to anticipate possible crime hotspots',
+    es: 'Utilizar técnicas de análisis predictivo para anticipar posibles focos de criminalidad'
+  },
+  projectTeam: {
+    pt: 'Equipe do Projeto',
+    en: 'Project Team',
+    es: 'Equipo del Proyecto'
+  },
+  teamDescription: {
+    pt: 'Este projeto é uma iniciativa dos alunos do curso de Análise e Desenvolvimento de Sistemas do Centro Universitário FACENS, desenvolvido como parte da disciplina UPX2 - Usina de Projetos Experimentais II.',
+    en: 'This project is an initiative of students from the Systems Analysis and Development course at FACENS University Center, developed as part of the UPX2 - Experimental Projects Plant II discipline.',
+    es: 'Este proyecto es una iniciativa de estudiantes del curso de Análisis y Desarrollo de Sistemas del Centro Universitario FACENS, desarrollado como parte de la disciplina UPX2 - Planta de Proyectos Experimentales II.'
+  },
+  advisor: {
+    pt: 'Orientador',
+    en: 'Advisor',
+    es: 'Asesor'
+  },
+  developmentTeam: {
+    pt: 'Equipe de Desenvolvimento',
+    en: 'Development Team',
+    es: 'Equipo de Desarrollo'
+  },
+  semester: {
+    pt: 'Semestre',
+    en: 'Semestre',
+    es: 'Semestre'
+  },
+  semesterValue: {
+    pt: '2º Semestre – 2025',
+    en: '2nd Semester – 2025',
+    es: '2do Semestre – 2025'
+  },
+  conclusion: {
+    pt: 'Conclusão',
+    en: 'Conclusion',
+    es: 'Conclusión'
+  },
+  conclusionText: {
+    pt: 'O INFOSP reforça o papel da tecnologia como aliada na busca por uma sociedade mais segura. Ao oferecer uma ferramenta de análise de dados aberta e acessível, o projeto contribui com a construção de políticas públicas mais eficientes, baseadas em evidências concretas e na participação ativa da população.',
+    en: 'INFOSP reinforces the role of technology as an ally in the search for a safer society. By offering an open and accessible data analysis tool, the project contributes to the construction of more efficient public policies, based on concrete evidence and active participation of the population.',
+    es: 'INFOSP refuerza el papel de la tecnología como aliada en la búsqueda de una sociedad más segura. Al ofrecer una herramienta de análisis de datos abierta y accesible, el proyecto contribuye a la construcción de políticas públicas más eficientes, basadas en evidencias concretas y en la participación activa de la población.'
+  },
+  // Footer
+  allDataFrom: {
+    pt: 'Todos os dados foram retirados da',
+    en: 'All data was taken from the',
+    es: 'Todos los datos fueron tomados de la'
+  },
+  securityDepartment: {
+    pt: 'Secretaria de Segurança Pública do Estado de São Paulo',
+    en: 'São Paulo State Public Security Department',
+    es: 'Secretaría de Seguridad Pública del Estado de São Paulo'
+  },
+  copyright: {
+    pt: '© 2025 InfoSP - Sistema de Visualização de Ocorrências',
+    en: '© 2025 InfoSP - Occurrence Visualization System',
+    es: '© 2025 InfoSP - Sistema de Visualización de Ocurrencias'
+  },
+  // Back button
+  back: {
+    pt: 'Voltar',
+    en: 'Back',
+    es: 'Volver'
+  },
+  // Region/City not found
+  regionNotFound: {
+    pt: 'Região não encontrada',
+    en: 'Region not found',
+    es: 'Región no encontrada'
+  },
+  cityNotFound: {
+    pt: 'Cidade não encontrada',
+    en: 'City not found',
+    es: 'Ciudad no encontrada'
+  },
+  noDataAvailable: {
+    pt: 'Não existem dados disponíveis para essa região',
+    en: 'No data available for this region',
+    es: 'No hay datos disponibles para esta región'
+  },
+  noDataAvailableCity: {
+    pt: 'Não existem dados disponíveis para essa cidade',
+    en: 'No data available for this city',
+    es: 'No hay datos disponibles para esta ciudad'
+  },
+  // Charts tooltips
+  crimesByYearTooltip: {
+    pt: 'Distribuição anual de crimes por tipo na região. Cada barra representa o número de ocorrências para cada categoria de crime.',
+    en: 'Annual distribution of crimes by type in the region. Each bar represents the number of occurrences for each crime category.',
+    es: 'Distribución anual de crímenes por tipo en la región. Cada barra representa el número de ocurrencias para cada categoría de crimen.'
+  },
+  temporalEvolutionTooltip: {
+    pt: 'Tendência temporal dos diferentes tipos de crime na região, permitindo visualizar padrões de crescimento ou redução ao longo dos anos.',
+    en: 'Temporal trend of different types of crime in the region, allowing visualization of growth or reduction patterns over the years.',
+    es: 'Tendencia temporal de diferentes tipos de crimen en la región, permitiendo visualizar patrones de crecimiento o reducción a lo largo de los años.'
+  },
+  distributionByTypeTooltip: {
+    pt: 'Proporção relativa de cada tipo de crime no total de ocorrências da região. Visualiza como cada crime contribui para o panorama geral de segurança.',
+    en: 'Relative proportion of each type of crime in the total occurrences of the region. Visualizes how each crime contributes to the overall security landscape.',
+    es: 'Proporción relativa de cada tipo de crimen en el total de ocurrencias de la región. Visualiza cómo cada crimen contribuye al panorama general de seguridad.'
+  },
+  citiesOfRegionTooltip: {
+    pt: 'Lista de cidades pertencentes à região com suas respectivas informações demográficas e estatísticas de ocorrências.',
+    en: 'List of cities belonging to the region with their respective demographic information and occurrence statistics.',
+    es: 'Lista de ciudades pertenecientes a la región con su respectiva información demográfica y estadísticas de ocurrencias.'
+  },
+  // More terms for charts and other components
+  in2024: {
+    pt: 'em 2024',
+    en: 'in 2024',
+    es: 'en 2024'
+  },
+  // OccurrenceCharts
+  top10Cities: {
+    pt: 'Top 10 Cidades com Mais Ocorrências',
+    en: 'Top 10 Cities with Most Occurrences',
+    es: 'Top 10 Ciudades con Más Ocurrencias'
+  },
+  top10CitiesTooltip: {
+    pt: 'As 10 cidades com maior número de ocorrências, coloridas por nível de severidade predominante. Barras mais longas indicam mais ocorrências.',
+    en: 'The 10 cities with the highest number of occurrences, colored by predominant severity level. Longer bars indicate more occurrences.',
+    es: 'Las 10 ciudades con mayor número de ocurrencias, coloreadas por nivel de severidad predominante. Barras más largas indican más ocurrencias.'
+  },
+  year: {
+    pt: 'Ano',
+    en: 'Year',
+    es: 'Año'
+  },
+  crimeEvolutionByYear: {
+    pt: 'Evolução de Crimes por Ano',
+    en: 'Crime Evolution by Year',
+    es: 'Evolución de Crímenes por Año'
+  },
+  crimeEvolutionTooltip: {
+    pt: 'Evolução anual das ocorrências por tipo de crime. Selecione o tipo de crime para visualizar a tendência ao longo dos anos.',
+    en: 'Annual evolution of occurrences by crime type. Select the crime type to visualize the trend over the years.',
+    es: 'Evolución anual de las ocurrencias por tipo de crimen. Seleccione el tipo de crimen para visualizar la tendencia a lo largo de los años.'
+  },
+  crimeType: {
+    pt: 'Tipo de Crime',
+    en: 'Crime Type',
+    es: 'Tipo de Crimen'
+  },
+  totalOf: {
+    pt: 'Total de',
+    en: 'Total of',
+    es: 'Total de'
+  },
+  totalOccurrencesLastYears: {
+    pt: 'Total de Ocorrências dos Últimos Anos',
+    en: 'Total Occurrences of Recent Years',
+    es: 'Total de Ocurrencias de los Últimos Años'
+  },
+  totalOccurrencesTooltip: {
+    pt: 'Comparativo anual do total de ocorrências registradas. Barras em tons mais claros representam anos em andamento com dados parciais.',
+    en: 'Annual comparison of total recorded occurrences. Bars in lighter shades represent years in progress with partial data.',
+    es: 'Comparación anual del total de ocurrencias registradas. Las barras en tonos más claros representan años en curso con datos parciales.'
+  },
+  yearlyRecords: {
+    pt: 'Registros anuais de 2022 a 2025',
+    en: 'Annual records from 2022 to 2025',
+    es: 'Registros anuales de 2022 a 2025'
+  },
+  distributionTooltip: {
+    pt: 'Distribuição percentual das ocorrências por nível de prioridade. Cada segmento representa uma proporção das ocorrências totais conforme sua classificação de gravidade.',
+    en: 'Percentage distribution of occurrences by priority level. Each segment represents a proportion of total occurrences according to their severity classification.',
+    es: 'Distribución porcentual de las ocurrencias por nivel de prioridad. Cada segmento representa una proporción de las ocurrencias totales según su clasificación de gravedad.'
+  },
+  Críticas: {
+    pt: 'Críticas',
+    en: 'Critical',
+    es: 'Críticas'
+  },
+  Altas: {
+    pt: 'Altas',
+    en: 'High',
+    es: 'Altas'
+  },
+  Médias: {
+    pt: 'Médias',
+    en: 'Medium',
+    es: 'Medias'
+  },
+  Baixas: {
+    pt: 'Baixas',
+    en: 'Low',
+    es: 'Bajas'
+  },
+  // LocalityData
+  localityDataDescription: {
+    pt: 'Informações sobre cidades, população, IDH e ocorrências',
+    en: 'Information about cities, population, HDI and occurrences',
+    es: 'Información sobre ciudades, población, IDH y ocurrencias'
+  },
+  searchCityRegion: {
+    pt: 'Pesquisar cidade ou região...',
+    en: 'Search city or region...',
+    es: 'Buscar ciudad o región...'
+  },
+  byCity: {
+    pt: 'Por Cidade',
+    en: 'By City',
+    es: 'Por Ciudad'
+  },
+  byRegion: {
+    pt: 'Por Região',
+    en: 'By Region',
+    es: 'Por Región'
+  },
+  region: {
+    pt: 'Região',
+    en: 'Region',
+    es: 'Región'
+  },
+  noCityFound: {
+    pt: 'Nenhuma cidade encontrada',
+    en: 'No city found',
+    es: 'Ninguna ciudad encontrada'
+  },
+  noRegionFound: {
+    pt: 'Nenhuma região encontrada',
+    en: 'No region found',
+    es: 'Ninguna región encontrada'
+  },
+  occurrenceDistribution: {
+    pt: 'Distribuição de ocorrências',
+    en: 'Occurrence distribution',
+    es: 'Distribución de ocurrencias'
+  },
+  regionRepresents: {
+    pt: 'A região de',
+    en: 'The region of',
+    es: 'La región de'
+  },
+  representsPercentage: {
+    pt: 'representa',
+    en: 'represents',
+    es: 'representa'
+  },
+  ofTotalOccurrences: {
+    pt: 'das ocorrências totais no estado',
+    en: 'of total occurrences in the state',
+    es: 'de las ocurrencias totales en el estado'
+  },
+  withTotal: {
+    pt: 'com um total de',
+    en: 'with a total of',
+    es: 'con un total de'
+  },
+  recordsIn2024: {
+    pt: 'registros em 2024',
+    en: 'records in 2024',
+    es: 'registros en 2024'
+  },
+  viewRegionDetails: {
+    pt: 'Ver detalhes da região',
+    en: 'View region details',
+    es: 'Ver detalles de la región'
+  },
+  // OccurrenceDetails
+  completeDetails: {
+    pt: 'Detalhes completos sobre esta ocorrência',
+    en: 'Complete details about this occurrence',
+    es: 'Detalles completos sobre esta ocurrencia'
+  },
+  totalRecorded: {
+    pt: 'Total Registrado',
+    en: 'Total Recorded',
+    es: 'Total Registrado'
+  },
+  totalIn2024: {
+    pt: 'Total em 2024',
+    en: 'Total in 2024',
+    es: 'Total en 2024'
+  },
+  growthBetweenYears: {
+    pt: 'Crescimento (2023-2024)',
+    en: 'Growth (2023-2024)',
+    es: 'Crecimiento (2023-2024)'
+  },
+  top5Cities: {
+    pt: 'Top 5 Cidades',
+    en: 'Top 5 Cities',
+    es: 'Top 5 Ciudades'
+  },
+  city: {
+    pt: 'Cidade',
+    en: 'City',
+    es: 'Ciudad'
+  },
+  growthByYear: {
+    pt: 'Crescimento por Ano',
+    en: 'Growth by Year',
+    es: 'Crecimiento por Año'
+  },
+  // Descrições de ocorrências
+  vehicleTheft: {
+    pt: 'Furto de Veículo',
+    en: 'Vehicle Theft',
+    es: 'Hurto de Vehículo'
+  },
+  streetLightingIssue: {
+    pt: 'Falta de iluminação pública',
+    en: 'Lack of public lighting',
+    es: 'Falta de iluminación pública'
+  },
+  trafficAccident: {
+    pt: 'Acidente de Trânsito',
+    en: 'Traffic Accident',
+    es: 'Accidente de Tránsito'
+  },
+  propertyInvasion: {
+    pt: 'Invasão de Propriedade',
+    en: 'Property Invasion',
+    es: 'Invasión de Propiedad'
+  },
+  publicPropertyVandalism: {
+    pt: 'Vandalismo em Prédio Público',
+    en: 'Vandalism in Public Building',
+    es: 'Vandalismo en Edificio Público'
+  },
+  intentionalHomicide: {
+  pt: 'Homicídio Doloso',
+  en: 'Intentional Homicide',
+  es: 'Homicidio Doloso'
+},
+intentionalHomicideVictims: {
+  pt: 'Vítimas Homicídio Doloso',
+  en: 'Intentional Homicide Victims',
+  es: 'Víctimas de Homicidio Doloso'
+},
+trafficIntentionalHomicide: {
+  pt: 'Homicídio Doloso Trânsito',
+  en: 'Traffic Intentional Homicide',
+  es: 'Homicidio Doloso en el Tránsito'
+},
+trafficIntentionalHomicideVictims: {
+  pt: 'Vítimas Homicídio Doloso Trânsito',
+  en: 'Traffic Intentional Homicide Victims',
+  es: 'Víctimas de Homicidio Doloso en el Tránsito'
+},
+trafficNegligentHomicide: {
+  pt: 'Homicídio Culposo Trânsito',
+  en: 'Traffic Negligent Homicide',
+  es: 'Homicidio Culposo en el Tránsito'
+},
+otherNegligentHomicide: {
+  pt: 'Homicídio Culposo Outros',
+  en: 'Other Negligent Homicide',
+  es: 'Otros Homicidios Culposos'
+},
+attemptedHomicide: {
+  pt: 'Tentativa de Homicídio',
+  en: 'Attempted Homicide',
+  es: 'Intento de Homicidio'
+},
+bodilyInjuryWithDeath: {
+  pt: 'Lesão Corporal c/ Morte',
+  en: 'Bodily Injury with Death',
+  es: 'Lesión Corporal con Muerte'
+},
+intentionalBodilyInjury: {
+  pt: 'Lesão Corporal Dolosa',
+  en: 'Intentional Bodily Injury',
+  es: 'Lesión Corporal Dolosa'
+},
+trafficNegligentInjury: {
+  pt: 'Lesão Culposa Trânsito',
+  en: 'Traffic Negligent Injury',
+  es: 'Lesión Culposa en el Tránsito'
+},
+otherNegligentInjury: {
+  pt: 'Lesão Culposa Outros',
+  en: 'Other Negligent Injury',
+  es: 'Otras Lesiones Culposas'
+},
+robberyHomicide: {
+  pt: 'Latrocínio',
+  en: 'Robbery Homicide',
+  es: 'Homicidio en Robo'
+},
+robberyHomicideVictims: {
+  pt: 'Vítimas Latrocínio',
+  en: 'Robbery Homicide Victims',
+  es: 'Víctimas de Homicidio en Robo'
+},
+totalRape: {
+  pt: 'Total Estupro',
+  en: 'Total Rape',
+  es: 'Total de Violaciones'
+},
+rape: {
+  pt: 'Estupro',
+  en: 'Rape',
+  es: 'Violación'
+},
+childRape: {
+  pt: 'Estupro Vulnerável',
+  en: 'Child Rape',
+  es: 'Violación de Menor'
+},
+totalRobbery: {
+  pt: 'Total Roubo',
+  en: 'Total Robbery',
+  es: 'Total de Robos'
+},
+otherRobbery: {
+  pt: 'Roubo Outros',
+  en: 'Other Robbery',
+  es: 'Otros Robos'
+},
+vehicleRobbery: {
+  pt: 'Roubo Veículo',
+  en: 'Vehicle Robbery',
+  es: 'Robo de Vehículo'
+},
+bankRobbery: {
+  pt: 'Roubo Banco',
+  en: 'Bank Robbery',
+  es: 'Robo a Banco'
+},
+cargoRobbery: {
+  pt: 'Roubo Carga',
+  en: 'Cargo Robbery',
+  es: 'Robo de Carga'
+},
+otherTheft: {
+  pt: 'Furto Outros',
+  en: 'Other Theft',
+  es: 'Otros Hurtos'
+},
+vehicleTheft: {
+  pt: 'Furto Veículo',
+  en: 'Vehicle Theft',
+  es: 'Hurto de Vehículo'
+}
+};
+
+interface LanguageContextProps {
+  language: Language;
+  setLanguage: (language: Language) => void;
   t: (key: string) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-const translations = {
-  pt: {
-    dashboard: "Painel",
-    reports: "Relatórios",
-    about: "Sobre",
-    welcome: "Bem-vindo ao Info SP",
-    subtitle: "Sistema de Visualização de Ocorrências de Segurança Pública",
-    description: "Dados de criminalidade e segurança pública do estado de São Paulo, com visualizações interativas e análises em tempo real.",
-    occurrencesByType: "Ocorrências por Tipo",
-    occurrencesByLevel: "Distribuição por Nível",
-    geographicDistribution: "Distribuição Geográfica",
-    distribution: "Distribuição",
-    byRegion: "Por Região",
-    recentOccurrences: "Ocorrências Recentes",
-    viewDetails: "Ver Detalhes",
-    total: "Total",
-    thisMonth: "Este Mês",
-    high: "Alta",
-    medium: "Média",
-    low: "Baixa",
-    critical: "Crítica",
-    theft: "Furto",
-    robbery: "Roubo",
-    rape: "Estupro",
-    homicide: "Homicídio",
-    byType: "Por Tipo",
-    byLevel: "Por Nível",
-    topCities: "Top 10 Cidades com Mais Ocorrências",
-    level: "Nível",
-    city: "Cidade",
-    occurrences: "Ocorrências",
-    accessAndExport: "Acesse e exporte relatórios do sistema",
-    downloadSpreadsheet: "Baixar Planilha",
-    availableReports: "Relatórios Disponíveis",
-    accessSystemReports: "Acesse relatórios gerados pelo sistema",
-    reportID: "ID do Relatório",
-    reportTitle: "Título do Relatório",
-    reportDate: "Data do Relatório",
-    reportType: "Tipo do Relatório",
-    reportStatus: "Status do Relatório",
-    reportAction: "Ação do Relatório",
-    monthlyAnalysis: "Análise mensal de ocorrências",
-    monthly: "Mensal",
-    available: "Disponível",
-    download: "Baixar",
-    downloadStarted: "Download iniciado com sucesso!",
-    projectDescription: "Este projeto apresenta dados de criminalidade e segurança pública do estado de São Paulo através de visualizações interativas e análises detalhadas.",
-    aboutProject: "Sobre o Projeto",
-    dataSource: "Fonte dos Dados",
-    dataSourceDescription: "Os dados utilizados neste sistema são baseados em registros oficiais de ocorrências policiais, processados e organizados para facilitar a análise e compreensão dos padrões criminais.",
-    mainFeatures: "Principais Funcionalidades",
-    interactiveCharts: "Gráficos Interativos",
-    interactiveChartsDesc: "Visualize dados através de gráficos de barras, linhas e pizza com informações detalhadas.",
-    geographicAnalysis: "Análise Geográfica",
-    geographicAnalysisDesc: "Explore a distribuição de crimes por regiões e cidades do estado.",
-    detailedReports: "Relatórios Detalhados",
-    detailedReportsDesc: "Acesse relatórios completos com análises aprofundadas dos dados.",
-    exportData: "Exportação de Dados",
-    exportDataDesc: "Baixe planilhas com os dados para suas próprias análises.",
-    safetyTip: "Dica de Segurança",
-    emergencyContacts: "Contatos de Emergência",
-    securityTip1: "Mantenha sempre seus documentos em local seguro",
-    securityTip2: "Evite demonstrar objetos de valor em público",
-    securityTip3: "Esteja atento ao seu entorno, principalmente à noite",
-    securityTip4: "Use transporte público com cautela em horários de pico",
-    securityTip5: "Tenha sempre os contatos de emergência à mão",
-    completeDetails: "Detalhes completos desta ocorrência",
-    totalRecorded: "Total Registrado",
-    totalIn2024: "Total em 2024",
-    growthBetweenYears: "Crescimento 2023-2024",
-    top5Cities: "Top 5 Cidades",
-    growthByYear: "Crescimento por Ano",
-    year: "Ano",
-    totalOccurrences: "Total de Ocorrências",
-    cityNotFound: "Cidade Não Encontrada",
-    noDataAvailableCity: "Não há dados disponíveis para esta cidade.",
-    back: "Voltar",
-    cityDetails: "Detalhes da Cidade",
-    recordedCrimes: "Crimes registrados por ano",
-    bars: "Barras",
-    lines: "Linhas",
-    pie: "Pizza",
-    in2024: "em 2024",
-    regionNotFound: "Região Não Encontrada",
-    noDataAvailableRegion: "Não há dados disponíveis para esta região.",
-    regionDetails: "Detalhes da Região",
-    crimesInRegion: "Crimes registrados na região por ano",
-    expandedView: "Visualização Expandida",
-    clickToExpand: "Clique para expandir",
-    allRights: "Todos os direitos reservados",
-    contact: "Contato",
-    privacy: "Privacidade",
-    terms: "Termos",
-    mostRecurringOccurrences: "Tipos de Ocorrências Mais Recorrentes",
-    mostFrequentTypes: "Os tipos de ocorrências mais frequentes no sistema",
-    typeId: "ID do Tipo",
-    filterByLevel: "Filtrar por Nível",
-    filter: "Filtrar",
-    vehicleTheft: "Furto de Veículo",
-    streetLightingIssue: "Problema de Iluminação Pública",
-    trafficAccident: "Acidente de Trânsito",
-    propertyInvasion: "Invasão de Propriedade",
-    publicPropertyVandalism: "Vandalismo ao Patrimônio Público",
-    referenceCode: "Código de referência",
-    occurrencePercentage: "Esta ocorrência representa",
-    ofTotalRecorded: "do total registrado",
-    showingOf: "Mostrando",
-    of: "de",
-    viewAll: "Ver Todos",
-    notFoundTitle: "Página Não Encontrada",
-    pageNotFound: "A página que você está procurando não existe.",
-    returnToHome: "Voltar ao Início",
-    securityDepartment: "Secretaria da Segurança Pública",
-    allDataFrom: "Todos os dados são provenientes da",
-    copyright: "© 2024 Info SP. Todos os direitos reservados.",
-    language: "Idioma",
-    portuguese: "Português",
-    english: "English",
-    spanish: "Español",
-    darkMode: "Modo Escuro",
-    lightMode: "Modo Claro",
-    intentionalHomicide: "Homicídio Doloso",
-    intentionalHomicideVictims: "Vítimas de Homicídio Doloso",
-    trafficIntentionalHomicide: "Homicídio Doloso no Trânsito",
-    trafficIntentionalHomicideVictims: "Vítimas de Homicídio Doloso no Trânsito",
-    trafficNegligentHomicide: "Homicídio Culposo no Trânsito",
-    otherNegligentHomicide: "Homicídio Culposo Outros",
-    attemptedHomicide: "Tentativa de Homicídio",
-    bodilyInjuryWithDeath: "Lesão Corporal com Morte",
-    intentionalBodilyInjury: "Lesão Corporal Dolosa",
-    trafficNegligentInjury: "Lesão Culposa no Trânsito",
-    otherNegligentInjury: "Lesão Culposa Outros",
-    robberyHomicide: "Latrocínio",
-    robberyHomicideVictims: "Vítimas de Latrocínio",
-    totalRape: "Total de Estupros",
-    childRape: "Estupro de Vulnerável",
-    totalRobbery: "Total de Roubos",
-    otherRobbery: "Roubo Outros",
-    vehicleRobbery: "Roubo de Veículo",
-    bankRobbery: "Roubo a Banco",
-    cargoRobbery: "Roubo de Carga",
-    otherTheft: "Furto Outros",
-    safeRegion: "Região Segura",
-    numberOfThefts: "Número de Furtos",
-    numberOfRobberies: "Número de Roubos",
-    dangerousCity: "Cidade Perigosa",
-    safeCity: "Cidade Segura",
-    dangerousRegion: "Região Perigosa",
-    annualGrowth: "Crescimento Anual",
-    top10Cities: "Top 10 Cidades",
-    top10CitiesTooltip: "As 10 cidades com maior número de ocorrências",
-    crimeEvolutionByYear: "Evolução dos Crimes por Ano",
-    totalOfTheft: "Total de Furtos",
-    totalOccurrencesLastYears: "Total de Ocorrências nos Últimos Anos",
-    totalOccurrencesTooltip: "Número total de ocorrências registradas no período",
-    yearlyRecords: "Registros Anuais",
-    distributionTooltip: "Distribuição de ocorrências por região",
-    localityData: "Dados de Localidade",
-    localityDataDescription: "Informações detalhadas sobre crimes por localidade",
-    searchCityRegion: "Pesquisar Cidade ou Região",
-    byCity: "Por Cidade",
-    population: "População",
-    occurrencesIn2024: "Ocorrências em 2024",
-    projectInfoSP: "Info SP - Projeto",
-    generalObjective: "Objetivo Geral",
-    generalObjectiveDesc: "Desenvolver um sistema de visualização e análise de dados de segurança pública para o estado de São Paulo",
-    technologiesAndFeatures: "Tecnologias e Funcionalidades",
-    geolocation: "Geolocalização",
-    interactiveDashboards: "Dashboards Interativos",
-    temporalAnalysis: "Análise Temporal",
-    predictiveAlgorithms: "Algoritmos Preditivos",
-    responsiveDesign: "Design Responsivo",
-    specificObjectives: "Objetivos Específicos",
-    collectData: "Coletar dados de segurança pública",
-    buildInterface: "Construir interface de visualização",
-    implementFilters: "Implementar filtros de análise",
-    applyVisualization: "Aplicar técnicas de visualização",
-    usePredictive: "Usar algoritmos preditivos",
-    projectTeam: "Equipe do Projeto",
-    teamDescription: "Este projeto foi desenvolvido por uma equipe multidisciplinar de estudantes e orientador",
-    advisor: "Orientador",
-    developmentTeam: "Equipe de Desenvolvimento",
-    semester: "Semestre",
-    semesterValue: "2024/2",
-    conclusion: "Conclusão",
-    conclusionText: "O Info SP representa um avanço significativo na análise e visualização de dados de segurança pública, fornecendo ferramentas essenciais para tomada de decisão baseada em evidências."
-  },
-  en: {
-    dashboard: "Dashboard",
-    reports: "Reports",
-    about: "About",
-    welcome: "Welcome to Info SP",
-    subtitle: "Public Safety Occurrence Visualization System",
-    description: "Crime and public safety data from São Paulo state, with interactive visualizations and real-time analysis.",
-    occurrencesByType: "Occurrences by Type",
-    occurrencesByLevel: "Distribution by Level",
-    geographicDistribution: "Geographic Distribution",
-    distribution: "Distribution",
-    byRegion: "By Region",
-    recentOccurrences: "Recent Occurrences",
-    viewDetails: "View Details",
-    total: "Total",
-    thisMonth: "This Month",
-    high: "High",
-    medium: "Medium",
-    low: "Low",
-    critical: "Critical",
-    theft: "Theft",
-    robbery: "Robbery",
-    rape: "Rape",
-    homicide: "Homicide",
-    byType: "By Type",
-    byLevel: "By Level",
-    topCities: "Top 10 Cities with Most Occurrences",
-    level: "Level",
-    city: "City",
-    occurrences: "Occurrences",
-    accessAndExport: "Access and export system reports",
-    downloadSpreadsheet: "Download Spreadsheet",
-    availableReports: "Available Reports",
-    accessSystemReports: "Access reports generated by the system",
-    reportID: "Report ID",
-    reportTitle: "Report Title",
-    reportDate: "Report Date",
-    reportType: "Report Type",
-    reportStatus: "Report Status",
-    reportAction: "Report Action",
-    monthlyAnalysis: "Monthly occurrence analysis",
-    monthly: "Monthly",
-    available: "Available",
-    download: "Download",
-    downloadStarted: "Download started successfully!",
-    projectDescription: "This project presents crime and public safety data from São Paulo state through interactive visualizations and detailed analysis.",
-    aboutProject: "About the Project",
-    dataSource: "Data Source",
-    dataSourceDescription: "The data used in this system is based on official police occurrence records, processed and organized to facilitate analysis and understanding of crime patterns.",
-    mainFeatures: "Main Features",
-    interactiveCharts: "Interactive Charts",
-    interactiveChartsDesc: "View data through bar, line and pie charts with detailed information.",
-    geographicAnalysis: "Geographic Analysis",
-    geographicAnalysisDesc: "Explore crime distribution by regions and cities in the state.",
-    detailedReports: "Detailed Reports",
-    detailedReportsDesc: "Access complete reports with in-depth data analysis.",
-    exportData: "Data Export",
-    exportDataDesc: "Download spreadsheets with data for your own analysis.",
-    safetyTip: "Safety Tip",
-    emergencyContacts: "Emergency Contacts",
-    securityTip1: "Always keep your documents in a safe place",
-    securityTip2: "Avoid displaying valuable objects in public",
-    securityTip3: "Stay alert to your surroundings, especially at night",
-    securityTip4: "Use public transport with caution during peak hours",
-    securityTip5: "Always have emergency contacts at hand",
-    completeDetails: "Complete details of this occurrence",
-    totalRecorded: "Total Recorded",
-    totalIn2024: "Total in 2024",
-    growthBetweenYears: "Growth 2023-2024",
-    top5Cities: "Top 5 Cities",
-    growthByYear: "Growth by Year",
-    year: "Year",
-    totalOccurrences: "Total Occurrences",
-    cityNotFound: "City Not Found",
-    noDataAvailableCity: "No data available for this city.",
-    back: "Back",
-    cityDetails: "City Details",
-    recordedCrimes: "Crimes recorded per year",
-    bars: "Bars",
-    lines: "Lines",
-    pie: "Pie",
-    in2024: "in 2024",
-    regionNotFound: "Region Not Found",
-    noDataAvailableRegion: "No data available for this region.",
-    regionDetails: "Region Details",
-    crimesInRegion: "Crimes recorded in the region per year",
-    expandedView: "Expanded View",
-    clickToExpand: "Click to expand",
-    allRights: "All rights reserved",
-    contact: "Contact",
-    privacy: "Privacy",
-    terms: "Terms",
-    mostRecurringOccurrences: "Most Recurring Occurrence Types",
-    mostFrequentTypes: "The most frequent types of occurrences in the system",
-    typeId: "Type ID",
-    filterByLevel: "Filter by Level",
-    filter: "Filter",
-    vehicleTheft: "Vehicle Theft",
-    streetLightingIssue: "Street Lighting Issue",
-    trafficAccident: "Traffic Accident",
-    propertyInvasion: "Property Invasion",
-    publicPropertyVandalism: "Public Property Vandalism",
-    referenceCode: "Reference code",
-    occurrencePercentage: "This occurrence represents",
-    ofTotalRecorded: "of total recorded",
-    showingOf: "Showing",
-    of: "of",
-    viewAll: "View All",
-    notFoundTitle: "Page Not Found",
-    pageNotFound: "The page you are looking for does not exist.",
-    returnToHome: "Return to Home",
-    securityDepartment: "Department of Public Security",
-    allDataFrom: "All data is from the",
-    copyright: "© 2024 Info SP. All rights reserved.",
-    language: "Language",
-    portuguese: "Português",
-    english: "English",
-    spanish: "Español",
-    darkMode: "Dark Mode",
-    lightMode: "Light Mode",
-    intentionalHomicide: "Intentional Homicide",
-    intentionalHomicideVictims: "Intentional Homicide Victims",
-    trafficIntentionalHomicide: "Traffic Intentional Homicide",
-    trafficIntentionalHomicideVictims: "Traffic Intentional Homicide Victims",
-    trafficNegligentHomicide: "Traffic Negligent Homicide",
-    otherNegligentHomicide: "Other Negligent Homicide",
-    attemptedHomicide: "Attempted Homicide",
-    bodilyInjuryWithDeath: "Bodily Injury with Death",
-    intentionalBodilyInjury: "Intentional Bodily Injury",
-    trafficNegligentInjury: "Traffic Negligent Injury",
-    otherNegligentInjury: "Other Negligent Injury",
-    robberyHomicide: "Robbery Homicide",
-    robberyHomicideVictims: "Robbery Homicide Victims",
-    totalRape: "Total Rape",
-    childRape: "Child Rape",
-    totalRobbery: "Total Robbery",
-    otherRobbery: "Other Robbery",
-    vehicleRobbery: "Vehicle Robbery",
-    bankRobbery: "Bank Robbery",
-    cargoRobbery: "Cargo Robbery",
-    otherTheft: "Other Theft",
-    safeRegion: "Safe Region",
-    numberOfThefts: "Number of Thefts",
-    numberOfRobberies: "Number of Robberies",
-    dangerousCity: "Dangerous City",
-    safeCity: "Safe City",
-    dangerousRegion: "Dangerous Region",
-    annualGrowth: "Annual Growth",
-    top10Cities: "Top 10 Cities",
-    top10CitiesTooltip: "The 10 cities with the highest number of occurrences",
-    crimeEvolutionByYear: "Crime Evolution by Year",
-    totalOfTheft: "Total Thefts",
-    totalOccurrencesLastYears: "Total Occurrences in Recent Years",
-    totalOccurrencesTooltip: "Total number of occurrences recorded in the period",
-    yearlyRecords: "Yearly Records",
-    distributionTooltip: "Distribution of occurrences by region",
-    localityData: "Locality Data",
-    localityDataDescription: "Detailed information about crimes by locality",
-    searchCityRegion: "Search City or Region",
-    byCity: "By City",
-    population: "Population",
-    occurrencesIn2024: "Occurrences in 2024",
-    projectInfoSP: "Info SP - Project",
-    generalObjective: "General Objective",
-    generalObjectiveDesc: "Develop a visualization and analysis system for public safety data in São Paulo state",
-    technologiesAndFeatures: "Technologies and Features",
-    geolocation: "Geolocation",
-    interactiveDashboards: "Interactive Dashboards",
-    temporalAnalysis: "Temporal Analysis",
-    predictiveAlgorithms: "Predictive Algorithms",
-    responsiveDesign: "Responsive Design",
-    specificObjectives: "Specific Objectives",
-    collectData: "Collect public safety data",
-    buildInterface: "Build visualization interface",
-    implementFilters: "Implement analysis filters",
-    applyVisualization: "Apply visualization techniques",
-    usePredictive: "Use predictive algorithms",
-    projectTeam: "Project Team",
-    teamDescription: "This project was developed by a multidisciplinary team of students and advisor",
-    advisor: "Advisor",
-    developmentTeam: "Development Team",
-    semester: "Semester",
-    semesterValue: "2024/2",
-    conclusion: "Conclusion",
-    conclusionText: "Info SP represents a significant advance in the analysis and visualization of public safety data, providing essential tools for evidence-based decision making."
-  },
-  es: {
-    dashboard: "Panel",
-    reports: "Informes",
-    about: "Acerca de",
-    welcome: "Bienvenido a Info SP",
-    subtitle: "Sistema de Visualización de Ocurrencias de Seguridad Pública",
-    description: "Datos de criminalidad y seguridad pública del estado de São Paulo, con visualizaciones interactivas y análisis en tiempo real.",
-    occurrencesByType: "Ocurrencias por Tipo",
-    occurrencesByLevel: "Distribución por Nivel",
-    geographicDistribution: "Distribución Geográfica",
-    distribution: "Distribución",
-    byRegion: "Por Región",
-    recentOccurrences: "Ocurrencias Recientes",
-    viewDetails: "Ver Detalles",
-    total: "Total",
-    thisMonth: "Este Mes",
-    high: "Alta",
-    medium: "Media",
-    low: "Baja",
-    critical: "Crítica",
-    theft: "Hurto",
-    robbery: "Robo",
-    rape: "Violación",
-    homicide: "Asesinato",
-    byType: "Por Tipo",
-    byLevel: "Por Nivel",
-    topCities: "Top 10 Ciudades con Más Ocurrencias",
-    level: "Nivel",
-    city: "Ciudad",
-    occurrences: "Ocurrencias",
-    accessAndExport: "Accede y exporta informes del sistema",
-    downloadSpreadsheet: "Descargar Hoja de Cálculo",
-    availableReports: "Informes Disponibles",
-    accessSystemReports: "Accede a informes generados por el sistema",
-    reportID: "ID del Informe",
-    reportTitle: "Título del Informe",
-    reportDate: "Fecha del Informe",
-    reportType: "Tipo de Informe",
-    reportStatus: "Estado del Informe",
-    reportAction: "Acción del Informe",
-    monthlyAnalysis: "Análisis mensual de ocurrencias",
-    monthly: "Mensual",
-    available: "Disponible",
-    download: "Descargar",
-    downloadStarted: "¡Descarga iniciada con éxito!",
-    projectDescription: "Este proyecto presenta datos de criminalidad y seguridad pública del estado de São Paulo a través de visualizaciones interactivas y análisis detallado.",
-    aboutProject: "Sobre el Proyecto",
-    dataSource: "Fuente de Datos",
-    dataSourceDescription: "Los datos utilizados en este sistema se basan en registros oficiales de ocurrencias policiales, procesados y organizados para facilitar el análisis y comprensión de patrones criminales.",
-    mainFeatures: "Características Principales",
-    interactiveCharts: "Gráficos Interactivos",
-    interactiveChartsDesc: "Visualiza datos a través de gráficos de barras, líneas y pastel con información detallada.",
-    geographicAnalysis: "Análisis Geográfico",
-    geographicAnalysisDesc: "Explora la distribución de crímenes por regiones y ciudades del estado.",
-    detailedReports: "Informes Detallados",
-    detailedReportsDesc: "Accede a informes completos con análisis profundo de los datos.",
-    exportData: "Exportación de Datos",
-    exportDataDesc: "Descarga hojas de cálculo con los datos para tus propios análisis.",
-    safetyTip: "Consejo de Seguridad",
-    emergencyContacts: "Contactos de Emergencia",
-    securityTip1: "Mantén siempre tus documentos en lugar seguro",
-    securityTip2: "Evita mostrar objetos de valor en público",
-    securityTip3: "Mantente alerta a tu entorno, especialmente por la noche",
-    securityTip4: "Usa el transporte público con precaución en horas pico",
-    securityTip5: "Mantén siempre los contactos de emergencia a mano",
-    completeDetails: "Detalles completos de esta ocurrencia",
-    totalRecorded: "Total Registrado",
-    totalIn2024: "Total en 2024",
-    growthBetweenYears: "Crecimiento 2023-2024",
-    top5Cities: "Top 5 Ciudades",
-    growthByYear: "Crecimiento por Año",
-    year: "Año",
-    totalOccurrences: "Total de Ocurrencias",
-    cityNotFound: "Ciudad No Encontrada",
-    noDataAvailableCity: "No hay datos disponibles para esta ciudad.",
-    back: "Volver",
-    cityDetails: "Detalles de la Ciudad",
-    recordedCrimes: "Crímenes registrados por año",
-    bars: "Barras",
-    lines: "Líneas",
-    pie: "Pastel",
-    in2024: "en 2024",
-    regionNotFound: "Región No Encontrada",
-    noDataAvailableRegion: "No hay datos disponibles para esta región.",
-    regionDetails: "Detalles de la Región",
-    crimesInRegion: "Crímenes registrados en la región por año",
-    expandedView: "Vista Expandida",
-    clickToExpand: "Haz clic para expandir",
-    allRights: "Todos los derechos reservados",
-    contact: "Contacto",
-    privacy: "Privacidad",
-    terms: "Términos",
-    mostRecurringOccurrences: "Tipos de Ocurrencias Más Recurrentes",
-    mostFrequentTypes: "Los tipos de ocurrencias más frecuentes en el sistema",
-    typeId: "ID del Tipo",
-    filterByLevel: "Filtrar por Nivel",
-    filter: "Filtrar",
-    vehicleTheft: "Robo de Vehículo",
-    streetLightingIssue: "Problema de Alumbrado Público",
-    trafficAccident: "Accidente de Tráfico",
-    propertyInvasion: "Invasión de Propiedad",
-    publicPropertyVandalism: "Vandalismo al Patrimonio Público",
-    referenceCode: "Código de referencia",
-    occurrencePercentage: "Esta ocurrencia representa",
-    ofTotalRecorded: "del total registrado",
-    showingOf: "Mostrando",
-    of: "de",
-    viewAll: "Ver Todos",
-    notFoundTitle: "Página No Encontrada",
-    pageNotFound: "La página que estás buscando no existe.",
-    returnToHome: "Volver al Inicio",
-    securityDepartment: "Secretaría de Seguridad Pública",
-    allDataFrom: "Todos los datos provienen de la",
-    copyright: "© 2024 Info SP. Todos los derechos reservados.",
-    language: "Idioma",
-    portuguese: "Português",
-    english: "English",
-    spanish: "Español",
-    darkMode: "Modo Oscuro",
-    lightMode: "Modo Claro",
-    intentionalHomicide: "Homicidio Intencional",
-    intentionalHomicideVictims: "Víctimas de Homicidio Intencional",
-    trafficIntentionalHomicide: "Homicidio Intencional en Tráfico",
-    trafficIntentionalHomicideVictims: "Víctimas de Homicidio Intencional en Tráfico",
-    trafficNegligentHomicide: "Homicidio Negligente en Tráfico",
-    otherNegligentHomicide: "Otro Homicidio Negligente",
-    attemptedHomicide: "Intento de Homicidio",
-    bodilyInjuryWithDeath: "Lesión Corporal con Muerte",
-    intentionalBodilyInjury: "Lesión Corporal Intencional",
-    trafficNegligentInjury: "Lesión Negligente en Tráfico",
-    otherNegligentInjury: "Otra Lesión Negligente",
-    robberyHomicide: "Robo con Homicidio",
-    robberyHomicideVictims: "Víctimas de Robo con Homicidio",
-    totalRape: "Total de Violaciones",
-    childRape: "Violación de Menor",
-    totalRobbery: "Total de Robos",
-    otherRobbery: "Otro Robo",
-    vehicleRobbery: "Robo de Vehículo",
-    bankRobbery: "Robo Bancario",
-    cargoRobbery: "Robo de Carga",
-    otherTheft: "Otro Hurto",
-    safeRegion: "Región Segura",
-    numberOfThefts: "Número de Hurtos",
-    numberOfRobberies: "Número de Robos",
-    dangerousCity: "Ciudad Peligrosa",
-    safeCity: "Ciudad Segura",
-    dangerousRegion: "Región Peligrosa",
-    annualGrowth: "Crecimiento Anual",
-    top10Cities: "Top 10 Ciudades",
-    top10CitiesTooltip: "Las 10 ciudades con mayor número de ocurrencias",
-    crimeEvolutionByYear: "Evolución de Crímenes por Año",
-    totalOfTheft: "Total de Hurtos",
-    totalOccurrencesLastYears: "Total de Ocurrencias en Años Recientes",
-    totalOccurrencesTooltip: "Número total de ocurrencias registradas en el período",
-    yearlyRecords: "Registros Anuales",
-    distributionTooltip: "Distribución de ocurrencias por región",
-    localityData: "Datos de Localidad",
-    localityDataDescription: "Información detallada sobre crímenes por localidad",
-    searchCityRegion: "Buscar Ciudad o Región",
-    byCity: "Por Ciudad",
-    population: "Población",
-    occurrencesIn2024: "Ocurrencias en 2024",
-    projectInfoSP: "Info SP - Proyecto",
-    generalObjective: "Objetivo General",
-    generalObjectiveDesc: "Desarrollar un sistema de visualización y análisis de datos de seguridad pública para el estado de São Paulo",
-    technologiesAndFeatures: "Tecnologías y Funcionalidades",
-    geolocation: "Geolocalización",
-    interactiveDashboards: "Dashboards Interactivos",
-    temporalAnalysis: "Análisis Temporal",
-    predictiveAlgorithms: "Algoritmos Predictivos",
-    responsiveDesign: "Diseño Responsivo",
-    specificObjectives: "Objetivos Específicos",
-    collectData: "Recopilar datos de seguridad pública",
-    buildInterface: "Construir interfaz de visualización",
-    implementFilters: "Implementar filtros de análisis",
-    applyVisualization: "Aplicar técnicas de visualización",
-    usePredictive: "Usar algoritmos predictivos",
-    projectTeam: "Equipo del Proyecto",
-    teamDescription: "Este proyecto fue desarrollado por un equipo multidisciplinario de estudiantes y asesor",
-    advisor: "Asesor",
-    developmentTeam: "Equipo de Desarrollo",
-    semester: "Semestre",
-    semesterValue: "2024/2",
-    conclusion: "Conclusión",
-    conclusionText: "Info SP representa un avance significativo en el análisis y visualización de datos de seguridad pública, proporcionando herramientas esenciales para la toma de decisiones basada en evidencia."
-  }
-};
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Tenta recuperar o idioma do localStorage ou usa 'pt' como padrão
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('language') as Language;
+    return savedLanguage || 'pt';
+  });
 
-interface LanguageProviderProps {
-  children: ReactNode;
-}
+  // Salva o idioma no localStorage quando ele muda
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<string>('pt');
-
+  // Função para traduzir textos
   const t = (key: string): string => {
-    return translations[language as keyof typeof translations]?.[key] || key;
-  };
+    const keys = key.split('.');
+    let translation = translations;
+    
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (translation[keys[i]]) {
+        translation = translation[keys[i]] as unknown as Translations;
+      } else {
+        return key;
+      }
+    }
 
-  const value = {
-    language,
-    setLanguage,
-    t,
+    const lastKey = keys[keys.length - 1];
+    
+    if (translation[lastKey] && translation[lastKey][language]) {
+      return translation[lastKey][language];
+    }
+    
+    return key;
   };
 
   return (
-    <LanguageContext.Provider value={value}>
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -596,7 +1045,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;

@@ -195,9 +195,9 @@ export const translations: Translations = {
     es: 'Disponible'
   },
   monthly: {
-  pt: 'Anual (2022–2025)',
-  en: 'Annual (2022–2025)',
-  es: 'Anual (2022–2025)'
+    pt: 'Mensal',
+    en: 'Monthly',
+    es: 'Mensual'
   },
   monthlyAnalysis: {
     pt: 'Análise mensal de ocorrências',

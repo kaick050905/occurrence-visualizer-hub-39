@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface LanguageContextType {
@@ -102,7 +103,6 @@ const translations = {
     mostRecurringOccurrences: "Tipos de Ocorrências Mais Recorrentes",
     mostFrequentTypes: "Os tipos de ocorrências mais frequentes no sistema",
     typeId: "ID do Tipo",
-    description: "Descrição",
     filterByLevel: "Filtrar por Nível",
     filter: "Filtrar",
     vehicleTheft: "Furto de Veículo",
@@ -210,7 +210,6 @@ const translations = {
     mostRecurringOccurrences: "Most Recurring Occurrence Types",
     mostFrequentTypes: "The most frequent types of occurrences in the system",
     typeId: "Type ID",
-    description: "Description",
     filterByLevel: "Filter by Level",
     filter: "Filter",
     vehicleTheft: "Vehicle Theft",
@@ -239,7 +238,7 @@ const translations = {
     viewDetails: "Ver Detalles",
     total: "Total",
     thisMonth: "Este Mes",
-    high: "Media",
+    high: "Alta",
     medium: "Media",
     low: "Baja",
     critical: "Crítica",
@@ -318,7 +317,6 @@ const translations = {
     mostRecurringOccurrences: "Tipos de Ocurrencias Más Recurrentes",
     mostFrequentTypes: "Los tipos de ocurrencias más frecuentes en el sistema",
     typeId: "ID del Tipo",
-    description: "Descripción",
     filterByLevel: "Filtrar por Nivel",
     filter: "Filtrar",
     vehicleTheft: "Robo de Vehículo",

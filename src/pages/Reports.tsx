@@ -13,10 +13,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const reportsData = [
   { 
-    id: "REL-2024-001", 
-    title: "Análise mensal de ocorrências", 
-    date: "01/06/2024", 
-    type: "Mensal",
+    id: "REL-2025-001", 
+    title: "Relatório de Ocorrências", 
+    date: "03/03/2025", 
+    type: "Anual (2022–2025)",
     status: "Disponível" 
   }
 ];

@@ -23,31 +23,31 @@ import { useLanguage } from "@/contexts/LanguageContext";
 // Sample data for most recurring occurrences
 const recurringOccurrencesData = [
   {
-    id: "TP-001",
+    id: "OCO-01",
     description: "vehicleTheft",
     status: "Crítica",
     count: 245,
   },
   {
-    id: "TP-002",
+    id: "OCO-02",
     description: "streetLightingIssue",
     status: "Alta",
     count: 210,
   },
   {
-    id: "TP-003",
+    id: "OCO-03",
     description: "trafficAccident",
     status: "Média",
     count: 180,
   },
   {
-    id: "TP-004",
+    id: "OCO-04",
     description: "propertyInvasion",
     status: "Alta",
     count: 165,
   },
   {
-    id: "TP-005",
+    id: "OCO-05",
     description: "publicPropertyVandalism",
     status: "Alta",
     count: 155,

@@ -68,6 +68,11 @@ const Occurrences: React.FC = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { t } = useLanguage();
 
+  const handleViewDetails = (occurrence: typeof allOccurrencesData[0]) => {
+    setSelectedOccurrence(occurrence);
+    setIsDetailsOpen(true);
+  };
+
   const getStatus = (status: string) => {
     if (status === "Crítica") return t('critical');
     if (status === "Alta") return t('high');

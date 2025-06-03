@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -19,6 +18,7 @@ import {
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import OccurrenceDetails from "./OccurrenceDetails";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 // Sample data for most recurring occurrences
 const recurringOccurrencesData = [
@@ -214,9 +214,11 @@ const RecentOccurrences: React.FC = () => {
           <div className="text-xs text-muted-foreground">
             {t('showingOf')} {filteredOccurrences.length} {t('of')} {recurringOccurrencesData.length} {t('occurrences')}
           </div>
-          <Button variant="outline" size="sm" className="gap-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-            <span>{t('viewAll')}</span>
-            <ChevronRight className="h-4 w-4" />
+          <Button variant="outline" size="sm" className="gap-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300" asChild>
+            <Link to="/ocorrencias">
+              <span>{t('viewAll')}</span>
+              <ChevronRight className="h-4 w-4" />
+            </Link>
           </Button>
         </CardFooter>
       </Card>

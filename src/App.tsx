@@ -13,6 +13,7 @@ import RegionDetails from "./pages/RegionDetails";
 import NotFound from "./pages/NotFound";
 import CityDetails from "./pages/CityDetails";
 import About from "./pages/About";
+import Occurrences from "./pages/Occurrences";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
 
@@ -37,6 +38,7 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/relatorios" element={<Reports />} />
+                    <Route path="/ocorrencias" element={<Occurrences />} />
                     <Route path="/dados-por-regiao" element={<RegionalData />} />
                     <Route path="/cidade/:name" element={<CityDetails />} />
                     <Route path="/regiao/:name" element={<RegionDetails />} />

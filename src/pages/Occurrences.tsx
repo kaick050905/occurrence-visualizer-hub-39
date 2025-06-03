@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -10,8 +9,9 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import DashboardHeader from "@/components/DashboardHeader";
+import CompleteDetails from "@/components/CompleteDetails";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye } from "lucide-react";
 
 // Dados completos de ocorrências OCO-01 a OCO-23
 const allOccurrencesData = [
@@ -64,6 +64,8 @@ const chartConfig = {
 
 const Occurrences: React.FC = () => {
   const [chartType, setChartType] = useState<"pie" | "line">("pie");
+  const [selectedOccurrence, setSelectedOccurrence] = useState<typeof allOccurrencesData[0] | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { t } = useLanguage();
 
   const getStatus = (status: string) => {
@@ -151,6 +153,7 @@ const Occurrences: React.FC = () => {
                         <TableHead>2024</TableHead>
                         <TableHead>2025</TableHead>
                         <TableHead>{t('total')}</TableHead>
+                        <TableHead>Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -174,6 +177,17 @@ const Occurrences: React.FC = () => {
                           <TableCell>{occurrence[2024]}</TableCell>
                           <TableCell>{occurrence[2025]}</TableCell>
                           <TableCell className="font-bold">{occurrence.total}</TableCell>
+                          <TableCell>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleViewDetails(occurrence)}
+                              className="gap-1"
+                            >
+                              <Eye className="h-3 w-3" />
+                              {t('completeDetails')}
+                            </Button>
+                          </TableCell>
                         </motion.tr>
                       ))}
                     </TableBody>
@@ -266,6 +280,13 @@ const Occurrences: React.FC = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Complete Details Dialog */}
+        <CompleteDetails 
+          open={isDetailsOpen}
+          onOpenChange={setIsDetailsOpen}
+          occurrence={selectedOccurrence}
+        />
       </div>
     </motion.div>
   );

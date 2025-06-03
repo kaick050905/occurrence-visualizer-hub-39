@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface LanguageContextType {
@@ -69,7 +70,9 @@ const translations = {
     distributionByType: "Distribuição percentual por tipo de ocorrência",
     yearlyEvolution: "Evolução Anual",
     evolutionOverYears: "Evolução das ocorrências ao longo dos anos",
-    // Novos tipos de ocorrências
+    completeDetails: "Detalhes Completos",
+    viewCompleteDetails: "Ver Detalhes Completos",
+    // Tipos de ocorrências
     vehicleTheft: "Furto de Veículo",
     streetLightingIssue: "Problema de Iluminação Pública",
     trafficAccident: "Acidente de Trânsito",
@@ -147,7 +150,9 @@ const translations = {
     distributionByType: "Percentage distribution by occurrence type",
     yearlyEvolution: "Yearly Evolution",
     evolutionOverYears: "Evolution of occurrences over the years",
-    // New occurrence types
+    completeDetails: "Complete Details",
+    viewCompleteDetails: "View Complete Details",
+    // Occurrence types
     vehicleTheft: "Vehicle Theft",
     streetLightingIssue: "Street Lighting Issue",
     trafficAccident: "Traffic Accident",
@@ -225,7 +230,9 @@ const translations = {
     distributionByType: "Distribución porcentual por tipo de ocurrencia",
     yearlyEvolution: "Evolución Anual",
     evolutionOverYears: "Evolución de las ocurrencias a lo largo de los años",
-    // New occurrence types
+    completeDetails: "Detalles Completos",
+    viewCompleteDetails: "Ver Detalles Completos",
+    // Tipos de ocurrencias
     vehicleTheft: "Robo de Vehículo",
     streetLightingIssue: "Problema de Alumbrado Público",
     trafficAccident: "Accidente de Tráfico",

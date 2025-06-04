@@ -1,9 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { Moon, Sun, Globe } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Moon, Sun, Globe, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -12,11 +12,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import ThemeSelector from './ThemeSelector';
 
 const DashboardHeader: React.FC = () => {
   const today = new Date();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, isDarkMode } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   
   const formattedDate = today.toLocaleDateString(
     language === 'pt' ? 'pt-BR' : language === 'es' ? 'es' : 'en-US', 
@@ -30,6 +39,10 @@ const DashboardHeader: React.FC = () => {
 
   // Capitalize the first letter
   const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+
+  const toggleBasicTheme = () => {
+    setTheme(isDarkMode ? 'light' : 'dark');
+  };
 
   return (
     <motion.div
@@ -82,15 +95,35 @@ const DashboardHeader: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Seletor de tema */}
+          {/* Seletor de tema avançado */}
+          <Dialog open={themeDialogOpen} onOpenChange={setThemeDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="transition-all duration-300 hover:rotate-12"
+                aria-label="Personalizar tema"
+              >
+                <Palette className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Personalização de Tema</DialogTitle>
+              </DialogHeader>
+              <ThemeSelector />
+            </DialogContent>
+          </Dialog>
+
+          {/* Toggle rápido light/dark */}
           <Button
             variant="outline"
             size="icon"
             className="transition-all duration-300 hover:rotate-12"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            aria-label={theme === "light" ? t('darkMode') : t('lightMode')}
+            onClick={toggleBasicTheme}
+            aria-label={isDarkMode ? t('lightMode') : t('darkMode')}
           >
-            {theme === "dark" ? (
+            {isDarkMode ? (
               <Sun className="h-[1.2rem] w-[1.2rem]" />
             ) : (
               <Moon className="h-[1.2rem] w-[1.2rem]" />

@@ -3,22 +3,22 @@ import React from "react";
 import { ExternalLink } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Footer: React.FC = () => {
   const isMobile = useIsMobile();
   const { t, language } = useLanguage();
-  const { theme } = useTheme();
+  const { isDarkMode } = useTheme();
   
   // Logo paths based on language and theme
   const logoPath = () => {
-    if (theme === 'dark') {
+    if (isDarkMode) {
       // Dark theme logos
       switch (language) {
         case 'en':
           return "/lovable-uploads/437e2150-de75-46b9-9253-24be1f5a459f.png";
         case 'es':
-          return "/lovable-uploads/e09f8826-ca9a-4ad5-8c5c-044da129304a.png"; // Nova imagem em espanhol para tema escuro
+          return "/lovable-uploads/e09f8826-ca9a-4ad5-8c5c-044da129304a.png";
         case 'pt':
         default:
           return "/lovable-uploads/75a9ae91-6d83-4a1f-a42c-704de28c652d.png";
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
         case 'en':
           return "/lovable-uploads/d600f854-bfa6-4afa-907c-b3886c0bb55f.png";
         case 'es':
-          return "/lovable-uploads/a780149c-0fe8-4dc1-a890-7cd0f20e7052.png"; // Nova imagem em espanhol para tema claro
+          return "/lovable-uploads/a780149c-0fe8-4dc1-a890-7cd0f20e7052.png";
         case 'pt':
         default:
           return "/lovable-uploads/5cd52671-40fe-4a7d-81de-0196a97a84c6.png";

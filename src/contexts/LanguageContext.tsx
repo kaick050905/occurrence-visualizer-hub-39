@@ -4,7 +4,7 @@ import { translations, TranslationKey, Language } from '../translations';
 
 interface LanguageContextType {
   language: string;
-  setLanguage: (lang: string) => void;
+  setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
 

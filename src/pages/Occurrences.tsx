@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -77,7 +78,6 @@ const Occurrences: React.FC = () => {
   const { t } = useLanguage();
 
   const handleViewDetails = (occurrence: typeof allOccurrencesData[0]) => {
-    // Convert the occurrence data to match OccurrenceDetails expected format
     const formattedOccurrence = {
       id: occurrence.id,
       description: t(occurrence.description),
@@ -114,11 +114,11 @@ const Occurrences: React.FC = () => {
     { year: "2025", ...Object.fromEntries(allOccurrencesData.slice(0, 8).map(item => [t(item.description), item[2025]])) }
   ];
 
-  // Dados para gráfico de barras - top 15 ocorrências
+  // Dados para gráfico de barras - top 15 ocorrências com nomes ajustados para mobile
   const barData = allOccurrencesData
     .slice(0, 15)
     .map((item, index) => ({
-      name: t(item.description).substring(0, 20) + (t(item.description).length > 20 ? '...' : ''),
+      name: t(item.description).substring(0, 15) + (t(item.description).length > 15 ? '...' : ''),
       fullName: t(item.description),
       total: item.total,
       status: item.status,
@@ -128,9 +128,9 @@ const Occurrences: React.FC = () => {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-background border border-border rounded-lg p-4 shadow-xl backdrop-blur-sm">
-          <p className="font-semibold text-foreground">{payload[0].payload?.fullName || label}</p>
-          <p className="text-primary font-medium">{`${t('total')}: ${payload[0].value}`}</p>
+        <div className="bg-background border border-border rounded-lg p-3 shadow-xl backdrop-blur-sm z-50">
+          <p className="font-semibold text-foreground text-sm">{payload[0].payload?.fullName || label}</p>
+          <p className="text-primary font-medium text-sm">{`${t('total')}: ${payload[0].value}`}</p>
         </div>
       );
     }
@@ -140,10 +140,10 @@ const Occurrences: React.FC = () => {
   const CustomPieTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-background border border-border rounded-lg p-4 shadow-xl backdrop-blur-sm">
-          <p className="font-semibold text-foreground">{payload[0].name}</p>
-          <p className="text-primary font-medium">{`${t('total')}: ${payload[0].value}`}</p>
-          <p className="text-sm text-muted-foreground">{`${((payload[0].value / pieData.reduce((a, b) => a + b.value, 0)) * 100).toFixed(1)}%`}</p>
+        <div className="bg-background border border-border rounded-lg p-3 shadow-xl backdrop-blur-sm z-50">
+          <p className="font-semibold text-foreground text-sm">{payload[0].name}</p>
+          <p className="text-primary font-medium text-sm">{`${t('total')}: ${payload[0].value}`}</p>
+          <p className="text-xs text-muted-foreground">{`${((payload[0].value / pieData.reduce((a, b) => a + b.value, 0)) * 100).toFixed(1)}%`}</p>
         </div>
       );
     }
@@ -168,10 +168,10 @@ const Occurrences: React.FC = () => {
           
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 {t('allOccurrences')}
               </h1>
-              <p className="text-muted-foreground mt-2">
+              <p className="text-muted-foreground mt-2 text-sm md:text-base">
                 {t('completeOccurrencesList')}
               </p>
             </div>
@@ -180,36 +180,38 @@ const Occurrences: React.FC = () => {
 
         <Tabs defaultValue="table" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 md:w-auto">
-            <TabsTrigger value="table" className="flex items-center gap-2">
+            <TabsTrigger value="table" className="flex items-center gap-2 text-xs md:text-sm">
               <BarChart3 className="h-4 w-4" />
-              {t('dataTable')}
+              <span className="hidden sm:inline">{t('dataTable')}</span>
+              <span className="sm:hidden">Tabela</span>
             </TabsTrigger>
-            <TabsTrigger value="charts" className="flex items-center gap-2">
+            <TabsTrigger value="charts" className="flex items-center gap-2 text-xs md:text-sm">
               <PieChartIcon className="h-4 w-4" />
-              {t('charts')}
+              <span className="hidden sm:inline">{t('charts')}</span>
+              <span className="sm:hidden">Gráficos</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="table">
             <Card className="shadow-lg border-0 bg-gradient-to-br from-card via-card to-muted/20">
               <CardHeader className="bg-gradient-to-r from-primary/5 to-purple-500/5 rounded-t-lg">
-                <CardTitle className="text-xl">{t('allOccurrenceTypes')}</CardTitle>
-                <CardDescription>{t('detailedOccurrenceData')}</CardDescription>
+                <CardTitle className="text-lg md:text-xl">{t('allOccurrenceTypes')}</CardTitle>
+                <CardDescription className="text-sm">{t('detailedOccurrenceData')}</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="overflow-auto max-h-[600px]">
+                <div className="overflow-auto max-h-[70vh]">
                   <Table>
                     <TableHeader className="sticky top-0 bg-muted/50 backdrop-blur-sm">
                       <TableRow>
-                        <TableHead className="font-semibold">{t('typeId')}</TableHead>
-                        <TableHead className="font-semibold">{t('description')}</TableHead>
-                        <TableHead className="font-semibold">{t('level')}</TableHead>
-                        <TableHead className="font-semibold">2022</TableHead>
-                        <TableHead className="font-semibold">2023</TableHead>
-                        <TableHead className="font-semibold">2024</TableHead>
-                        <TableHead className="font-semibold">2025</TableHead>
-                        <TableHead className="font-semibold">{t('total')}</TableHead>
-                        <TableHead className="font-semibold">Ações</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm">{t('typeId')}</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm min-w-[120px]">{t('description')}</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm">{t('level')}</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm hidden md:table-cell">2022</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm hidden md:table-cell">2023</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm hidden sm:table-cell">2024</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm">2025</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm">{t('total')}</TableHead>
+                        <TableHead className="font-semibold text-xs md:text-sm">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -221,27 +223,28 @@ const Occurrences: React.FC = () => {
                           transition={{ duration: 0.3, delay: index * 0.02 }}
                           className="hover:bg-muted/50 transition-all duration-200 border-b border-border/50"
                         >
-                          <TableCell className="font-medium text-primary">{occurrence.id}</TableCell>
-                          <TableCell className="max-w-xs truncate">{t(occurrence.description)}</TableCell>
+                          <TableCell className="font-medium text-primary text-xs md:text-sm">{occurrence.id}</TableCell>
+                          <TableCell className="max-w-[100px] md:max-w-xs truncate text-xs md:text-sm">{t(occurrence.description)}</TableCell>
                           <TableCell>
-                            <Badge className={`${statusStyle[occurrence.status as keyof typeof statusStyle]} shadow-sm`}>
+                            <Badge className={`${statusStyle[occurrence.status as keyof typeof statusStyle]} shadow-sm text-xs`}>
                               {getStatus(occurrence.status)}
                             </Badge>
                           </TableCell>
-                          <TableCell className="font-mono">{occurrence[2022]}</TableCell>
-                          <TableCell className="font-mono">{occurrence[2023]}</TableCell>
-                          <TableCell className="font-mono">{occurrence[2024]}</TableCell>
-                          <TableCell className="font-mono">{occurrence[2025]}</TableCell>
-                          <TableCell className="font-bold text-lg">{occurrence.total}</TableCell>
+                          <TableCell className="font-mono text-xs md:text-sm hidden md:table-cell">{occurrence[2022]}</TableCell>
+                          <TableCell className="font-mono text-xs md:text-sm hidden md:table-cell">{occurrence[2023]}</TableCell>
+                          <TableCell className="font-mono text-xs md:text-sm hidden sm:table-cell">{occurrence[2024]}</TableCell>
+                          <TableCell className="font-mono text-xs md:text-sm">{occurrence[2025]}</TableCell>
+                          <TableCell className="font-bold text-sm md:text-lg">{occurrence.total}</TableCell>
                           <TableCell>
                             <Button 
                               variant="outline" 
                               size="sm"
                               onClick={() => handleViewDetails(occurrence)}
-                              className="gap-1 hover:shadow-md transition-all duration-200"
+                              className="gap-1 hover:shadow-md transition-all duration-200 text-xs p-2"
                             >
                               <Eye className="h-3 w-3" />
-                              {t('completeDetails')}
+                              <span className="hidden sm:inline">{t('completeDetails')}</span>
+                              <span className="sm:hidden">Ver</span>
                             </Button>
                           </TableCell>
                         </motion.tr>
@@ -259,52 +262,55 @@ const Occurrences: React.FC = () => {
                 <Button 
                   variant={chartType === "pie" ? "default" : "outline"}
                   onClick={() => setChartType("pie")}
-                  className="flex items-center gap-2 shadow-md"
+                  className="flex items-center gap-2 shadow-md text-xs md:text-sm"
                 >
                   <PieChartIcon className="h-4 w-4" />
-                  {t('distributionChart')}
+                  <span className="hidden sm:inline">{t('distributionChart')}</span>
+                  <span className="sm:hidden">Pizza</span>
                 </Button>
                 <Button 
                   variant={chartType === "line" ? "default" : "outline"}
                   onClick={() => setChartType("line")}
-                  className="flex items-center gap-2 shadow-md"
+                  className="flex items-center gap-2 shadow-md text-xs md:text-sm"
                 >
                   <TrendingUp className="h-4 w-4" />
-                  {t('evolutionChart')}
+                  <span className="hidden sm:inline">{t('evolutionChart')}</span>
+                  <span className="sm:hidden">Linha</span>
                 </Button>
                 <Button 
                   variant={chartType === "bar" ? "default" : "outline"}
                   onClick={() => setChartType("bar")}
-                  className="flex items-center gap-2 shadow-md"
+                  className="flex items-center gap-2 shadow-md text-xs md:text-sm"
                 >
                   <BarChart3 className="h-4 w-4" />
-                  Gráfico de Barras
+                  <span className="hidden sm:inline">Gráfico de Barras</span>
+                  <span className="sm:hidden">Barras</span>
                 </Button>
               </div>
 
               {chartType === "pie" && (
                 <Card className="shadow-xl border-0 bg-gradient-to-br from-card via-card to-primary/5">
                   <CardHeader className="bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-t-lg">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <PieChartIcon className="h-5 w-5 text-primary" />
-                      {t('occurrenceDistribution')} - Top 10
+                    <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+                      <PieChartIcon className="h-4 md:h-5 w-4 md:w-5 text-primary" />
+                      <span className="text-sm md:text-xl">{t('occurrenceDistribution')} - Top 10</span>
                     </CardTitle>
-                    <CardDescription>{t('distributionByType')}</CardDescription>
+                    <CardDescription className="text-xs md:text-sm">{t('distributionByType')}</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
-                    <ChartContainer config={chartConfig} className="h-[500px]">
-                      <ResponsiveContainer>
+                  <CardContent className="p-3 md:p-6">
+                    <div className="w-full h-[300px] md:h-[500px]">
+                      <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
                             data={pieData}
                             cx="50%"
                             cy="50%"
-                            outerRadius={150}
-                            innerRadius={60}
+                            outerRadius="80%"
+                            innerRadius="40%"
                             paddingAngle={2}
                             dataKey="value"
                             stroke="#fff"
-                            strokeWidth={2}
+                            strokeWidth={1}
                           >
                             {pieData.map((entry, index) => (
                               <Cell 
@@ -317,13 +323,13 @@ const Occurrences: React.FC = () => {
                           <Tooltip content={<CustomPieTooltip />} />
                           <Legend 
                             verticalAlign="bottom" 
-                            height={100}
-                            wrapperStyle={{ paddingTop: "20px" }}
+                            height={60}
+                            wrapperStyle={{ paddingTop: "10px", fontSize: "12px" }}
                             iconType="circle"
                           />
                         </PieChart>
                       </ResponsiveContainer>
-                    </ChartContainer>
+                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -331,33 +337,33 @@ const Occurrences: React.FC = () => {
               {chartType === "line" && (
                 <Card className="shadow-xl border-0 bg-gradient-to-br from-card via-card to-blue-500/5">
                   <CardHeader className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-t-lg">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-blue-600" />
-                      {t('yearlyEvolution')} - Top 8
+                    <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+                      <TrendingUp className="h-4 md:h-5 w-4 md:w-5 text-blue-600" />
+                      <span className="text-sm md:text-xl">{t('yearlyEvolution')} - Top 8</span>
                     </CardTitle>
-                    <CardDescription>{t('evolutionOverYears')}</CardDescription>
+                    <CardDescription className="text-xs md:text-sm">{t('evolutionOverYears')}</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
-                    <ChartContainer config={chartConfig} className="h-[500px]">
-                      <ResponsiveContainer>
-                        <LineChart data={lineData} margin={{ top: 20, right: 30, left: 20, bottom: 100 }}>
+                  <CardContent className="p-3 md:p-6">
+                    <div className="w-full h-[300px] md:h-[500px] overflow-hidden">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={lineData} margin={{ top: 20, right: 10, left: 10, bottom: 60 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                           <XAxis 
                             dataKey="year" 
                             stroke="hsl(var(--foreground))"
-                            fontSize={12}
+                            fontSize={10}
                             fontWeight={500}
                           />
                           <YAxis 
                             stroke="hsl(var(--foreground))"
-                            fontSize={12}
+                            fontSize={10}
                             fontWeight={500}
                           />
                           <Tooltip content={<CustomTooltip />} />
                           <Legend 
                             verticalAlign="bottom" 
-                            height={80}
-                            wrapperStyle={{ paddingTop: "20px" }}
+                            height={50}
+                            wrapperStyle={{ paddingTop: "10px", fontSize: "10px" }}
                           />
                           {allOccurrencesData.slice(0, 8).map((occurrence, index) => (
                             <Line
@@ -365,15 +371,15 @@ const Occurrences: React.FC = () => {
                               type="monotone"
                               dataKey={t(occurrence.description)}
                               stroke={vibrantColors[index]}
-                              strokeWidth={3}
-                              dot={{ fill: vibrantColors[index], strokeWidth: 2, r: 4 }}
-                              activeDot={{ r: 6, stroke: vibrantColors[index], strokeWidth: 2 }}
+                              strokeWidth={2}
+                              dot={{ fill: vibrantColors[index], strokeWidth: 1, r: 3 }}
+                              activeDot={{ r: 4, stroke: vibrantColors[index], strokeWidth: 1 }}
                               name={t(occurrence.description)}
                             />
                           ))}
                         </LineChart>
                       </ResponsiveContainer>
-                    </ChartContainer>
+                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -381,39 +387,39 @@ const Occurrences: React.FC = () => {
               {chartType === "bar" && (
                 <Card className="shadow-xl border-0 bg-gradient-to-br from-card via-card to-green-500/5">
                   <CardHeader className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-t-lg">
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-green-600" />
-                      Ranking de Ocorrências - Top 15
+                    <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+                      <BarChart3 className="h-4 md:h-5 w-4 md:w-5 text-green-600" />
+                      <span className="text-sm md:text-xl">Ranking de Ocorrências - Top 15</span>
                     </CardTitle>
-                    <CardDescription>Visualização em barras das principais ocorrências</CardDescription>
+                    <CardDescription className="text-xs md:text-sm">Visualização em barras das principais ocorrências</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
-                    <ChartContainer config={chartConfig} className="h-[600px]">
-                      <ResponsiveContainer>
+                  <CardContent className="p-3 md:p-6">
+                    <div className="w-full h-[400px] md:h-[600px]">
+                      <ResponsiveContainer width="100%" height="100%">
                         <BarChart 
                           data={barData} 
-                          margin={{ top: 20, right: 30, left: 20, bottom: 120 }}
-                          layout="horizontal"
+                          margin={{ top: 20, right: 10, left: 10, bottom: 20 }}
                         >
                           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                           <XAxis 
-                            type="number"
+                            dataKey="name"
                             stroke="hsl(var(--foreground))"
-                            fontSize={12}
+                            fontSize={9}
                             fontWeight={500}
+                            angle={-45}
+                            textAnchor="end"
+                            height={80}
+                            interval={0}
                           />
                           <YAxis 
-                            type="category"
-                            dataKey="name"
                             stroke="hsl(var(--foreground))"
                             fontSize={10}
                             fontWeight={500}
-                            width={150}
                           />
                           <Tooltip content={<CustomTooltip />} />
                           <Bar 
                             dataKey="total" 
-                            radius={[0, 4, 4, 0]}
+                            radius={[4, 4, 0, 0]}
                             stroke="#fff"
                             strokeWidth={1}
                           >
@@ -427,7 +433,7 @@ const Occurrences: React.FC = () => {
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
-                    </ChartContainer>
+                    </div>
                   </CardContent>
                 </Card>
               )}
